@@ -6,8 +6,8 @@ Date:           12th of November 2018
 Version:        1.2.1
 Python version: 3.6
 Usage:          * Keep this file and empty __init__.py in same repository as yatzy.py
-				* Must have 'from mergesort import mergesort' line at the beginning of yatzy.py
-Notes:			This file is part of yatzy.py file. This game is my a final assignment for Data Structures and Algorithms course in JAMK University of Applied Sciences.
+		* Must have 'from mergesort import mergesort' line at the beginning of yatzy.py
+Notes:		This file is part of yatzy.py file. This game is my a final assignment for Data Structures and Algorithms course in JAMK University of Applied Sciences.
 
 Change log:
 
