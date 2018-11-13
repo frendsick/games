@@ -1,9 +1,9 @@
 '''
 Title:          Merge sort
-Description:    Algorithm for sorting integers in ascending order
+Description:    Algorithm for sorting Player objects based on their points in descending order
 Author:         Teemu Pätsi
 Date:           12th of November 2018
-Version:        1.1.1
+Version:        1.2.1
 Python version: 3.6
 Usage:          * Keep this file and empty __init__.py in same repository as yatzy.py
 				* Must have 'from mergesort import mergesort' line at the beginning of yatzy.py
@@ -17,6 +17,7 @@ Change log:
 		1.1.1   Edited author notes and made some code layout standardizing
 	13th of November:
 		1.2.0	Done changes for yatzy.py so that my_list is a list of Player objects
+		1.2.1	Corrected comments and author notes
 		
 '''
 
@@ -59,7 +60,7 @@ def merge(my_list, left, right):
     # If both sides have still unsorted numbers
     while i < len(left) and j < len(right):
 
-        # Change to descending sort by changing '<' to '>'
+        # Change to ascending sort by changing '>' to '<'
         if left[i].total > right[j].total:
             my_list[k] = left[i]
             i += 1
