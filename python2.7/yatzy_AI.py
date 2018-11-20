@@ -16,10 +16,11 @@ Change log:
 
 '''
 import time
+from Player import Player
 
-class Yatzy_AI():
+class Yatzy_AI(Player):
     
-    name = 'Unnamed'
+    name = 'Unnamed BOT'
     
     # Multiplications
     aces_weight             = 7
@@ -39,16 +40,7 @@ class Yatzy_AI():
     chance_weight           = 1
     yatzhee_weight          = 1337
 
-
-    def __init__(self, name):
-        self.name = name
-
-        # For point evaluation purposes
-        self.eval = 0
-
-
-    def AI_Turn(AI_players):
-        for i in range(0,len(AI_players):
+    def AI_Turn(AI_players, i):
             print("/nBOT {0}'s turn!\n".format(AI_players[i].name))
             AI_players[i].Print_Points()
 
@@ -64,46 +56,12 @@ class Yatzy_AI():
             AI_players[i].Update_Points(pick, dices)
             AI_players[i].Print_Points()
 
-    def Evaluate_Throws():
-        return
-
-    # Method for point evaluation for AI
-    def Choose():
-        if 'Aces' not in self.used:
-            print ("1: Aces")
-        if 'Twos' not in self.used:
-            print ("2: Twos")
-        if 'Threes' not in self.used:
-            print ("3: Threes")
-        if 'Fours' not in self.used:
-            print ("4: Fours")
-        if 'Fives' not in self.used:
-            print ("5: Fives")
-        if 'Sixes' not in self.used:
-            print ("6: Sixes")
-        if 'Pair' not in self.used:
-            print ("7: Pair")
-        if 'Two Pair' not in self.used:
-            print ("8: Two Pair")
-        if 'Three of a Kind' not in self.used:
-            print ("9: Three of a Kind")
-        if 'Four of a Kind' not in self.used:
-            print ("10: Four of a Kind")
-        if 'Small Straight' not in self.used:
-            print ("11: Small Straight")
-        if 'Large Straight' not in self.used:
-            print ("12: Large Straight")
-        if 'Full House' not in self.used:
-            print ("13: Full House")
-        if 'Chance' not in self.used:
-            print ("14: Chance")
-        if 'Yatzy' not in self.used:
-            print ("15: Yatzy")
-
-        time.sleep(0.7)
+    @staticmethod
+    def Evaluate_Throws(dices, chosen_dices, players, i):
         
-        # Evaluate where to put points
-        Evaluate_final()
+        else:
+
+        return dices, chosen_dices
 
     def Evaluate_final():
         return

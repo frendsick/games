@@ -46,7 +46,7 @@ def Instantiate_AI():
 	AI_players = []
 	AI_player_amount = raw_input("How many bots? ")
 	
-	for i in range (0, int(player_amount)):
+	for i in range (0, int(AI_player_amount)):
 		name = raw_input("What is BOT {}'s name? ".format(i+1))
 		p = Yatzy_AI(name)
 		AI_players.append(p)
@@ -63,35 +63,59 @@ def Yatzy():
 	while not game_over:
 		# Loops through all the players
 		for i in range(0,len(players)):
-			
-			# Print only if there is 2 or more players
-			if (len(players) > 1):
-				print ("\n{}'s turn!\n".format(players[i].name))
-				players[i].Print_Points()
-			
-			players[i].Choose(False)
-			dices = [0,0,0,0,0]
-			
-			# Returns dice values after players throws
-			dices = Throws(dices)
-			
-			# Player picks where to put points
-			pick = players[i].Choose(True)
-			
-			players[i].Update_Points(pick, dices)
-			players[i].Print_Points()
+			Turn(players, i)
 		
 		# Do every bots turns
 		for i in range(0,len(AI_players)):
-			AI_players.AI_Turn(AI_players)
+			AI_Turn(AI_players, i)
 		
-			# If last player has used all slots, game is over
+		# If last player has used all slots, game is over
+		if (len(players) > 0 and len(AI_players) == 0):
 			if len(players[len(players)-1].used) == 15:
 				game_over = True
 				print ("\nGame over!")
 				Who_Won(players)
+		
+		elif (len(AI_players) > 0):
+			if len(AI_players[len(AI_players)-1].used) == 15:
+				game_over = True
+				print ("\nGame over!")
+				Who_Won(players, AI_players)
+				
+		else:
+			game_over = True
+			print ("No players")
+				
+def Turn(players, i):
+	# Print only if there is 2 or more players
+	if (len(players) > 1):
+		print ("\n{}'s turn!\n".format(players[i].name))
+		players[i].Print_Points()
+
+	# Includes all turn actions
+	Turn_Choices(players, i)
 	
-def Throws(dices):
+def AI_Turn(AI_players, i):
+
+		print("\nBOT {0}'s turn!\n".format(AI_players[i].name))
+		AI_players[i].Print_Points()
+
+		Turn_Choices(AI_players, i)
+		
+def Turn_Choices(players, i):
+	players[i].Choose(False)
+	dices = [0,0,0,0,0]
+
+	# Returns dice values after players throws
+	dices = Throws(dices, players, i)
+
+	# Player picks where to put points
+	pick = players[i].Choose(True)
+
+	players[i].Update_Points(pick, dices)
+	players[i].Print_Points()
+
+def Throws(dices, players, i):
 	chosen_dices = []
 	# Maximum of three throws
 	for throw in range(0,3):
@@ -105,7 +129,7 @@ def Throws(dices):
 		
 		# Asks player what dices he/she chooses to keep
 		if (throw < 2):
-			dices, chosen_dices, is_ready = Which_Dices_To_Keep(dices, chosen_dices)
+			dices, chosen_dices, is_ready = Which_Dices_To_Keep(dices, chosen_dices, players, i)
 		
 		# If player decides to keep all of dices as is break from the loop
 		if (is_ready):
@@ -113,33 +137,40 @@ def Throws(dices):
 	
 	return dices
 	
-def Which_Dices_To_Keep(dices, chosen_dices):
+def Which_Dices_To_Keep(dices, chosen_dices, players, i):
 
-	valid_input = False
+	try:
+		players[0].aces_weight == 7
+	# If is real player
+	except:
+		valid_input = False
+		
+		while not valid_input:
+			# valid_input changes to False if wrong raw_input is inserted
+			valid_input = True 
+			chosen_dices = []
+			keep = raw_input("Which dices you'd like to keep? ")
+			
+			# Iterate through all chars
+			for i in range(0, len(keep)):
+				if keep[i] != '1' and keep[i] != '2' and keep[i] != '3' and keep[i] != '4' and keep[i] != '5':
+					valid_input = False
+					break
+				else:
+					# Checks if user's input has some integer multiple times
+					for j in range(0, len(chosen_dices)):
+						if chosen_dices[j] == keep[i]:
+							valid_input = False
+							break
+						
+					chosen_dices.append(keep[i])
+			
+			# Tells player how to choose
+			if (not valid_input):
+				print ("Just insert numbers for dices. F.ex. '1235' will throw again dices 1,2,3 and 5")
 	
-	while not valid_input:
-                # valid_input changes to False if wrong raw_input is inserted
-                valid_input = True 
-                chosen_dices = []
-		keep = raw_input("Which dices you'd like to keep? ")
-		
-		# Iterate through all chars
-		for i in range(0, len(keep)):
-			if keep[i] != '1' and keep[i] != '2' and keep[i] != '3' and keep[i] != '4' and keep[i] != '5':
-				valid_input = False
-				break
-			else:
-				# Checks if user's input has some integer multiple times
-				for j in range(0, len(chosen_dices)):
-					if chosen_dices[j] == keep[i]:
-						valid_input = False
-						break
-					
-				chosen_dices.append(keep[i])
-		
-		# Tells player how to choose
-		if (not valid_input):
-			print ("Just insert numbers for dices. F.ex. '1235' will throw again dices 1,2,3 and 5")
+	else:
+		dices, chosen_dices = Yatzy_AI.Evaluate_Throws(dices, chosen_dices, players, i)
 	
 	if (len(chosen_dices) >= 5):
 		is_ready = True
@@ -148,7 +179,9 @@ def Which_Dices_To_Keep(dices, chosen_dices):
 	
 	return dices, chosen_dices, is_ready
 	
-def Who_Won(players):
+def Who_Won(players, AI_players):
+	players.extend(AI_players)
+	
 	# Sorts players list in descending point order
 	mergesort(players)
 	for i in range(0,len(players)):

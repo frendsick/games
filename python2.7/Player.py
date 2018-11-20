@@ -49,7 +49,7 @@ class Player:
 		# Player's name is 'Unnamed' if empty string is provided
 		if name != '':
 			self.name = name
-	
+
 	def Choose(self, throw_done):
 		
 		# For checking
