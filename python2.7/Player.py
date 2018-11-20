@@ -204,6 +204,8 @@ class Player:
 		for i in range(0,len(dices)):
 			# Test if there is multiple occurrences of this number and if there is bigger pair available
 			if (dices.count(dices[i]) > 1 and 2*dices[i] > self.pair):
+                                self.pair -= self.pair
+                                self.total -= self.pair
 				self.pair += 2*dices[i]
 				self.total += 2*dices[i]
 	

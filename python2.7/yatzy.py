@@ -86,36 +86,37 @@ def Yatzy():
 			game_over = True
 			print ("No players")
 				
-def Turn(players, i):
+def Turn(players, ind):
 	# Print only if there is 2 or more players
 	if (len(players) > 1):
-		print ("\n{}'s turn!\n".format(players[i].name))
-		players[i].Print_Points()
+		print ("\n{}'s turn!\n".format(players[ind].name))
+		players[ind].Print_Points()
 
 	# Includes all turn actions
-	Turn_Choices(players, i)
+	Turn_Choices(players, ind)
 	
-def AI_Turn(AI_players, i):
+def AI_Turn(AI_players, ind):
 
-		print("\nBOT {0}'s turn!\n".format(AI_players[i].name))
-		AI_players[i].Print_Points()
+		print("\nBOT {0}'s turn!\n".format(AI_players[ind].name))
+		AI_players[ind].Print_Points()
 
-		Turn_Choices(AI_players, i)
+		Turn_Choices(AI_players, ind)
 		
-def Turn_Choices(players, i):
-	players[i].Choose(False)
+def Turn_Choices(players, ind):
+	players[ind].Choose(False)
 	dices = [0,0,0,0,0]
 
 	# Returns dice values after players throws
-	dices = Throws(dices, players, i)
+
+	dices = Throws(dices, players, ind)
 
 	# Player picks where to put points
-	pick = players[i].Choose(True)
+	pick = players[ind].Choose(True)
 
-	players[i].Update_Points(pick, dices)
-	players[i].Print_Points()
+	players[ind].Update_Points(pick, dices)
+	players[ind].Print_Points()
 
-def Throws(dices, players, i):
+def Throws(dices, players, ind):
 	chosen_dices = []
 	# Maximum of three throws
 	for throw in range(0,3):
@@ -129,7 +130,7 @@ def Throws(dices, players, i):
 		
 		# Asks player what dices he/she chooses to keep
 		if (throw < 2):
-			dices, chosen_dices, is_ready = Which_Dices_To_Keep(dices, chosen_dices, players, i)
+			dices, chosen_dices, is_ready = Which_Dices_To_Keep(dices, chosen_dices, players, ind)
 		
 		# If player decides to keep all of dices as is break from the loop
 		if (is_ready):
@@ -137,7 +138,7 @@ def Throws(dices, players, i):
 	
 	return dices
 	
-def Which_Dices_To_Keep(dices, chosen_dices, players, i):
+def Which_Dices_To_Keep(dices, chosen_dices, players, ind):
 
 	try:
 		players[0].aces_weight == 7
@@ -170,13 +171,14 @@ def Which_Dices_To_Keep(dices, chosen_dices, players, i):
 				print ("Just insert numbers for dices. F.ex. '1235' will throw again dices 1,2,3 and 5")
 	
 	else:
-		dices, chosen_dices = Yatzy_AI.Evaluate_Throws(dices, chosen_dices, players, i)
+		dices, chosen_dices = Yatzy_AI.Evaluate_Throws(dices, chosen_dices, players, ind)
 	
 	if (len(chosen_dices) >= 5):
 		is_ready = True
 	else:
 		is_ready = False
 	
+	print chosen_dices
 	return dices, chosen_dices, is_ready
 	
 def Who_Won(players, AI_players):
