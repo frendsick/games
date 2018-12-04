@@ -36,7 +36,7 @@ def mergesort(my_list):
 # Splits my_list to sorted sublists
 def split(my_list):
    
-    print("Split " + str(my_list))       # Delete comment to print whenever program splits list to smaller sublists
+    # print("Split " + str(my_list))       # Delete comment to print whenever program splits list to smaller sublists
 
     # 1 or 0 length my_list/substring is sorted
     if len(my_list) > 1:
@@ -79,7 +79,7 @@ def merge(my_list, left, right):
         j += 1
         k += 1
  
-    print("Merge " + str(my_list))      # Delete comment to print when program merges two sublists
+    # print("Merge " + str(my_list))      # Delete comment to print when program merges two sublists
 
 def main():
     print("Executed main from mergesort.py")

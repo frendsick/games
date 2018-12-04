@@ -1,10 +1,10 @@
 '''
 Title:          Merge sort
 Description:    Algorithm for sorting integers in ascending order
-Author:         Teemu Pätsi
+Author:         Teemu Patsi
 Date:           12th of November 2018
 Version:        1.0.0
-Python version: 3.6
+Python version: 2.7
 Usage:          Run this program to see how my mergesort code works
 
 Change log:
