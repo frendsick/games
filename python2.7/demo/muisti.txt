@@ -1,2 +1,0 @@
-C:\Python27\python.exe D:\K9100\games\python2.7\demo\yatzy.py
-C:\Python27\python.exe D:\K9100\games\python2.7\demo\tests\
