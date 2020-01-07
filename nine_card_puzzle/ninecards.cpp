@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 /*  Card has 1 to 3 glass tops or bottoms on each side.
  *  Each side is represented in binary form so that tops and bottoms match:
@@ -58,24 +59,30 @@ class Card {
     }
 
     // Return line to ASCII art representation of card
-    std::string GetRow(const char& r) {
+    std::string GetRow(const char& rowID) {
       std::string row = "";
-      std::string el  = " |\n| "; // End line and start a new one
       std::string sp  = "       ";
       std::string st  = "| ";     // Start
+      std::string eol = " |";
     
       // Handle middle rows here
-      if (r == 'M') {
+      if (rowID == '1' || rowID == '2' || rowID == '3') {
         std::string l = this->GetSideRow('L');
         std::string r = this->GetSideRow('R');
-
-        // Construct the rows
-        row = st + l.at(0) + sp + r.at(2) + el + l.at(1) + sp + r.at(1) + el + l.at(2) + sp + r.at(0) + " |";
-        return row;
+        
+        // Construct row and return it afterwards
+        switch (rowID) {
+          case '1':
+            return st + l.at(0) + sp + r.at(2) + eol;
+          case '2':
+            return st + l.at(1) + sp + r.at(1) + eol;
+          case '3':
+            return st + l.at(2) + sp + r.at(0) + eol; 
+        }
       }
 
       // If bottom row is asked, increment two to direction
-      int increment = (r == 'B') ? 2 : 0;
+      int increment = (rowID == 'B') ? 2 : 0;
 
       int side = (this->direction + increment) % 4;
 
@@ -83,12 +90,12 @@ class Card {
         case 2:
           row = "|     T     |"; break;
         case 3:
-          if (r == 'T') {
+          if (rowID == 'T') {
             row = "|     T T   |"; break;
           }
           row = "|   T T     |"; break;
         case 6:
-          if (r == 'T') {
+          if (rowID == 'T') {
             row = "|   T T     |"; break;
           }
           row = "|     T T   |"; break;
@@ -97,12 +104,12 @@ class Card {
         case -2:
           row = "|     B     |"; break;
         case -3:
-          if (r == 'T') {
+          if (rowID == 'T') {
             row = "|   B B     |"; break;
           }
           row = "|     B B   |"; break;
         case -6:
-          if (r == 'T') {
+          if (rowID == 'T') {
             row = "|     B B   |"; break;
           }
           row = "|   B B     |"; break;
@@ -122,38 +129,150 @@ class Card {
      * |___________|
      */ 
 
+    void PrintTop() {
+      std::cout << " ___________" << std::endl;
+      std::cout << this->GetRow('T') << std::endl;
+    }
+
+    void Print1Row()  { std::cout << this->GetRow('1') << std::endl; }
+
+    void Print2Row()  { std::cout << this->GetRow('2') << std::endl; }
+
+    void Print3Row()  { std::cout << this->GetRow('3') << std::endl; }
+
+    void PrintBottom() {
+      std::cout << this->GetRow('B') << std::endl;
+      std::cout << "|___________|" << std::endl;
+    }
+
+
     // Returns T's or B's to ASCII art presentation of a card
     // row ==> 'T' or 'B' (TOP or BOTTOM) or 'M' (THREE MIDDLE ROWS)
     void PrintCard() {
 
+      /*
       // Print sides numerically
       std::cout << "\nCard " << cardID << " sides: ";
       for (int side: sides)
         std::cout << side << " ";
       std::cout << std::endl;
+      */
       
       // Print card as an ASCII art
-      std::cout << " ___________" << std::endl;
-      std::cout << this->GetRow('T') << std::endl;
-      std::cout << this->GetRow('M') << std::endl;
-      std::cout << this->GetRow('B') << std::endl;
-      std::cout << "|___________|" << std::endl;
+      this->PrintTop();
+      this->Print1Row();
+      this->Print2Row();
+      this->Print3Row();
+      this->PrintBottom();
     }
 };
 
 class Position {
   public:
     std::vector<Card> cards;
-
     
+    // This method presumes that cards are sorted by their position
+    void PrintPosition() {
+      std::string top_line    = "";
+      std::string top         = "";
+      std::string row1        = "";
+      std::string row2        = "";
+      std::string row3        = "";
+      std::string bottom      = "";
+      std::string bottom_line = "";
+
+      std::cout << "\nPrinting current position\n";
+
+      for (int i=0; i<cards.size(); i++) {
+        top_line    += " ___________ ";
+        top         += cards[i].GetRow('T');
+        row1        += cards[i].GetRow('1');
+        row2        += cards[i].GetRow('2');
+        row3        += cards[i].GetRow('3');
+        bottom      += cards[i].GetRow('B');
+        bottom_line += "|___________|";
+        
+        if (i % 3 == 2 || i == cards.size() - 1) {
+          std::cout << top_line << std::endl << top << std::endl << row1 << std::endl << row2
+            << std::endl << row3 << std::endl << bottom << std::endl << bottom_line << std::endl;
+          top_line    = "";
+          top         = "";
+          row1        = "";
+          row2        = "";
+          row3        = "";
+          bottom      = "";
+          bottom_line = "";
+        }
+      }
+    }
+
+    void SortPosition() {
+      std::sort(
+        this->cards.begin(),
+        this->cards.end(),
+        [](Card a, Card b) { return a.position < b.position; }
+      );
+    }
+
+    // TODO
+    // I only need to check down and right for a match if I start match checking from UP-LEFT corner
+    bool CheckNeighbor(Card card1, Card card2) {
+
+      // std::cout << c1.position << ", " << c2.position << std::endl;
+      int c1_score = 1337;
+      int c2_score = 9001;
+      
+      // If cards are next to each other and they
+      if (card2.position - card1.position == 1) { 
+        c1_score  = card1.sides[(card1.direction + 1) % 4];
+        c2_score  = card2.sides[(card2.direction + 3) % 4];
+      }
+      
+      // If cards are on top of each other
+      else if (card2.position - card1.position == 3) {
+        c1_score  = card1.sides[(card1.direction + 2) % 4];
+        c2_score  = card2.sides[card2.direction % 4];
+      }
+      
+      if (c1_score + c2_score == 0) {
+        std::cout << "\n\nCards " << card1.cardID << " and " << card2.cardID << " are matching!\n";
+        return true;
+      }
+
+      return false;
+    }
+    
+    // TODO
+    void BruteForce() {
+      int finished_cards = 0;
+
+      while (finished_cards < 9) {
+        for (int i=1; i<cards.size(); i++) {
+          for (int j=0; j<i; j++) {
+            for (int round=0; round<4; round++) {
+              this->cards[j].direction++;
+
+              for (Card c : this->cards)
+                if (this->CheckNeighbor(c, cards[i]))
+                  this->PrintPosition();
+            }
+          }
+        }
+      }
+    }
 };
+
+// Utility function for sorting Card vectors by card positions
+bool CompareCardPositions(Card c1, Card c2) { return (c1.position < c2.position); }
 
 void initializeCards(Card (&cards)[9]) {
   std::cout << "Initializing cards" << std::endl;
 
-  // Initialize cardID's
-  for (int i=0; i<9; i++)
-    cards[i].cardID = i;
+  // Initialize cardID's and positions
+  for (int i=0; i<9; i++) {
+    cards[i].cardID   = i;
+    cards[i].position = i;
+  }
   
   // TRDL
   const int all_card_sides[9][4] = {
@@ -174,17 +293,28 @@ void initializeCards(Card (&cards)[9]) {
     cards[i].sides[2] = all_card_sides[i][2];
     cards[i].sides[3] = all_card_sides[i][3];
   }
-  
-  std::cout << "All cards are initialized!" << std::endl;
 
   // Print all sides of cards
   for (Card card : cards)
     card.PrintCard();
+  
+  std::cout << "All cards are initialized!" << std::endl;
 }
 
 int main() {
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
+  
+  Position pos;
+  std::vector<Position> positions;
+  positions.emplace_back(pos);
+
+  for (Card card : cards)
+    positions[0].cards.emplace_back(card);
+
+  positions[0].SortPosition();
+
+  positions[0].BruteForce();
 
   return 0;
 }
