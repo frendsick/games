@@ -222,8 +222,8 @@ class Position {
       
       // If cards are next to each other and they
       if (card2.position - card1.position == 1) { 
-        c1_score  = card1.sides[(card1.direction + 1) % 4];
-        c2_score  = card2.sides[(card2.direction + 3) % 4];
+        c1_score  = card1.sides[(card1.direction + 3) % 4];
+        c2_score  = card2.sides[(card2.direction + 1) % 4];
       }
       
       // If cards are on top of each other
@@ -253,7 +253,7 @@ class Position {
           }
         }
         // Check rightward neighbor for every card exept for the rightmost
-        else if (i % 3 != 2) {
+        if (i % 3 != 2) {
           // Break if is not match
           if (!CheckNeighbor(cards[i], cards[i+1])) {
             solved = false; break;
@@ -300,7 +300,7 @@ class Position {
         }
         
         else if (current == 7) {
-          this->SwapCards(current);
+          this->SwapCards(0);
           checked_cards++;
           current = 1;
         }
