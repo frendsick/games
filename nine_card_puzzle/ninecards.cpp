@@ -13,12 +13,10 @@
  *  
  *  EXAMPLE CARD:
  *    Side 0 has three bottoms    ==> -7 (-4 -2 -1)
- *    Side 1 has two tops, R+M  ==> 6  (4 + 2)
- *    Side 2 has one top        ==> 2
+ *    Side 1 has two tops, R+M    ==> 6  (4 + 2)
+ *    Side 2 has one top          ==> 2
  *    Side 3 has two bottoms, R+M ==> -3 (-1 -2)
  *
- *    // INITIALIZATION
- *    Card card4(4, -7, 6, 2, -3);   // Params: cardID, s0, s1, s2, s3
  */
 
 class Card {
