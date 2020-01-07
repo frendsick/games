@@ -233,28 +233,83 @@ class Position {
       }
       
       if (c1_score + c2_score == 0) {
-        std::cout << "\n\nCards " << card1.cardID << " and " << card2.cardID << " are matching!\n";
+        // std::cout << "\n\nCards " << card1.cardID << " and " << card2.cardID << " are matching!\n";
         return true;
       }
 
       return false;
     }
     
+    // Start from UP-LEFT corner and check if every card
+    // matches with its rightward and downward neighbor
+    bool IsSolved() {
+      bool solved = true;
+      for (int i=0; i<this->cards.size()-1; i++) {
+        // Check every downward neighbor
+        if (i < 6) {
+          // Break if is not match
+          if (!CheckNeighbor(cards[i], cards[i+3])) {
+            solved = false; break;
+          }
+        }
+        // Check rightward neighbor for every card exept for the rightmost
+        else if (i % 3 != 2) {
+          // Break if is not match
+          if (!CheckNeighbor(cards[i], cards[i+1])) {
+            solved = false; break;
+          }
+        }
+      }
+
+      return solved;
+    }
+
+    void SwapCards(int i) {
+      Card temp_card;
+      cards[i].position++;
+      cards[i+1].position--;
+      temp_card   = cards[i];
+      cards[i]    = cards[i+1];
+      cards[i+1]  = temp_card;
+    }
+    
     // TODO
     void BruteForce() {
-      int finished_cards = 0;
+      int current = 0;
+      int checked_cards = 0;
+      bool full_rev = false;
 
-      while (finished_cards < 9) {
-        for (int i=1; i<cards.size(); i++) {
-          for (int j=0; j<i; j++) {
-            for (int round=0; round<4; round++) {
-              this->cards[j].direction++;
+      while (checked_cards < 9) {
+        // Rotate card at a time
+        for (int i=0; i<9; i++) {
+          this->cards[i].direction++;
+          // If current card has rotated full revolution, rotate next card
+          if (this->cards[i].direction % 4 != 0)
+            break;
 
-              for (Card c : this->cards)
-                if (this->CheckNeighbor(c, cards[i]))
-                  this->PrintPosition();
-            }
+          // If last card has rotated full revolution
+          else if (i == 8) {
+            current++; full_rev = true;
           }
+        }
+
+        if (this->IsSolved()) {
+          std::cout << "SOLVED!\n";
+          this->PrintPosition();
+          break;
+        }
+        
+        else if (current == 7) {
+          this->SwapCards(current);
+          checked_cards++;
+          current = 1;
+        }
+        
+        // Move current card forward by one spot
+        else if (full_rev) {
+          this->SwapCards(current);
+          this->PrintPosition();
+          full_rev = false;
         }
       }
     }
