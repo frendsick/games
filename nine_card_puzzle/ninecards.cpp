@@ -22,7 +22,7 @@
  */
 
 void initializeCards(Card (&cards)[9]) {
-  std::cout << "Initializing cards" << std::endl;
+  std::cout << "Initializing cards..." << std::endl;
 
   // Initialize cardID's and positions
   for (int i=0; i<9; i++) {
@@ -49,28 +49,7 @@ void initializeCards(Card (&cards)[9]) {
     cards[i].sides[3] = all_card_sides[i][3];
   }
 
-  // Print all sides of cards
-  for (Card card : cards)
-    card.PrintCard();
-  
   std::cout << "All cards are initialized!" << std::endl;
-}
-
-
-bool fitsRight(std::vector<Card> cards, Card& c2) {
-  Card c1 = cards.back();
-  int c1_score_r = c1.sides[(c1.direction + 1) % 4];
-  int c2_score_l = c2.sides[(c2.direction + 3) % 4];
- /* 
-  if (cards.back().position > 3) {
-    Card card_up = cards[cards.back().position - 3];
-    int card_up_score_d = card_up.sides[(c1.direction + 2) % 4];
-    int c2_score_u = c2.sides[c2.direction % 4];
-    
-    return (c1_score_r + c2_score_l == 0 && card_up_score_d + c2_score_u == 0);
-  }
-*/
-  return (c1_score_r + c2_score_l == 0);
 }
 
 bool fitsBelow(Card& c1, Card& c2) {
@@ -79,7 +58,23 @@ bool fitsBelow(Card& c1, Card& c2) {
   return (c1_score + c2_score == 0);
 }
 
-// c1 left, c2 right
+// Test can a card be put to the right of rightmost card
+bool fitsRight(std::vector<Card>& cards, Card& c2) {
+  Card c1 = cards.back();
+  int c1_score_r = c1.sides[(c1.direction + 1) % 4];
+  int c2_score_l = c2.sides[(c2.direction + 3) % 4];
+
+  // If the last inserted card is at position 3 or onwards
+  // then the program checks if the card above mathces as well
+  if (c1.position > 3) {
+    Card c3 = cards[c1.position - 2];
+    return (fitsBelow(c3, c2) && c1_score_r + c2_score_l == 0);
+  }
+  
+  return (c1_score_r + c2_score_l == 0); // Only check horizontal match
+}
+
+// card1 left, card2 right
 std::vector<Position> getPairs(std::vector<Position>& singles) {
   std::vector<Position> pairs;
 
@@ -108,10 +103,10 @@ std::vector<Position> getPairs(std::vector<Position>& singles) {
     }
   }
 
-  return pairs;
+  return pairs; // All possible pairs to go to positions 0 and 1 in 3x3 grid
 }
 
-
+// Returns vector of integers including all used cards in currently handled position
 std::vector<int> getUsedCards(Position& pos) {
   std::vector<int> used;
   for (int i=0; i<pos.cards.size(); i++)
@@ -119,8 +114,12 @@ std::vector<int> getUsedCards(Position& pos) {
   return used;
 }
 
+// Returns vector of Position objects which includes all possible combinations
+// of cards with one more card compared to 'positions' parameter
 std::vector<Position> getBiggerPositions(std::vector<Position>& positions, Card (&cards)[9]) {
   std::vector<Position> new_positions;
+
+  // Loop through already known possible combinations of cards
   for (Position pos : positions) {
     Card card1;
 
@@ -141,18 +140,19 @@ std::vector<Position> getBiggerPositions(std::vector<Position>& positions, Card 
 
       // Do not reuse cards that are already used
       if (std::count(used.begin(), used.end(), c))
-        continue;
+        continue; // Go to the next iteration of the FOR loop
 
       Card card2 = cards[c];
       for (int i=0; i<4; i++) {
-        bool is_position = false;
+        bool is_possible = false; // Can card1 and card2 be neighbors
 
         if (need_right)
-          is_position = fitsRight(pos.cards, card2);
+          is_possible = fitsRight(pos.cards, card2);
         else
-          is_position = fitsBelow(card1, card2);
+          is_possible = fitsBelow(card1, card2);
           
-        if (is_position) {
+        // If card1 and card2 could be neighbors, add card2 to new_positions
+        if (is_possible) {
           Position new_pos;
           new_pos.cards = pos.cards;
           new_pos.cards.emplace_back(card2);
@@ -163,11 +163,12 @@ std::vector<Position> getBiggerPositions(std::vector<Position>& positions, Card 
 
           new_positions.emplace_back(new_pos);
         }
+        // Rotate tested card for 4 times (for loop)
         card2.direction++;
       }
     }
   }
-  return new_positions;
+  return new_positions; // The vector of possible combinations of cards
 }
 
 int main() {
@@ -175,41 +176,29 @@ int main() {
   initializeCards(cards); // Initializes all cards with correct values
   std::vector<Position> positions;
   
+  // Put every single card to a vector of Position objects
   for (Card card : cards) {
     Position pos;
     pos.cards.emplace_back(card); 
     positions.emplace_back(pos);
   }
   
-  positions = getPairs(positions);
-  int cards_in_grid = 2;
-  while (cards_in_grid < 9) {
+  // getBiggerPositions returns all possible combinations of cards
+  // which has one more card inserted right from rightmost card or
+  // below the leftmost card if rightmost card is at the edge of 3x3 grid
+  for (int cards_in_grid=1; cards_in_grid<9; cards_in_grid++)
     positions = getBiggerPositions(positions, cards);
-    positions[0].PrintPosition();
-    cards_in_grid++;
-  }
 
+  // Test all returned 3x3 grids from getBiggerPositions
+  // and notify if solution was found
   for (Position position: positions) {
     if (position.IsSolved()) {
-      std::cout << "SOLVED!\n";
+      std::cout << "\n\nSOLVED!\n";
       position.PrintPosition();
       return 0;
     }
   }
   
+  std::cout << "No solution found :(\n";
   return 1;
 }
-/*  //while (positions.size() < 9) {
-    //positions = 
-  Position pos;
-
-
-  position.SortPosition();
-  position.PrintPosition();
-
-  Position initial_pos = position;
-
-  BruteForce(position);
-
-  return 0;
-}*/
