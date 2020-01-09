@@ -27,7 +27,6 @@ void initializeCards(Card (&cards)[9]) {
   // Initialize cardID's and positions
   for (int i=0; i<9; i++) {
     cards[i].cardID   = i;
-    cards[i].position = i;
   }
   
   // TRDL
@@ -57,60 +56,153 @@ void initializeCards(Card (&cards)[9]) {
   std::cout << "All cards are initialized!" << std::endl;
 }
 
-// Utility function for sorting Card objects by card positions
-bool CompareCardPositions(Card c1, Card c2) { return (c1.position < c2.position); }
 
-// TODO
-void BruteForce(Position handled_position) {
-  int rounds = 0;
-  while (rounds < 9) {
-    int current = 0;
-    int checking = current + 1;
-    int checked_cards = 0;
-    bool full_rev = false;
+bool fitsRight(std::vector<Card> cards, Card& c2) {
+  Card c1 = cards.back();
+  int c1_score_r = c1.sides[(c1.direction + 1) % 4];
+  int c2_score_l = c2.sides[(c2.direction + 3) % 4];
+ /* 
+  if (cards.back().position > 3) {
+    Card card_up = cards[cards.back().position - 3];
+    int card_up_score_d = card_up.sides[(c1.direction + 2) % 4];
+    int c2_score_u = c2.sides[c2.direction % 4];
+    
+    return (c1_score_r + c2_score_l == 0 && card_up_score_d + c2_score_u == 0);
+  }
+*/
+  return (c1_score_r + c2_score_l == 0);
+}
 
-    while (checked_cards < 9) {
-      // Rotate card at a time
-      for (int i=1; i<9-rounds; i++) {
-        handled_position.cards[i].direction++;
-        // If current card has rotated full revolution, rotate next card
-        if (handled_position.cards[i].direction % 4 != 0)
-          break;
+bool fitsBelow(Card& c1, Card& c2) {
+  int c1_score = c1.sides[(c1.direction + 2) % 4];
+  int c2_score = c2.sides[c2.direction % 4];
+  return (c1_score + c2_score == 0);
+}
 
-        // If last card has rotated full revolution
-        else if (i == 8) {
-          current++; full_rev = true; handled_position.PrintPosition();
+// c1 left, c2 right
+std::vector<Position> getPairs(std::vector<Position>& singles) {
+  std::vector<Position> pairs;
+
+  // Test which cards can attach to right of the card
+  for (int i=0; i<singles.size(); i++) {
+    Card card1 = singles[i].cards[0];
+    for (int j=0; j<singles.size(); j++) {
+      for (int r1=0; r1<4; r1++) {
+        card1.direction++;
+        for (int r2=0; r2<4; r2++) {
+          Card card2 = singles[j].cards[0];
+
+          // 'card' is left, 'card2' is right
+          if (fitsRight(singles[i].cards, card2)) {
+            //card1.direction  = (card1.direction  + 1) % 4;
+            //card2.direction = (card2.direction + 3) % 4;
+            Position pair;
+            pair.cards.emplace_back(card1);
+            pair.cards.emplace_back(card2);
+
+            pairs.emplace_back(pair);
+          }
+          card2.direction++;
         }
       }
+    }
+  }
 
-      if (handled_position.IsSolved()) {
-        std::cout << "SOLVED!\n";
-        handled_position.PrintPosition();
-        exit(0);
-      }
-      else if (current == 9-checked_cards-rounds) {
-        checked_cards++;
-        current = 1;
-      }
-      
-      // Move current card forward by one spot
-      else if (full_rev) {
-        handled_position.SwapCards(current, current-1);
-        full_rev = false;
+  return pairs;
+}
+
+
+std::vector<int> getUsedCards(Position& pos) {
+  std::vector<int> used;
+  for (int i=0; i<pos.cards.size(); i++)
+    used.emplace_back( pos.cards[i].cardID );
+  return used;
+}
+
+std::vector<Position> getBiggerPositions(std::vector<Position>& positions, Card (&cards)[9]) {
+  std::vector<Position> new_positions;
+  for (Position pos : positions) {
+    Card card1;
+
+    // If card is in the right edge of the 3x3 grid
+    // the next card should go below the leftmost card
+    bool need_right = true;
+    if (pos.cards.back().position % 3 == 2) {
+      need_right = false;
+      card1 = pos.cards[pos.cards.back().position - 2]; // The leftmost card at bottom row
+    }
+
+    // Get already used cardID's
+    std::vector<int> used = getUsedCards(pos); 
+
+    // Rotate every other card full revolution and test
+    // if it fits to the right side of rightmost card
+    for (int c=0; c<9; c++) {
+
+      // Do not reuse cards that are already used
+      if (std::count(used.begin(), used.end(), c))
+        continue;
+
+      Card card2 = cards[c];
+      for (int i=0; i<4; i++) {
+        bool is_position = false;
+
+        if (need_right)
+          is_position = fitsRight(pos.cards, card2);
+        else
+          is_position = fitsBelow(card1, card2);
+          
+        if (is_position) {
+          Position new_pos;
+          new_pos.cards = pos.cards;
+          new_pos.cards.emplace_back(card2);
+          
+          // Update card positions
+          for (int p=0; p<new_pos.cards.size(); p++)
+            new_pos.cards[p].position = p;
+
+          new_positions.emplace_back(new_pos);
+        }
+        card2.direction++;
       }
     }
-    rounds++;
   }
+  return new_positions;
 }
 
 int main() {
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
+  std::vector<Position> positions;
   
-  Position position;
+  for (Card card : cards) {
+    Position pos;
+    pos.cards.emplace_back(card); 
+    positions.emplace_back(pos);
+  }
+  
+  positions = getPairs(positions);
+  int cards_in_grid = 2;
+  while (cards_in_grid < 9) {
+    positions = getBiggerPositions(positions, cards);
+    positions[0].PrintPosition();
+    cards_in_grid++;
+  }
 
-  for (Card card : cards)
-    position.cards.emplace_back(card);
+  for (Position position: positions) {
+    if (position.IsSolved()) {
+      std::cout << "SOLVED!\n";
+      position.PrintPosition();
+      return 0;
+    }
+  }
+  
+  return 1;
+}
+/*  //while (positions.size() < 9) {
+    //positions = 
+  Position pos;
+
 
   position.SortPosition();
   position.PrintPosition();
@@ -120,4 +212,4 @@ int main() {
   BruteForce(position);
 
   return 0;
-}
+}*/
