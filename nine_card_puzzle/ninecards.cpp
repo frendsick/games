@@ -73,7 +73,7 @@ class Card {
           case '1':
             return st + l.at(0) + sp + r.at(2) + eol;
           case '2':
-            return st + l.at(1) + sp + r.at(1) + eol;
+            return st + l.at(1) + "   " + std::to_string(this->cardID+1) + "   " + r.at(1) + eol;
           case '3':
             return st + l.at(2) + sp + r.at(0) + eol; 
         }
@@ -181,7 +181,7 @@ class Position {
 
       std::cout << "\nPrinting current position\n";
 
-      for (int i=0; i<cards.size(); i++) {
+      for (int i=0; i<this->cards.size(); i++) {
         top_line    += " ___________ ";
         top         += cards[i].GetRow('T');
         row1        += cards[i].GetRow('1');
@@ -190,7 +190,7 @@ class Position {
         bottom      += cards[i].GetRow('B');
         bottom_line += "|___________|";
         
-        if (i % 3 == 2 || i == cards.size() - 1) {
+        if (i % 3 == 2 || i == this->cards.size() - 1) {
           std::cout << top_line << std::endl << top << std::endl << row1 << std::endl << row2
             << std::endl << row3 << std::endl << bottom << std::endl << bottom_line << std::endl;
           top_line    = "";
@@ -212,7 +212,6 @@ class Position {
       );
     }
 
-    // TODO
     // I only need to check down and right for a match if I start match checking from UP-LEFT corner
     bool CheckNeighbor(Card card1, Card card2) {
 
@@ -222,8 +221,8 @@ class Position {
       
       // If cards are next to each other and they
       if (card2.position - card1.position == 1) { 
-        c1_score  = card1.sides[(card1.direction + 3) % 4];
-        c2_score  = card2.sides[(card2.direction + 1) % 4];
+        c1_score  = card1.sides[(card1.direction + 1) % 4];
+        c2_score  = card2.sides[(card2.direction + 3) % 4];
       }
       
       // If cards are on top of each other
@@ -264,60 +263,60 @@ class Position {
       return solved;
     }
 
-    void SwapCards(int i) {
-      Card temp_card;
-      cards[i].position++;
-      cards[i+1].position--;
-      temp_card   = cards[i];
-      cards[i]    = cards[i+1];
-      cards[i+1]  = temp_card;
+    void SwapCards(int i, int j) {
+      int temp_pos = this->cards[i].position;
+      this->cards[i].position = this->cards[j].position;
+      this->cards[j].position = temp_pos;
+      std::swap(this->cards[i], this->cards[j]);
     }
     
-    // TODO
-    void BruteForce() {
-      int current = 0;
-      int checked_cards = 0;
-      bool full_rev = false;
-
-      while (checked_cards < 9) {
-        // Rotate card at a time
-        for (int i=0; i<9; i++) {
-          this->cards[i].direction++;
-          // If current card has rotated full revolution, rotate next card
-          if (this->cards[i].direction % 4 != 0)
-            break;
-
-          // If last card has rotated full revolution
-          else if (i == 8) {
-            current++; full_rev = true;
-          }
-        }
-
-        if (this->IsSolved()) {
-          std::cout << "SOLVED!\n";
-          this->PrintPosition();
-          break;
-        }
-        
-        else if (current == 7) {
-          this->SwapCards(0);
-          checked_cards++;
-          current = 1;
-        }
-        
-        // Move current card forward by one spot
-        else if (full_rev) {
-          this->SwapCards(current);
-          this->PrintPosition();
-          full_rev = false;
-        }
-      }
-    }
 };
 
 // Utility function for sorting Card vectors by card positions
 bool CompareCardPositions(Card c1, Card c2) { return (c1.position < c2.position); }
 
+// TODO
+void BruteForce(Position handled_position, Position initial_position) {
+  int rounds = 0;
+  while (rounds < 9) {
+    int current = 0;
+    int checking = current + 1;
+    int checked_cards = 0;
+    bool full_rev = false;
+
+    while (checked_cards < 9) {
+      // Rotate card at a time
+      for (int i=1; i<9-rounds; i++) {
+        handled_position.cards[i].direction++;
+        // If current card has rotated full revolution, rotate next card
+        if (handled_position.cards[i].direction % 4 != 0)
+          break;
+
+        // If last card has rotated full revolution
+        else if (i == 8) {
+          current++; full_rev = true; handled_position.PrintPosition();
+        }
+      }
+
+      if (handled_position.IsSolved()) {
+        std::cout << "SOLVED!\n";
+        handled_position.PrintPosition();
+        exit(0);
+      }
+      else if (current == 9-checked_cards-rounds) {
+        checked_cards++;
+        current = 1;
+      }
+      
+      // Move current card forward by one spot
+      else if (full_rev) {
+        handled_position.SwapCards(current, current-1);
+        full_rev = false;
+      }
+    }
+    rounds++;
+  }
+}
 void initializeCards(Card (&cards)[9]) {
   std::cout << "Initializing cards" << std::endl;
 
@@ -358,16 +357,17 @@ int main() {
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
   
-  Position pos;
-  std::vector<Position> positions;
-  positions.emplace_back(pos);
+  Position position;
 
   for (Card card : cards)
-    positions[0].cards.emplace_back(card);
+    position.cards.emplace_back(card);
 
-  positions[0].SortPosition();
+  position.SortPosition();
+  position.PrintPosition();
 
-  positions[0].BruteForce();
+  Position initial_pos = position;
+
+  BruteForce(position, initial_pos);
 
   return 0;
 }
