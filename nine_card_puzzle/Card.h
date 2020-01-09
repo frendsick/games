@@ -1,12 +1,12 @@
 class Card {
   public:
-    int cardID;
-    int sides[4];
+    int cardID;     // Unique identifier to a single card. Should not be changed.
+    int sides[4];   // Numeric value for every side of the card. See ninecards.cpp
     int direction;  // How many times the card is rotated anticlockwize
     int position;   // This cards position in 3x3 matrix, 0 = UP-LEFT, 2 = UP-RIGHT, 5 = MID-RIGHT etc.
   
-    // Default constructor zeroes card's direction
-    Card() { direction = 0; }
+    // Default constructor zeroes card's direction and position
+    Card() { direction = 0; position = 0; }
 
     // Returns the glass pieces for side rows
     std::string GetSideRow(const char& row) {
