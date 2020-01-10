@@ -4,7 +4,7 @@
 
 <p>The game has 9 cards which each has top and bottom halves of a glass on four sides. The tops and bottoms align nicely when cards are inserted correctly</p>
 
-![Picture of game's cards]('cards.jpeg')
+![Picture of game's cards](cards.jpeg)
 
 ### The program
 
