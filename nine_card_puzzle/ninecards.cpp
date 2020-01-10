@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
   
-  int initial_rotations = getRotationFromArguments(argc, argv);
+  int initial_rotations = getRotationFromArguments(argc, argv); // Defaults to 0 if no args are given
   
   auto start_timer = std::chrono::high_resolution_clock::now(); // Timer for the solve
   
