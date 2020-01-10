@@ -2,6 +2,8 @@
 
 <p>I got a souvenir which I was unable to solve by hand. Luckily a computer can do the work for me ;)</p>
 
+<img src='avoid_work.jpg' style='width:350px; heigth:300px;'/>
+
 <p>The game has 9 cards which each has top and bottom halves of a glass on four sides. The tops and bottoms align nicely when cards are inserted correctly</p>
 
 ![Picture of game's cards](cards.jpeg)
