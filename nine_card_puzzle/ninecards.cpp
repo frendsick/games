@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 #include "Card.h"     // Every card and card related methods
 #include "Position.h" // Single position containing all 9 cards in 3x3 grid
 
@@ -74,38 +75,6 @@ bool fitsRight(std::vector<Card>& cards, Card& c2) {
   return (c1_score_r + c2_score_l == 0); // Only check horizontal match
 }
 
-// card1 left, card2 right
-std::vector<Position> getPairs(std::vector<Position>& singles) {
-  std::vector<Position> pairs;
-
-  // Test which cards can attach to right of the card
-  for (int i=0; i<singles.size(); i++) {
-    Card card1 = singles[i].cards[0];
-    for (int j=0; j<singles.size(); j++) {
-      for (int r1=0; r1<4; r1++) {
-        card1.direction++;
-        for (int r2=0; r2<4; r2++) {
-          Card card2 = singles[j].cards[0];
-
-          // 'card' is left, 'card2' is right
-          if (fitsRight(singles[i].cards, card2)) {
-            //card1.direction  = (card1.direction  + 1) % 4;
-            //card2.direction = (card2.direction + 3) % 4;
-            Position pair;
-            pair.cards.emplace_back(card1);
-            pair.cards.emplace_back(card2);
-
-            pairs.emplace_back(pair);
-          }
-          card2.direction++;
-        }
-      }
-    }
-  }
-
-  return pairs; // All possible pairs to go to positions 0 and 1 in 3x3 grid
-}
-
 // Returns vector of integers including all used cards in currently handled position
 std::vector<int> getUsedCards(Position& pos) {
   std::vector<int> used;
@@ -172,6 +141,8 @@ std::vector<Position> getBiggerPositions(std::vector<Position>& positions, Card 
 }
 
 int main() {
+  auto start_timer = std::chrono::high_resolution_clock::now(); // Timer for the program
+
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
   std::vector<Position> positions;
@@ -193,7 +164,15 @@ int main() {
   // and notify if solution was found
   for (Position position: positions) {
     if (position.IsSolved()) {
+      
+      // End the timer
+      auto stop_timer = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop_timer - start_timer);
+
       std::cout << "\n\nSOLVED!\n";
+      std::cout << "It took " << duration.count() << " microseconds to find the solution\n";
+
+      // Print solution and end the program
       position.PrintPosition();
       return 0;
     }
