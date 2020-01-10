@@ -22,6 +22,10 @@
  *
  */
 
+// GLOBALS for counting comparisons and found possible combinations for each card amount
+int AMOUNT_OF_COMPARISONS = 0;
+int POSSIBILITIES[9]      = {0}; // Zero all nine elements
+
 void initializeCards(Card (&cards)[9]) {
   std::cout << "Initializing cards..." << std::endl;
 
@@ -51,6 +55,20 @@ void initializeCards(Card (&cards)[9]) {
   }
 
   std::cout << "All cards are initialized!" << std::endl;
+}
+
+// Put every single card to a vector of Position objects
+std::vector<Position> cardsToPositions(Card (&cards)[9]) {
+  std::vector<Position> positions;
+  for (Card card : cards) { // Loop through cards
+    for (int i=0; i<4; i++) { // Rotate card 4 times to get all combinations
+      Position pos;
+      pos.cards.emplace_back(card);
+      positions.emplace_back(pos);
+      card.direction++;
+    }
+  }
+  return positions;
 }
 
 bool fitsBelow(Card& c1, Card& c2) {
@@ -145,14 +163,9 @@ int main() {
 
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
-  std::vector<Position> positions;
   
-  // Put every single card to a vector of Position objects
-  for (Card card : cards) {
-    Position pos;
-    pos.cards.emplace_back(card); 
-    positions.emplace_back(pos);
-  }
+  // Put every all cards to Position vector two different ways
+  std::vector<Position> positions = cardsToPositions(cards);
   
   // getBiggerPositions returns all possible combinations of cards
   // which has one more card inserted right from rightmost card or
