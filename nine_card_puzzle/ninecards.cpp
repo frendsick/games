@@ -184,27 +184,29 @@ int main(int argc, char* argv[]) {
   // getBiggerPositions returns all possible combinations of cards
   // which has one more card inserted right from rightmost card or
   // below the leftmost card if rightmost card is at the edge of 3x3 grid
-  for (int cards_in_grid=1; cards_in_grid<9; cards_in_grid++)
+  for (int i=1; i<9; i++) {
     positions = getBiggerPositions(positions, cards);
+    POSSIBILITIES[i] = positions.size();
+  }
 
   // Test all returned 3x3 grids from getBiggerPositions
   // and notify if solution was found
+  int solutions = 0;
   for (Position position: positions) {
     if (position.IsSolved()) {
-      
-      // End the timer
-      auto stop_timer = std::chrono::high_resolution_clock::now();
-      auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop_timer - start_timer);
+      solutions++;
+      std::cout << "\n\nFound solution " << solutions << std::endl;
 
-      std::cout << "\n\nSOLVED!\n";
-      std::cout << "It took " << duration.count() << " microseconds to find the solution\n";
-
-      // Print solution and end the program
-      position.PrintPosition();
-      return 0;
+      position.PrintPosition(); // Print the position
     }
   }
-  
-  std::cout << "No solution found :(\n";
-  return 1;
+  // End the timer
+  auto stop_timer = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop_timer - start_timer);
+
+  if (solutions > 0)
+    std::cout << "\n\nIt took " << duration.count() << " microseconds to find " << solutions << " solutions\n";
+  else
+    std::cout << "No solution found :(\n";
+  return 0;
 }
