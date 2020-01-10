@@ -60,9 +60,14 @@ void initializeCards(Card (&cards)[9]) {
 int getRotationFromArguments(int argc, char* argv[]) {
   if (argc > 1) {
     #include <cstdlib> // std::strtol
-    int rotation = std::strtol(argv[1], nullptr, 10); // The first argument in numerical form
-    if (rotation > 4)
-      rotation = 4;
+    char* endPtr; // For input checking, will become '\0' if the conversion to long was successful
+    int rotation = std::strtol(argv[1], &endPtr, 10); // The first argument in numerical form
+    
+    // If argument wasn't an integer or it was negative
+    if (*endPtr != '\0' || rotation < 0)
+      rotation = 0;
+    else if (rotation > 3)
+      rotation = 3;
     return rotation;
   }
   return 0;
@@ -77,6 +82,7 @@ std::vector<Position> cardsToPositions(Card (&cards)[9], int rotations) {
       pos.cards.emplace_back(card);
       positions.emplace_back(pos);
       card.direction++;
+      POSSIBILITIES[0]++;
     }
   }
   return positions;
@@ -163,6 +169,7 @@ std::vector<Position> getBiggerPositions(std::vector<Position>& positions, Card 
         }
         // Rotate tested card for 4 times (for loop)
         card2.direction++;
+        AMOUNT_OF_COMPARISONS++;
       }
     }
   }
@@ -204,8 +211,15 @@ int main(int argc, char* argv[]) {
   auto stop_timer = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop_timer - start_timer);
 
-  if (solutions > 0)
+  if (solutions > 0) {
     std::cout << "\n\nIt took " << duration.count() << " microseconds to find " << solutions << " solutions\n";
+    std::cout << "The program made " << AMOUNT_OF_COMPARISONS << " comparisons\n\n";
+
+    /* UNCOMMENT if you want to print how many possible X card configurations were found
+    for (int i=0; i<9; i++)
+      std::cout << "There were " << POSSIBILITIES[i] << " possible " << i+1 << " card configurations\n";
+    */
+  }
   else
     std::cout << "No solution found :(\n";
   return 0;
