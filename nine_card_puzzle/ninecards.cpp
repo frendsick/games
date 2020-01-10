@@ -57,19 +57,22 @@ void initializeCards(Card (&cards)[9]) {
   std::cout << "All cards are initialized!" << std::endl;
 }
 
-int getRotationFromArguments(int argc, char* argv[])
+int getRotationFromArguments(int argc, char* argv[]) {
   if (argc > 1) {
     #include <cstdlib> // std::strtol
-    return std::strtol(argv[1], nullptr, 10); // The first argument in numerical form
+    int rotation = std::strtol(argv[1], nullptr, 10); // The first argument in numerical form
+    if (rotation > 4)
+      rotation = 4;
+    return rotation;
   }
   return 0;
 }
 
 // Put every single card to a vector of Position objects
-std::vector<Position> cardsToPositions(Card (&cards)[9]) {
+std::vector<Position> cardsToPositions(Card (&cards)[9], int rotations) {
   std::vector<Position> positions;
   for (Card card : cards) { // Loop through cards
-    for (int i=0; i<4; i++) { // Rotate card 4 times to get all combinations
+    for (int i=0; i<rotations+1; i++) { // Rotate card 4 times to get all combinations
       Position pos;
       pos.cards.emplace_back(card);
       positions.emplace_back(pos);
@@ -171,9 +174,9 @@ int main(int argc, char* argv[]) {
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
   
-  auto start_timer = std::chrono::high_resolution_clock::now(); // Timer for the solve
+  int initial_rotations = getRotationFromArguments(argc, argv);
   
-  int initial_rotations = testArguments(argc, argv);
+  auto start_timer = std::chrono::high_resolution_clock::now(); // Timer for the solve
   
   // Put every all cards to Position vector two different ways
   std::vector<Position> positions = cardsToPositions(cards, initial_rotations);
