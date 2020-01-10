@@ -57,6 +57,14 @@ void initializeCards(Card (&cards)[9]) {
   std::cout << "All cards are initialized!" << std::endl;
 }
 
+int getRotationFromArguments(int argc, char* argv[])
+  if (argc > 1) {
+    #include <cstdlib> // std::strtol
+    return std::strtol(argv[1], nullptr, 10); // The first argument in numerical form
+  }
+  return 0;
+}
+
 // Put every single card to a vector of Position objects
 std::vector<Position> cardsToPositions(Card (&cards)[9]) {
   std::vector<Position> positions;
@@ -158,14 +166,17 @@ std::vector<Position> getBiggerPositions(std::vector<Position>& positions, Card 
   return new_positions; // The vector of possible combinations of cards
 }
 
-int main() {
-  auto start_timer = std::chrono::high_resolution_clock::now(); // Timer for the program
-
+int main(int argc, char* argv[]) {
+  
   Card cards[9];
   initializeCards(cards); // Initializes all cards with correct values
   
+  auto start_timer = std::chrono::high_resolution_clock::now(); // Timer for the solve
+  
+  int initial_rotations = testArguments(argc, argv);
+  
   // Put every all cards to Position vector two different ways
-  std::vector<Position> positions = cardsToPositions(cards);
+  std::vector<Position> positions = cardsToPositions(cards, initial_rotations);
   
   // getBiggerPositions returns all possible combinations of cards
   // which has one more card inserted right from rightmost card or
