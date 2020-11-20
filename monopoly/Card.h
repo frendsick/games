@@ -1,5 +1,5 @@
 class Card {
-  private:
+  public:
     int cardID;
     int movePosition = -1;  // Position on the board (square)
     int payment;            // Payment on the square
@@ -9,8 +9,7 @@ class Card {
     std::string cardType;   // Sattuma or Yhteismaa
     std::string text;       // Text on the card
 
-  public:
-    // Default constructor zeroes payment, moveBackwards and mustMove values
+    // Constructor zeroes payment, moveBackwards and mustMove values
     Card() { payment = 0; moveBackwards = false; mustMove = false; }
 
 };
