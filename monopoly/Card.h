@@ -6,7 +6,7 @@ class Card {
     bool mustMove;          // Does card require the player to move
     bool moveBackwards;     // When card requires the player to move is the direction backwards
     
-    std::string cardType;   // Sattuma or Yhteismaa
+    std::string type;   // Sattuma or Yhteismaa
     std::string text;       // Text on the card
 
     // Constructor zeroes payment, moveBackwards and mustMove values
