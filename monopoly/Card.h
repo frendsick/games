@@ -11,5 +11,12 @@ class Card {
 
     // Constructor zeroes payment, moveBackwards and mustMove values
     Card() { payment = 0; moveBackwards = false; mustMove = false; }
+    
+    void Print() {
+      std::cout << text << " : " << type << " : " << payment << "€";
 
+      if (mustMove)
+        std::cout << " : Liiku ruutuun " << movePosition;
+      std::cout << std::endl;
+    }
 };
