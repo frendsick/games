@@ -4,9 +4,15 @@
  * - Community Chest cards (Yhteismaa)
  */
 
-void newGame(Board &board, std::vector<Player> &players, Card &chanceCards[16], Card &communityCards[16]) {
+// DECLARATIONS
+void initBoard(Board &board);
+// void initPlayers(std::vector<Player> &players);
+void initChance(Card (&chanceCards)[16]);
+void initCommunity(Card (&communityCards)[16]);
+
+void newGame(Board &board, std::vector<Player> &players, Card (&chanceCards)[16], Card (&communityCards)[16]) {
   initBoard(board);
-  initPlayers(players);
+  // initPlayers(players);
   initChance(chanceCards);
   initCommunity(communityCards);
 }
@@ -55,16 +61,19 @@ void initBoard(Board &board) {
     "Maksa lisävero",
     "Erottaja"
   };
-
-  board.positions = positions;
+  
+  for (int i=0; i<40; i++)
+    board.positions[i] = positions[i];
 }
 
+/* 
 // TODO
 void initPlayers(Player &players) {
   return;
 }
+*/
 
-void initChance(Card &chanceCards[16]) {
+void initChance(Card (&chanceCards)[16]) {
   std::string cardTexts[16] = {
     // Property payments
     "Kaikkia kiinteistöjäsi on korjattava. Maksu kustakin talosta 25€, kustakin hotellista 100€.",
@@ -93,7 +102,8 @@ void initChance(Card &chanceCards[16]) {
 
   int cardPayments[16] = { 0, 0, 150, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, -150 };
 
-  for (int i=0; i<16; i++) {
+  int i=0;
+  for (Card card : chanceCards) {
     card.text = cardTexts[i];
     card.type = "Sattuma";
     card.payment = cardPayments[i];
@@ -131,12 +141,13 @@ void initChance(Card &chanceCards[16]) {
           break;
         default:
           std::cout << "Sattumakortin '" << card.text << "' alustaminen ei onnistunut!" << std::endl;
-      }
-    }
-  }
-}
+      } // End of switch-loop
+    } // End of if-statement (movement cards)
+    i++;
+  } // End of for-loop
+} // End of initChance()
 
-void initCommunity(Card &communityCards[16]) {
+void initCommunity(Card (&communityCards)[16]) {
   std::string cardTexts[16] = {
     // Collect money + perks
     "Elinkorko erääntyy maksettavaksi. Peri 100€.",
@@ -163,7 +174,8 @@ void initCommunity(Card &communityCards[16]) {
 
   int cardPayments[16] = { 100, 200, 50, 10, 0, 25, 100, 20, 0, 0, 0, 0, -50, -100, -10, -50 };
 
-  for (int i=0; i<16; i++) {
+  int i=0;
+  for (Card card : communityCards) {
     card.text = cardTexts[i];
     card.type = "Yhteismaa";
     card.payment = cardPayments[i];
@@ -187,6 +199,8 @@ void initCommunity(Card &communityCards[16]) {
         default:
           std::cout << "Yhteismaakortin '" << card.text << "' alustaminen ei onnistunut!" << std::endl;
       }
-    }
-  } 
-}
+    } // End of if-statement (movement cards)
+
+    i++;
+  } // End of for-loop
+} // End of initCommunity()
