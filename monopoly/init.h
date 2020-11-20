@@ -100,7 +100,7 @@ void initChance(Card (&chanceCards)[16]) {
     "Jatka matkaasi Hämeentielle. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€.",
     "Jatka matkaasi Simonkadulle. Jos kuljet \"Lähtö\"-ruudun kautta saat periä 200€.",
     "Käväise Sörnäisten-asemalla. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€.",
-    "Käväise Tavara-asemalla. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€."
+    "Käväise Tavara-asemalla. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€.",
     "Mene kolme askelta taaksepäin.",
     "Mene vankilaan! Mene suoraan vankilaan kulkematta \"Lähtö\"-ruudun kautta.",
 
