@@ -61,9 +61,18 @@ void initBoard(Board &board) {
     "Maksa lisävero",
     "Erottaja"
   };
+
+  int payments[40] = {
+    0, -60, 0, -60, -200, -200, -100, 0, -100, -120,
+    0, -140, -150, -140, -160, -200, -180, 0, -180, -200,
+    0, -220, 0, -220, -240, -200, -260, -260, -150, -280,
+    0, -300, -300, 0, -320, -200, 0, -350, -100, -400
+  };
   
-  for (int i=0; i<40; i++)
+  for (int i=0; i<40; i++) {
     board.positions[i] = positions[i];
+    board.payments[i] = payments[i];
+  }
 }
 
 /* 
@@ -83,10 +92,10 @@ void initChance(Card (&chanceCards)[16]) {
     "Maksu rakennuslainastasi, peri 150€.",
     "Olet voittanut ristisanakilpailun, peri 100€.",
     "Saat nostaa pankista säästötilikorkoa 50€.",
-    "Vapaudut vankilasta."
+    "Vapaudut vankilasta.",
 
     // Move to a location
-    "Jatka matkaasi \"lähtö\"-ruutuun.",
+    "Jatka matkaasi \"Lähtö\"-ruutuun.",
     "Jatka matkaasi Erottajalle.",
     "Jatka matkaasi Hämeentielle. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€.",
     "Jatka matkaasi Simonkadulle. Jos kuljet \"Lähtö\"-ruudun kautta saat periä 200€.",
@@ -97,7 +106,7 @@ void initChance(Card (&chanceCards)[16]) {
 
     // Payments
     "Maksa sakkoa ylinopeudesta 15€.",
-    "Maksa koulumaksuja 150€.",
+    "Maksa koulumaksuja 150€."
   };
 
   int cardPayments[16] = { 0, 0, 150, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, -150 };
@@ -113,6 +122,7 @@ void initChance(Card (&chanceCards)[16]) {
 
       switch (i) {
         case 6:
+          std::cout << chanceCards[i].text << i<<std::endl;
           chanceCards[i].movePosition  = 0;  // Lähtö
           chanceCards[i].moveBackwards = true; // Player cannot bypass "Lähtö" square
           break;
