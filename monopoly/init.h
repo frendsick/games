@@ -79,12 +79,12 @@ void initChance(Card &chanceCards[16]) {
     // Move to a location
     "Jatka matkaasi \"lähtö\"-ruutuun.",
     "Jatka matkaasi Erottajalle.",
-    "Jatka matkaasi Hämeentielle. Jos kuljet \"lähtö\"-ruudun kautta, saat periä 200€.",
-    "Jatka matkaasi Simonkadulle. Jos kuljet \"lähtö\"-ruudun kautta saat periä 200€.",
-    "Käväise Sörnäisten-asemalla. Jos kuljet \"lähtö\"-ruudun kautta, saat periä 200€.",
-    "Käväise Tavara-asemalla. Jos kuljet \"lähtö\"-ruudun kautta, saat periä 200€."
+    "Jatka matkaasi Hämeentielle. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€.",
+    "Jatka matkaasi Simonkadulle. Jos kuljet \"Lähtö\"-ruudun kautta saat periä 200€.",
+    "Käväise Sörnäisten-asemalla. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€.",
+    "Käväise Tavara-asemalla. Jos kuljet \"Lähtö\"-ruudun kautta, saat periä 200€."
     "Mene kolme askelta taaksepäin.",
-    "Mene vankilaan! Mene suoraan vankilaan kulkematta \"lähtö\"-ruudun kautta.",
+    "Mene vankilaan! Mene suoraan vankilaan kulkematta \"Lähtö\"-ruudun kautta.",
 
     // Payments
     "Maksa sakkoa ylinopeudesta 15€.",
@@ -104,7 +104,8 @@ void initChance(Card &chanceCards[16]) {
 
       switch (i) {
         case 6:
-          card.movePosition = 0;  // Start square (Lähtö)
+          card.movePosition  = 0;  // Lähtö
+          card.moveBackwards = true; // Player cannot bypass "Lähtö" square
           break;
         case 7:
           card.movePosition = 39; // Erottaja
@@ -123,6 +124,7 @@ void initChance(Card &chanceCards[16]) {
           break;
         case 12:
           card.movePosition = -3; // 3 steps backwards
+          card.moveBackwards = true;
           break;
         case 13:
           card.movePosition = 20; // Vankila
@@ -134,7 +136,57 @@ void initChance(Card &chanceCards[16]) {
   }
 }
 
-// TODO
 void initCommunity(Card &communityCards[16]) {
-  
+  std::string cardTexts[16] = {
+    // Collect money + perks
+    "Elinkorko erääntyy maksettavaksi. Peri 100€.",
+    "Laskuvirhe pankissa sinun eduksesi. Peri 200€.",
+    "Olet myynyt varastosta tavaraa. Peri 50€.",
+    "Olet saanut toisen palkinnon kauneuskilpailussa. Peri 10€.",
+    "On syntymäpäiväsi. Peri 10€ jokaiselta osanottajalta.",
+    "Osinko 7\% etuoikeutetuista osakkeista. Peri 25€.",
+    "Saat perintöä 100€.",
+    "Veronpalautus peri 20€.",
+    "Vapaudut vankilasta.",
+    
+    // Move to a location
+    "Jatka matkaasi \"Lähtö\"-ruutuun.",
+    "Mene vankilaan! Mene suoraan vankilaan kulkematta \"Lähtö\"-ruudun kautta.",
+    "Palaa Korkeavuorenkadulle.",
+
+    // Payments
+    "Lääkärinpalkkio. Maksa 50€.",
+    "Maksa sairaalamaksu 100€.",
+    "Maksa sakkoa 10€ tai ota \"Sattuma\"-kortti.",
+    "Maksa vakuutusmaksuja 50€."
+  };
+
+  int cardPayments[16] = { 100, 200, 50, 10, 0, 25, 100, 20, 0, 0, 0, 0, -50, -100, -10, -50 };
+
+  for (int i=0; i<16; i++) {
+    card.text = cardTexts[i];
+    card.type = "Yhteismaa";
+    card.payment = cardPayments[i];
+
+    // Movement cards are indexes 9-11
+    if (i >= 9 && i <= 11) {
+      card.mustMove = true;
+
+      switch (i) {
+        case 9:
+          card.movePosition = 0; // Lähtö
+          break;
+        case 10:
+          card.movePosition  = 10; // Vankila
+          card.moveBackwards = true; // Player cannot bypass "Lähtö" square
+          break;
+        case 11:
+          card.movePosition  = 1; // Korkeavuorenkatu
+          card.moveBackwards = true;
+          break;
+        default:
+          std::cout << "Yhteismaakortin '" << card.text << "' alustaminen ei onnistunut!" << std::endl;
+      }
+    }
+  } 
 }
