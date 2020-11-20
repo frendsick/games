@@ -102,48 +102,46 @@ void initChance(Card (&chanceCards)[16]) {
 
   int cardPayments[16] = { 0, 0, 150, 100, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, -150 };
 
-  int i=0;
-  for (Card card : chanceCards) {
-    card.text = cardTexts[i];
-    card.type = "Sattuma";
-    card.payment = cardPayments[i];
+  for (int i=0; i<16; i++) {
+    chanceCards[i].text = cardTexts[i]; // End of switch-loop
+    chanceCards[i].type = "Sattuma";
+    chanceCards[i].payment = cardPayments[i];
 
     // Movement cards are indexes 6-13
     if (i >= 6 && i <= 13) {
-      card.mustMove = true;
+      chanceCards[i].mustMove = true;
 
       switch (i) {
         case 6:
-          card.movePosition  = 0;  // Lähtö
-          card.moveBackwards = true; // Player cannot bypass "Lähtö" square
+          chanceCards[i].movePosition  = 0;  // Lähtö
+          chanceCards[i].moveBackwards = true; // Player cannot bypass "Lähtö" square
           break;
         case 7:
-          card.movePosition = 39; // Erottaja
+          chanceCards[i].movePosition = 39; // Erottaja
           break;
         case 8:
-          card.movePosition = 11; // Hämeentie
+          chanceCards[i].movePosition = 11; // Hämeentie
           break;
         case 9:
-          card.movePosition = 24; // Simonkatu
+          chanceCards[i].movePosition = 24; // Simonkatu
           break;
         case 10:
-          card.movePosition = 15; // Sörnäisten-asema
+          chanceCards[i].movePosition = 15; // Sörnäisten-asema
           break;
         case 11:
-          card.movePosition = 35; // Tavara-asema
+          chanceCards[i].movePosition = 35; // Tavara-asema
           break;
         case 12:
-          card.movePosition = -3; // 3 steps backwards
-          card.moveBackwards = true;
+          chanceCards[i].movePosition = -3; // 3 steps backwards
+          chanceCards[i].moveBackwards = true;
           break;
         case 13:
-          card.movePosition = 20; // Vankila
+          chanceCards[i].movePosition = 20; // Vankila
           break;
         default:
-          std::cout << "Sattumakortin '" << card.text << "' alustaminen ei onnistunut!" << std::endl;
+          std::cout << "Sattumakortin '" << chanceCards[i].text << "' alustaminen ei onnistunut!" << std::endl;
       } // End of switch-loop
     } // End of if-statement (movement cards)
-    i++;
   } // End of for-loop
 } // End of initChance()
 
@@ -174,33 +172,30 @@ void initCommunity(Card (&communityCards)[16]) {
 
   int cardPayments[16] = { 100, 200, 50, 10, 0, 25, 100, 20, 0, 0, 0, 0, -50, -100, -10, -50 };
 
-  int i=0;
-  for (Card card : communityCards) {
-    card.text = cardTexts[i];
-    card.type = "Yhteismaa";
-    card.payment = cardPayments[i];
+  for (int i=0; i<16; i++) {
+    communityCards[i].text = cardTexts[i];
+    communityCards[i].type = "Yhteismaa";
+    communityCards[i].payment = cardPayments[i];
 
     // Movement cards are indexes 9-11
     if (i >= 9 && i <= 11) {
-      card.mustMove = true;
+      communityCards[i].mustMove = true;
 
       switch (i) {
         case 9:
-          card.movePosition = 0; // Lähtö
+          communityCards[i].movePosition = 0; // Lähtö
           break;
         case 10:
-          card.movePosition  = 10; // Vankila
-          card.moveBackwards = true; // Player cannot bypass "Lähtö" square
+          communityCards[i].movePosition  = 10; // Vankila
+          communityCards[i].moveBackwards = true; // Player cannot bypass "Lähtö" square
           break;
         case 11:
-          card.movePosition  = 1; // Korkeavuorenkatu
-          card.moveBackwards = true;
+          communityCards[i].movePosition  = 1; // Korkeavuorenkatu
+          communityCards[i].moveBackwards = true;
           break;
         default:
-          std::cout << "Yhteismaakortin '" << card.text << "' alustaminen ei onnistunut!" << std::endl;
-      }
+          std::cout << "Yhteismaakortin '" << communityCards[i].text << "' alustaminen ei onnistunut!" << std::endl;
+      } // End of switch-loop
     } // End of if-statement (movement cards)
-
-    i++;
   } // End of for-loop
 } // End of initCommunity()
