@@ -70,8 +70,8 @@ void initBoard(Board &board) {
   };
   
   for (int i=0; i<40; i++) {
-    board.positions[i] = positions[i];
-    board.payments[i] = payments[i];
+    board.SetPosition(i, positions[i]);
+    board.SetPayment(i, payments[i]);
   }
 }
 
