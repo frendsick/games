@@ -6,13 +6,13 @@
 
 // DECLARATIONS
 void initBoard(Board &board);
-// void initPlayers(std::vector<Player> &players);
+void initPlayers(std::vector<Player> &players);
 void initChance(Card (&chanceCards)[16]);
 void initCommunity(Card (&communityCards)[16]);
 
 void newGame(Board &board, std::vector<Player> &players, Card (&chanceCards)[16], Card (&communityCards)[16]) {
   initBoard(board);
-  // initPlayers(players);
+  initPlayers(players);
   initChance(chanceCards);
   initCommunity(communityCards);
 }
@@ -75,12 +75,19 @@ void initBoard(Board &board) {
   }
 }
 
-/* 
 // TODO
-void initPlayers(Player &players) {
-  return;
+void initPlayers(std::vector<Player> &players) {
+  std::string models[4] = {"Koira", "Hattu", "Laiva", "Auto"};
+  std::string names[2] = {"P1", "P2"};
+  int player_amt = 2;
+  for (int i=0; i<player_amt; i++) {
+    Player player;
+    player.SetPlayerID(i);
+    player.SetModel(models[i]);
+    player.SetName(names[i]);
+    players.emplace_back(player);
+  }
 }
-*/
 
 void initChance(Card (&chanceCards)[16]) {
   std::string cardTexts[16] = {
