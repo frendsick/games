@@ -19,6 +19,9 @@ int main() {
     chanceCards[i].Print();
     communityCards[i].Print();
   }
+  for (Player player : players) {
+    player.Print();
+  }
 
   return 0;
 }
