@@ -9,11 +9,11 @@ class Player {
     std::string name;
 
   public:
-    // Constructors
+    // CONSTRUCTORS
     Player() { hotelCount = 0, houseCount = 0, money = 1500; position = 0; }
     Player(std::string m) { model = m; hotelCount = 0, houseCount = 0, money = 1500; position = 0; }
 
-    // Getters and Setters
+    // GETTERS AND SETTERS
     void SetPlayerID(int id) {
       playerID = id;
     }
@@ -34,8 +34,18 @@ class Player {
       name = n;
     }
 
+    int GetPosition() {
+      return position;
+    };
+
+    // METHODS
+
     // TODO
-    void MakeMove () {
-      position++; // Just a temporary action
+    void MakeMove(int squares) {
+      position = (position + squares) % 40;
+    }
+
+    void Print() {
+      std::cout << name << " | " << model << " | " << money << "€ | Hotels: " << hotelCount << " | Houses: " <<  houseCount << " | Position: " <<  position << std::endl;
     }
 };
