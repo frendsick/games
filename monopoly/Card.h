@@ -17,10 +17,12 @@ class Card {
     void SetCardID(int id) { cardID = id; }
     void SetMovePosition(int pos) { movePosition = pos; }
     void SetPayment(int p) { payment = p; }
-    void SetMustMove(bool m) { mustMove = m; }
-    void SetMoveBackwards(bool m) { moveBackwards = m; }
+    void SetMustMove() { mustMove = true; }
+    void SetMoveBackwards() { moveBackwards = true; }
     void SetType(std::string t) { type = t; }
     void SetText(std::string t) { text = t; }
+
+    std::string GetText() { return text; }
 
     // METHODS
     void Print() {
