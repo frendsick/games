@@ -77,14 +77,9 @@ void initBoard(Board &board) {
 
 // TODO
 void initPlayers(std::vector<Player> &players) {
-  std::string models[4] = {"Koira", "Hattu", "Laiva", "Auto"};
-  std::string names[2] = {"P1", "P2"};
-  int player_amt = 2;
-  for (int i=0; i<player_amt; i++) {
+  for (int i=0; i<PLAYER_AMOUNT; i++) {
     Player player;
     player.SetPlayerID(i);
-    player.SetModel(models[i]);
-    player.SetName(names[i]);
     players.emplace_back(player);
   }
 }
