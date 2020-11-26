@@ -22,7 +22,11 @@ class Card {
     void SetType(std::string t) { type = t; }
     void SetText(std::string t) { text = t; }
 
+    int GetMovePosition() { return movePosition; }
+    bool MustMove() { return mustMove; }
     std::string GetText() { return text; }
+    std::string GetType() { return type; }
+    
 
     // METHODS
     void Print() {
