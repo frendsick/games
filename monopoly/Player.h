@@ -14,33 +14,15 @@ class Player {
     Player(std::string m) { model = m; hotelCount = 0, houseCount = 0, money = 1500; position = 0; }
 
     // GETTERS AND SETTERS
-    void SetPlayerID(int id) {
-      playerID = id;
-    }
+    void SetPlayerID(int id) { playerID = id; }
+    void SetHotelCount(int c) { hotelCount = c; }
+    void SetHouseCount(int c) { houseCount = c; }
+    void SetModel(std::string m) { model = m; }
+    void SetName(std::string n) { name = n; }
 
-    void SetHotelCount(int c) {
-      hotelCount = c;
-    }
-
-    void SetHouseCount(int c) {
-      houseCount = c;
-    }
-
-    void SetModel(std::string m) {
-      model = m;
-    }
-
-    void SetName(std::string n) {
-      name = n;
-    }
-
-    int GetPosition() {
-      return position;
-    };
+    int GetPosition() { return position; };
 
     // METHODS
-
-    // TODO
     void MakeMove(int squares) {
       position = (position + squares) % 40;
     }
