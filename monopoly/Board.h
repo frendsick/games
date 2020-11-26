@@ -6,14 +6,12 @@ class Board {
 
   public:
     // GETTERS AND SETTERS
-    void SetPayment(int pos, int amount) {
-      payments[pos] = amount;
-    }
+    void SetPayment(int pos, int amount) { payments[pos] = amount; }
+    void SetPosition(int pos, std::string text) { positions[pos] = text; }
 
-    void SetPosition(int pos, std::string text) {
-      positions[pos] = text;
-    }
+    std::string GetPosition(int pos) { return positions[pos]; }
 
+    // METHODS
     void Print() {
       std::cout << "\n---PELILAUTA---\n";
       for (int i=0; i<40; i++) {
