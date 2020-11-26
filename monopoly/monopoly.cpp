@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <vector>
@@ -44,7 +44,7 @@ void drawCard(int &position, Card (&cards)[16]) {
 /*
 void printVisits(std::vector<Player> &players) {
   for (Player player : players) {
-    std::cout << "PELAAJAN " << player.GetID() << " KÄYDYT RUUDUT:";
+    std::cout << "PELAAJAN ID" << player.GetID() << " KÄYDYT RUUDUT:";
     for (int i=0; i<40; i++) {
       std::cout << player.GetPositionVisitedAmount(i) << " ";
     }
@@ -68,16 +68,18 @@ void printSquarePercentages(std::vector<Player> &players, Board &board) {
 }
 
 int main() {
-  srand((unsigned) time(0));
+  srand((unsigned) time(0));    // Seeds rand() function
+
+  // Initialize variables
   Board board;
   Card chanceCards[16];
   Card communityCards[16];
   std::vector<Player> players;
 
-  newGame(board, players, chanceCards, communityCards);
-  generateMoves(board, players, chanceCards, communityCards);
+  newGame(board, players, chanceCards, communityCards);         // Initializes board and players as well as Sattuma and Yhteismaa cards
+  generateMoves(board, players, chanceCards, communityCards);   // Generates MOVE_AMOUNT moves for PLAYER_AMOUNT players
   // printVisits(players);
-  printSquarePercentages(players, board);
+  printSquarePercentages(players, board);                       // Prints the average percentages of every square for every player
 
   return 0;
 }
