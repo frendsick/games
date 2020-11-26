@@ -31,7 +31,16 @@ class Player {
     int GetPositionVisitedAmount(int p) { return visitedPositions[p]; }
 
     // METHODS
-    void MakeMove(int diceSum, Board &board, Card (&chanceCards)[16], Card (&communityCards)[16]) {
+    void MakeMove(int (&dices)[2], Board &board, Card (&chanceCards)[16], Card (&communityCards)[16]) 
+      // Test if player threw a pair
+      if (dices[0] == dices[1]) {
+        if (doubleCount < 2)
+          doubleCount++;
+        else {
+          position = 10;  // If player threw 3 pairs in a row, go to jail
+        }
+      }
+
       position = (position + diceSum) % 40;
       std::string squareName = board.GetPosition(position);
       
