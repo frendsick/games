@@ -1,3 +1,4 @@
+void throwDices(int (&dices)[2]);
 const bool LOVE_JAIL = false;  // Are players in jail as long as possible?
 
 class Player {
@@ -94,9 +95,11 @@ class Player {
         return;
       }
       
-      // If this was the first or second pair in a row
-      doubleCount++;
+      // Move to new position and make a new move
       GetNewPosition(dices, board, chanceCards, communityCards);
+      throwDices(dices);
+      MakeMove(dices, board, chanceCards, communityCards);
+      doubleCount++;
     }
 
     void NormalMove(int (&dices)[2], Board &board, Card (&chanceCards)[16], Card (&communityCards)[16]){
