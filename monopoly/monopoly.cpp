@@ -30,16 +30,6 @@ void generateMoves(Board &board, std::vector<Player> &players, Card (&chanceCard
   }
 }
 
-// Draw Sattuma or Yhteismaa card
-void drawCard(int &position, Card (&cards)[16]) {
-  int i = rand() % 16;
-  if (cards[i].MustMove()) {
-    if (cards[i].GetMovePosition() < 0) // Mene 3 askelta taaksepäin
-      position -= cards[i].GetMovePosition();
-    else
-      position = cards[i].GetMovePosition();
-  }
-}
 
 /*
 void printVisits(std::vector<Player> &players) {
