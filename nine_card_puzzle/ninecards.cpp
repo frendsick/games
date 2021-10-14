@@ -215,10 +215,10 @@ int main(int argc, char* argv[]) {
     std::cout << "\n\nIt took " << duration.count() << " microseconds to find " << solutions << " solutions\n";
     std::cout << "The program made " << AMOUNT_OF_COMPARISONS << " comparisons\n\n";
 
-    /* UNCOMMENT if you want to print how many possible X card configurations were found
+    // Print how many possible X card configurations were found
     for (int i=0; i<9; i++)
-      std::cout << "There were " << POSSIBILITIES[i] << " possible " << i+1 << " card configurations\n";
-    */
+      std::cout << "Possible " << i+1 << " card configurations: " <<  POSSIBILITIES[i] << std::endl;
+    
   }
   else
     std::cout << "No solution found :(\n";
