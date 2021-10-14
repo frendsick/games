@@ -82,7 +82,7 @@ def merge(my_list, left, right):
     # print("Merge " + str(my_list))      # Delete comment to print when program merges two sublists
 
 def main():
-    print("Executed main from mergesort.py")
+    print("Mergesort algorithm to sort Player objects by their total points.")
 
 if(__name__ == '__main__'):
     main()
