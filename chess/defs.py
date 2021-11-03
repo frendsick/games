@@ -37,30 +37,40 @@ class Piece:
 class Square:
     loc:    Tuple[int, int] # 1, 5 --> B6
     piece:  Piece = None
+    oob:    bool  = False # Out of bounds square
 
 class Board:
+    captured_pieces:    List[List[Piece]]
+    squares:            List[List[Square]]
+
     # Positive are white pieces, negative are black pieces
-    STARTING_POSITION = [ \
-        [-50, -30, -31, -90, -9001, -31, -30, -50], \
-        [-10] * 8, \
-        [0]   * 8, \
-        [0]   * 8, \
-        [0]   * 8, \
-        [0]   * 8, \
-        [10]  * 8, \
-        [50, 30, 31, 90, 9001, 31, 30, 50] \
+    # Zero's are empty, None's are out-of-bounds
+    STARTING_POSITION = [
+        [None]  * 10,
+        [None, -50, -30, -31, -90, -9001, -31, -30, -50, None],
+        [None, -10, -10, -10, -10, -10, -10, -10, -10, None],
+        [None, 0, 0, 0, 0, 0, 0,  0, 0, None],
+        [None, 0, 0, 0, 0, 0, 0,  0, 0, None],
+        [None, 0, 0, 0, 0, 0, 0,  0, 0, None],
+        [None, 0, 0, 0, 0, 0, 0,  0, 0, None],
+        [None, 10, 10, 10, 10, 10, 10, 10, 10, None],
+        [None, 50, 30, 31, 90, 9001, 31, 30, 50, None],
+        [None]  * 10
     ]
 
     def init_board(self) -> List[List[Square]]:
         squares = self.STARTING_POSITION # Empty squares
-        for x in range(8):
-            for y in range(8):
+        for x in range(10):
+            for y in range(10):
                 squares[x][y] = self.init_square(x, y)
         return squares
 
     def init_square(self, x, y) -> Square:
-        if 1 < x < 6: # Empty square
-            return Square( (x, y), None )
+        if x < 1 or x > 8 or y < 1 or y > 8:
+            return Square( loc=(x, y), piece=None, oob=True )
+
+        if 2 < x < 7: # Empty square
+            return Square( loc=(x, y), piece=None, oob=False )
 
         id      = y+(x*8)
         color   = 'BLACK' if x < 6 else 'WHITE'
@@ -68,7 +78,8 @@ class Board:
         name    = PIECE_VALUE_MAP[value]
         icon    = PIECE_ICON_MAP[f'{color} {name}']
         piece   = Piece(id, color, icon, name, value)
-        return Square( (x, y), piece )
+        return Square( loc=(x, y), piece=piece, oob=False )
 
     def __init__(self) -> None:
-        self.squares: List[List[Square]] = self.init_board()
+        self.captured_pieces    = []
+        self.squares            = self.init_board()

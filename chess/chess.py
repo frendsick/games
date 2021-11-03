@@ -12,8 +12,7 @@ def new_game():
     # Game loop
     while not game_over:
         print_board(board)
-        move = ask_move(turn)
-        make_move(move, board, turn)
+        board = make_move(board, turn)
         game_over = is_game_over(board)
 
 def ask_play_again():
