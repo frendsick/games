@@ -12,9 +12,9 @@ from defs import Board
 #     A B C D E F G H
 
 def print_board(board: Board) -> None:
-    for x in range(1,9):
-        print(f'\n{8-x}  ', end='')
-        for y in range(1,9):
+    for y in range(8, 0, -1):
+        print(f'\n{y}  ', end='')
+        for x in range(1,9):
             piece   = board.squares[x][y].piece
             icon    = '-' if piece is None else piece.icon
             print(f' {icon}', end='')

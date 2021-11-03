@@ -4,15 +4,15 @@ from move   import ask_move, make_move
 from utils  import print_board
 
 def new_game():
-    turn: int       = 1
-    game_over: bool = False
+    game_over: bool     = False
+    whites_turn: bool   = True
 
     board = Board() # Initializes the board to the starting position
 
     # Game loop
     while not game_over:
         print_board(board)
-        board = make_move(board, turn)
+        board = make_move(board, whites_turn)
         game_over = is_game_over(board)
 
 def ask_play_again():
