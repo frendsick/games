@@ -1,0 +1,4 @@
+test
+__pycache__/
+gdb_history
+peda-session*
