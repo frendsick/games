@@ -8,9 +8,11 @@ def new_game():
     game_over: bool = False
 
     board = Board() # Initializes the board to the starting position
+
+    # Game loop
     while not game_over:
         print_board(board)
-        move = ask_move()
+        move = ask_move(turn)
         make_move(move, board, turn)
         game_over = is_game_over(board)
 
