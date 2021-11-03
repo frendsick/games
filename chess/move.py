@@ -18,12 +18,17 @@ def ask_move(turn: int) -> str:
         print("Give move: ", end='')
         move = input()
         if re.fullmatch(move_regex, move) and move[:2] != move[-2:]:
-            return move
+            return move.upper()
         invalid_move_error(move)
 
 def check_move(move: str, board: Board) -> bool:
-    move_from   = move[:2]
-    move_to     = move[-2:]
+    assert len(move) == 4, "Error in move parsing"
+    x_from  = int(ord(move[0]) - 64)
+    y_from  = int(move[1])
+    x_to    = int(ord(move[2]) - 64)
+    y_to    = int(move[1])
+    #print(x_from, y_from, x_to, y_to)
+
 
     invalid_move_error(move, "TEST")
     raise NotImplementedError
