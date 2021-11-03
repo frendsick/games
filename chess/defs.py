@@ -1,19 +1,35 @@
 from dataclasses import dataclass
 from typing import List, Tuple
 
-PIECE_MAP = {
-    10:     'Pawn',
-    30:     'Knight',
-    31:     'Bishop',
-    50:     'Rook',
-    90:     'Queen',
-    9001:   'King'
+PIECE_VALUE_MAP = {
+    10:     'PAWN',
+    30:     'KNIGHT',
+    31:     'BISHOP',
+    50:     'ROOK',
+    90:     'QUEEN',
+    9001:   'KING'
+}
+
+PIECE_ICON_MAP = {
+    'WHITE KING'    : '\u2654',
+    'WHITE QUEEN'   : '\u2655',
+    'WHITE ROOK'    : '\u2656',
+    'WHITE BISHOP'  : '\u2657',
+    'WHITE KNIGHT'  : '\u2658',
+    'WHITE PAWN'    : '\u2659',
+    'BLACK KING'    : '\u265A',
+    'BLACK QUEEN'   : '\u265B',
+    'BLACK ROOK'    : '\u265C',
+    'BLACK BISHOP'  : '\u265D',
+    'BLACK KNIGHT'  : '\u265E',
+    'BLACK PAWN'    : '\u265F',
 }
 
 @dataclass
 class Piece:
     id:    int
     color: str
+    icon:  str # Unicode representation of a piece
     name:  str
     value: int
 
@@ -49,7 +65,7 @@ class Board:
         id      = y+(x*8)
         color   = 'WHITE' if x < 6 else 'BLACK'
         value   = abs(self.STARTING_POSITION[x][y])
-        name    = PIECE_MAP[value]
+        name    = PIECE_VALUE_MAP[value]
         piece   = Piece(id, color, name, value)
         return Square( (x, y), piece )
 
