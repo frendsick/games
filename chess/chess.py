@@ -1,5 +1,4 @@
-import re
-from defs   import Board, Piece, Square
+from defs   import Board
 from logic  import is_game_over
 from move   import ask_move, make_move
 from utils  import print_board
