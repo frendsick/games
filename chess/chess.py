@@ -1,8 +1,19 @@
 import re
-from defs import Board
+from defs   import Board, Piece, Square
+from logic  import is_game_over
+from move   import ask_move, make_move
+from utils  import print_board
 
 def new_game():
-    board = Board
+    turn: int       = 1
+    game_over: bool = False
+
+    board = Board() # Initializes the board to the starting position
+    while not game_over:
+        print_board(board)
+        move = ask_move()
+        make_move(move, board, turn)
+        game_over = is_game_over(board)
 
 def ask_play_again():
     while(True):

@@ -19,8 +19,8 @@ class Piece:
 
 @dataclass
 class Square:
-    loc: Tuple[int, int] # 1, 5 --> B6
-    piece: Piece = None
+    loc:    Tuple[int, int] # 1, 5 --> B6
+    piece:  Piece = None
 
 class Board:
     # Positive are white pieces, negative are black pieces
@@ -35,16 +35,16 @@ class Board:
         [50, 30, 31, 90, 9001, 31, 30, 50] \
     ]
 
-    def init_board(self) -> List[Square]:
-        squares = [] # Empty squares
+    def init_board(self) -> List[List[Square]]:
+        squares = self.STARTING_POSITION # Empty squares
         for x in range(8):
             for y in range(8):
-                squares.append(self.init_square(x, y))
+                squares[x][y] = self.init_square(x, y)
         return squares
 
     def init_square(self, x, y) -> Square:
         if 1 < x < 6: # Empty square
-            return Square( (x, y) )
+            return Square( (x, y), None )
 
         id      = y+(x*8)
         color   = 'WHITE' if x < 6 else 'BLACK'
@@ -54,4 +54,4 @@ class Board:
         return Square( (x, y), piece )
 
     def __init__(self) -> None:
-        self.squares: List[List[Square]] = self.init_board() # 8*8 Squares
+        self.squares: List[List[Square]] = self.init_board()
