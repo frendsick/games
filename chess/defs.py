@@ -11,18 +11,18 @@ PIECE_VALUE_MAP = {
 }
 
 PIECE_ICON_MAP = {
-    'WHITE KING'    : '\u2654',
-    'WHITE QUEEN'   : '\u2655',
-    'WHITE ROOK'    : '\u2656',
-    'WHITE BISHOP'  : '\u2657',
-    'WHITE KNIGHT'  : '\u2658',
-    'WHITE PAWN'    : '\u2659',
-    'BLACK KING'    : '\u265A',
-    'BLACK QUEEN'   : '\u265B',
-    'BLACK ROOK'    : '\u265C',
-    'BLACK BISHOP'  : '\u265D',
-    'BLACK KNIGHT'  : '\u265E',
-    'BLACK PAWN'    : '\u265F',
+    'BLACK KING'    : '\u2654',
+    'BLACK QUEEN'   : '\u2655',
+    'BLACK ROOK'    : '\u2656',
+    'BLACK BISHOP'  : '\u2657',
+    'BLACK KNIGHT'  : '\u2658',
+    'BLACK PAWN'    : '\u2659',
+    'WHITE KING'    : '\u265A',
+    'WHITE QUEEN'   : '\u265B',
+    'WHITE ROOK'    : '\u265C',
+    'WHITE BISHOP'  : '\u265D',
+    'WHITE KNIGHT'  : '\u265E',
+    'WHITE PAWN'    : '\u265F',
 }
 
 @dataclass
@@ -63,10 +63,11 @@ class Board:
             return Square( (x, y), None )
 
         id      = y+(x*8)
-        color   = 'WHITE' if x < 6 else 'BLACK'
+        color   = 'BLACK' if x < 6 else 'WHITE'
         value   = abs(self.STARTING_POSITION[x][y])
         name    = PIECE_VALUE_MAP[value]
-        piece   = Piece(id, color, name, value)
+        icon    = PIECE_ICON_MAP[f'{color} {name}']
+        piece   = Piece(id, color, icon, name, value)
         return Square( (x, y), piece )
 
     def __init__(self) -> None:
