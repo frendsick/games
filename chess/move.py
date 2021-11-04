@@ -27,25 +27,25 @@ def is_own_piece(loc: Tuple[int, int], board: Board, color: str) -> bool:
     piece = board.squares[loc[0]][loc[1]].piece
     return piece is not None or piece.color != color.upper()
 
-def in_check():
+def in_check(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
-def check_pawn_move():
+def legal_pawn_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
-def check_knight_move():
+def legal_knight_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
-def check_bishop_move():
+def legal_bishop_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
-def check_rook_move():
+def legal_rook_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
-def check_queen_move():
+def legal_queen_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
-def check_king_move():
+def legal_king_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
 def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, color: str) -> bool:
@@ -61,7 +61,7 @@ def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Boa
 
     # Check is the move legal for the type of the piece
     if moved_piece.type == "PAWN":
-        return check_pawn_move()
+        return check_pawn_move(loc_from, loc_to, board)
     if moved_piece.type == "KNIGHT":
         return check_knight_move()
     if moved_piece.type == "BISHOP":
@@ -72,6 +72,7 @@ def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Boa
         return check_queen_move()
     if moved_piece.type == "KING":
         return check_king_move()
+    raise RuntimeError("This should not be accessible")
 
 def move_piece(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, moves: List[Move]) -> Board:
     # TODO: Move rules for different pieces
