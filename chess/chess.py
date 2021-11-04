@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from defs   import Board
 from logic  import is_game_over
 from move   import ask_move, make_move

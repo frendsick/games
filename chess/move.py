@@ -1,54 +1,52 @@
 import re
-from typing import TextIO
+from typing import List, TextIO, Tuple
 
 from defs import Board, Piece
+from utils import print_board
 
 def invalid_move_error(move: str, error_message: str = None) -> None:
     print(f"'{move}' is not a valid move!")
     if error_message:
         print(error_message)
 
-# Returns given move
-def ask_move(color: str) -> str:
+# Returns given move in two tuples of coordinates for the move
+def ask_move(color: str) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     # move_regex  = r'[BRQNK][a-h][1-8]|[BRQNK][a-h]x[a-h][1-8]|[BRQNK][a-h][1-8]x[a-h][1-8]|[BRQNK][a-h][1-8][a-h][1-8]|[BRQNK][a-h][a-h][1-8]|[BRQNK]x[a-h][1-8]|[a-h]x[a-h][1-8]=(B+R+Q+N)|[a-h]x[a-h][1-8]|[a-h][1-8]x[a-h][1-8]=(B+R+Q+N)|[a-h][1-8]x[a-h][1-8]|[a-h][1-8][a-h][1-8]=(B+R+Q+N)|[a-h][1-8][a-h][1-8]|[a-h][1-8]=(B+R+Q+N)|[a-h][1-8]|[BRQNK][1-8]x[a-h][1-8]|[BRQNK][1-8][a-h][1-8]|O-O|O-O-O'
     move_regex = r'(?i)[a-h][1-8][a-h][1-8]' # Example: e2g4
     print(f"{color}'s turn!")
     while(True):
         print("Give move: ", end='')
-        move = input()
+        move = input().upper()
         if re.fullmatch(move_regex, move) and move[:2] != move[-2:]:
-            return move.upper()
+            move_from = (int(ord(move[0])-64), int(move[1]))
+            move_to = (int(ord(move[2]) - 64), int(move[3]))
+            return move_from, move_to
         invalid_move_error(move)
 
-def is_own_piece(x: int, y: int, board: Board, color: str) -> bool:
-    piece = board.squares[x][y].piece
-    print(piece is None)
-    print(piece.color == color.upper())
-    return piece is None or piece.color != color.upper()
+def is_own_piece(loc: Tuple[int, int], board: Board, color: str) -> bool:
+    piece = board.squares[loc[0]][loc[1]].piece
+    return piece is not None or piece.color != color.upper()
 
-def check_move(move: str, board: Board, color: int) -> bool:
-    assert len(move) == 4, "Error in move parsing"
-    x_from  = int(ord(move[0]) - 64)
-    y_from  = int(move[1])
-    x_to    = int(ord(move[2]) - 64)
-    y_to    = int(move[1])
-    print(x_from, y_from, x_to, y_to)
-    if not is_own_piece(x_from, y_from, board, color):
-        return False
+def move_piece(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> Board:
+    # TODO: Move rules for different pieces
+    x_from, y_from  = loc_from
+    x_to,   y_to    = loc_to
 
-    invalid_move_error(move, "TEST")
-    raise NotImplementedError
+    piece = board.squares[x_from][y_from].piece
+    board.squares[x_to][y_to].piece = piece
+    board.squares[x_from][y_from].piece = None
+    return board
 
-def move_piece(move: str, board: Board) -> Board:
-    raise NotImplementedError
+def check_move(move_from: Tuple[int, int], move_to: Tuple[int, int], board: Board, color: int) -> bool:
+    return is_own_piece(move_from, board, color)
 
 def make_move(board: Board, turn: int) -> Board:
     color: str = 'White' if turn % 2 == 1 else 'Black'
     legal_move = False
     while not legal_move:
-        move = ask_move(color)
-        legal_move = check_move(move, board, color)
-    return move_piece(move, board)
+        move_from, move_to = ask_move(color)
+        legal_move = check_move(move_from, move_to, board, color)
+    return move_piece(move_from, move_to, board)
 
 def is_game_over():
     raise NotImplementedError
