@@ -39,8 +39,15 @@ class Square:
     piece:  Piece = None
     oob:    bool  = False # Out of bounds square
 
+@dataclass
+class Move:
+    from_square:    Square
+    to_square:      Square
+    piece:          Piece
+
 class Board:
     captured_pieces:    List[List[Piece]]
+    moves:              List[Move]
     squares:            List[List[Square]]
 
     # Positive are white pieces, negative are black pieces
@@ -83,4 +90,5 @@ class Board:
 
     def __init__(self) -> None:
         self.captured_pieces    = []
+        self.moves              = []
         self.squares            = self.init_board()
