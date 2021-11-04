@@ -55,6 +55,7 @@ class Board:
     # Zero's are empty, None's are out-of-bounds
     STARTING_POSITION = [
         [None]  * 10,
+        [None]  * 10,
         [None, 50, 30, 31, 90, 9001, 31, 30, 50, None],
         [None, 10, 10, 10, 10, 10, 10, 10, 10, None],
         [None, 0, 0, 0, 0, 0, 0,  0, 0, None],
@@ -63,6 +64,7 @@ class Board:
         [None, 0, 0, 0, 0, 0, 0,  0, 0, None],
         [None, -10, -10, -10, -10, -10, -10, -10, -10, None],
         [None, -50, -30, -31, -90, -9001, -31, -30, -50, None],
+        [None]  * 10,
         [None]  * 10
     ]
 
@@ -70,15 +72,15 @@ class Board:
         import copy
         squares = copy.deepcopy(self.STARTING_POSITION) # Empty squares
         for x in range(10):
-            for y in range(10):
+            for y in range(12):
                 squares[y][x] = self.init_square(x, y)
         return squares
 
     def init_square(self, x, y) -> Square:
-        if x < 1 or x > 8 or y < 1 or y > 8:
+        if x < 2 or x > 9 or y < 1 or y > 8:
             return Square( loc=(y, x), piece=None, oob=True )
 
-        if 2 < x < 7: # Empty square
+        if 3 < x < 8: # Empty square
             return Square( loc=(y, x), piece=None, oob=False )
 
         id      = y+(x*8)
