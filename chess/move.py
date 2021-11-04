@@ -1,7 +1,7 @@
 import re
 from typing import List, TextIO, Tuple
 
-from defs import Board, Move, Square
+from defs import Board, Move, Square, Piece
 from utils import print_board
 
 def invalid_move_error(move: str, error_message: str = None) -> None:
@@ -23,37 +23,59 @@ def ask_move(color: str) -> Tuple[Tuple[int, int], Tuple[int, int]]:
             return move_from, move_to
         invalid_move_error(move)
 
-def is_own_piece(loc: Tuple[int, int], board: Board, color: str) -> bool:
-    piece = board.squares[loc[0]][loc[1]].piece
+def is_own_piece(x: int, y: int, board: Board, color: str) -> bool:
+    piece = board.squares[x][y].piece
     return piece is not None or piece.color != color.upper()
 
 def in_check(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
 
-def legal_pawn_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
-    raise NotImplementedError
+def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    x_curr = x_from
+    y_curr = y_from
+    while (x_to != x_curr or y_to != y_curr):
+        if x_from != x_to:
+            x_curr = x_curr+1 if x_to > x_from else x_curr-1
+        if y_from != y_to:
+            y_curr = y_curr+1 if y_to > y_from else y_curr-1
+        if board.squares[x_curr][y_curr].piece != None:
+            return True
+    return False
 
-def legal_knight_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
-    raise NotImplementedError
+def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    start_square    = board.squares[x_from][y_from]
+    pawn            = start_square.piece
+    home_row        = 3 if pawn.color == 'WHITE' else 8
+    allowed_steps   = 2 if start_square.loc[1] == home_row else 1
 
-def legal_bishop_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
-    raise NotImplementedError
+    # If the pawn walks forward check if there is any other pieces in the way
+    if x_from == x_to and abs(y_from - y_to) <= allowed_steps:
+        return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
-def legal_rook_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
-    raise NotImplementedError
 
-def legal_queen_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
-    raise NotImplementedError
+def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    print("Knight move rules are not implemented!")
+    return True
 
-def legal_king_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
-    raise NotImplementedError
+def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    print("Bishop move rules are not implemented!")
+    return True
 
-def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, color: str) -> bool:
-    x_from, y_from  = loc_from
-    x_to,   y_to    = loc_to
+def legal_rook_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    print("Rook move rules are not implemented!")
+    return True
+
+def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    print("Queen move rules are not implemented!")
+    return True
+
+def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    print("King move rules are not implemented!")
+    return True
+
+def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, color: str) -> bool:
     moved_piece     = board.squares[x_from][y_from].piece
     target_piece    = board.squares[x_to][y_to].piece
-    print(board.squares[4][4].piece)
 
     # Cannot capture own piece
     if target_piece is not None and target_piece.color == color:
@@ -61,46 +83,46 @@ def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Boa
 
     # Check is the move legal for the type of the piece
     if moved_piece.type == "PAWN":
-        return legal_pawn_move(loc_from, loc_to, board)
+        return legal_pawn_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "KNIGHT":
-        return legal_knight_move(loc_from, loc_to, board)
+        return legal_knight_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "BISHOP":
-        return legal_bishop_move(loc_from, loc_to, board)
+        return legal_bishop_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "ROOK":
-        return legal_rook_move(loc_from, loc_to, board)
+        return legal_rook_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "QUEEN":
-        return legal_queen_move(loc_from, loc_to, board)
+        return legal_queen_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "KING":
-        return legal_king_move(loc_from, loc_to, board)
+        return legal_king_move(x_from, y_from, x_to, y_to, board)
     raise RuntimeError("This should not be accessible")
 
-def move_piece(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, moves: List[Move]) -> Board:
+def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves: List[Move]) -> Board:
     # TODO: Move rules for different pieces
-    x_from, y_from  = loc_from
-    x_to,   y_to    = loc_to
     moved_piece     = board.squares[x_from][y_from].piece
     target_piece    = board.squares[x_to][y_to].piece
     captured_piece  = target_piece if target_piece != None else None
-    from_square     = Square( (loc_from), moved_piece )
-    to_square       = Square( (loc_to), target_piece )
+    from_square     = Square( (x_from, y_from), moved_piece )
+    to_square       = Square( (x_to, y_to), target_piece )
 
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
     return board
 
-def check_move(move_from: Tuple[int, int], move_to: Tuple[int, int], board: Board, color: int) -> bool:
-    if not is_own_piece(move_from, board, color):
+def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, color: int) -> bool:
+    if not is_own_piece(x_from, y_from, board, color):
         return False
-    return is_legal_move(move_from, move_to, board, color)
+    return is_legal_move(x_from, y_from, x_to, y_to, board, color)
 
 def make_move(board: Board, moves: List[Move], turn: int) -> Board:
     color: str = 'White' if turn % 2 == 1 else 'Black'
     legal_move = False
     while not legal_move:
         move_from, move_to = ask_move(color)
-        legal_move = check_move(move_from, move_to, board, color)
-    return move_piece(move_from, move_to, board, moves)
+        x_from, y_from  = move_from
+        x_to,   y_to    = move_to
+        legal_move = check_move(x_from, y_from, x_to, y_to, board, color)
+    return move_piece(x_from, y_from, x_to, y_to, board, moves)
 
 def is_game_over():
     raise NotImplementedError
