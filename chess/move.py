@@ -47,9 +47,10 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     pawn            = start_square.piece
     home_row        = 3 if pawn.color == 'WHITE' else 8
     allowed_steps   = 2 if start_square.loc[1] == home_row else 1
+    right_direction = (y_from < y_to and pawn.color == 'WHITE') or (y_from > y_to and pawn.color == 'BLACK')
 
     # If the pawn walks forward check if there is any other pieces in the way
-    if x_from == x_to and abs(y_from - y_to) <= allowed_steps:
+    if x_from == x_to and abs(y_from - y_to) <= allowed_steps and right_direction:
         return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
 
