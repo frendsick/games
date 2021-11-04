@@ -43,7 +43,8 @@ class Square:
 class Move:
     from_square:    Square
     to_square:      Square
-    piece:          Piece
+    moved_piece:    Piece
+    captured_piece: Piece   = None
 
 class Board:
     captured_pieces:    List[List[Piece]]
