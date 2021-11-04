@@ -27,11 +27,51 @@ def is_own_piece(loc: Tuple[int, int], board: Board, color: str) -> bool:
     piece = board.squares[loc[0]][loc[1]].piece
     return piece is not None or piece.color != color.upper()
 
+def in_check():
+    raise NotImplementedError
+
+def check_pawn_move():
+    raise NotImplementedError
+
+def check_knight_move():
+    raise NotImplementedError
+
+def check_bishop_move():
+    raise NotImplementedError
+
+def check_rook_move():
+    raise NotImplementedError
+
+def check_queen_move():
+    raise NotImplementedError
+
+def check_king_move():
+    raise NotImplementedError
+
 def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, color: str) -> bool:
     x_from, y_from  = loc_from
     x_to,   y_to    = loc_to
-    piece_type: str = board.squares[x_from][y_from].piece.type
-    return True
+    moved_piece     = board.squares[x_from][y_from].piece
+    target_piece    = board.squares[x_to][y_to].piece
+    print(board.squares[4][4].piece)
+
+    # Cannot capture own piece
+    if target_piece is not None and target_piece.color == color:
+        return False
+
+    # Check is the move legal for the type of the piece
+    if moved_piece.type == "PAWN":
+        return check_pawn_move()
+    if moved_piece.type == "KNIGHT":
+        return check_knight_move()
+    if moved_piece.type == "BISHOP":
+        return check_bishop_move()
+    if moved_piece.type == "ROOK":
+        return check_rook_move()
+    if moved_piece.type == "QUEEN":
+        return check_queen_move()
+    if moved_piece.type == "KING":
+        return check_king_move()
 
 def move_piece(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, moves: List[Move]) -> Board:
     # TODO: Move rules for different pieces
