@@ -61,17 +61,17 @@ def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Boa
 
     # Check is the move legal for the type of the piece
     if moved_piece.type == "PAWN":
-        return check_pawn_move(loc_from, loc_to, board)
+        return legal_pawn_move(loc_from, loc_to, board)
     if moved_piece.type == "KNIGHT":
-        return check_knight_move()
+        return legal_knight_move(loc_from, loc_to, board)
     if moved_piece.type == "BISHOP":
-        return check_bishop_move()
+        return legal_bishop_move(loc_from, loc_to, board)
     if moved_piece.type == "ROOK":
-        return check_rook_move()
+        return legal_rook_move(loc_from, loc_to, board)
     if moved_piece.type == "QUEEN":
-        return check_queen_move()
+        return legal_queen_move(loc_from, loc_to, board)
     if moved_piece.type == "KING":
-        return check_king_move()
+        return legal_king_move(loc_from, loc_to, board)
     raise RuntimeError("This should not be accessible")
 
 def move_piece(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, moves: List[Move]) -> Board:
