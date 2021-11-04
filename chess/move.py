@@ -18,8 +18,8 @@ def ask_move(color: str) -> Tuple[Tuple[int, int], Tuple[int, int]]:
         print("Give move: ", end='')
         move = input().upper()
         if re.fullmatch(move_regex, move) and move[:2] != move[-2:]:
-            move_from = (int(ord(move[0])-64), int(move[1]))
-            move_to = (int(ord(move[2]) - 64), int(move[3]))
+            move_from = (int(ord(move[0])-64), int(move[1])+1)
+            move_to = (int(ord(move[2]) - 64), int(move[3])+1)
             return move_from, move_to
         invalid_move_error(move)
 
