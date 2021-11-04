@@ -27,6 +27,12 @@ def is_own_piece(loc: Tuple[int, int], board: Board, color: str) -> bool:
     piece = board.squares[loc[0]][loc[1]].piece
     return piece is not None or piece.color != color.upper()
 
+def is_legal_move(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, color: str) -> bool:
+    x_from, y_from  = loc_from
+    x_to,   y_to    = loc_to
+    piece_type: str = board.squares[x_from][y_from].piece.type
+    return True
+
 def move_piece(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board, moves: List[Move]) -> Board:
     # TODO: Move rules for different pieces
     x_from, y_from  = loc_from
@@ -43,7 +49,9 @@ def move_piece(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board,
     return board
 
 def check_move(move_from: Tuple[int, int], move_to: Tuple[int, int], board: Board, color: int) -> bool:
-    return is_own_piece(move_from, board, color)
+    if not is_own_piece(move_from, board, color):
+        return False
+    return is_legal_move(move_from, move_to, board, color)
 
 def make_move(board: Board, moves: List[Move], turn: int) -> Board:
     color: str = 'White' if turn % 2 == 1 else 'Black'

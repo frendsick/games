@@ -30,7 +30,7 @@ class Piece:
     id:    int
     color: str
     icon:  str # Unicode representation of a piece
-    name:  str
+    type:  str
     value: int
 
 @dataclass
