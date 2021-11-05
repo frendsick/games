@@ -68,7 +68,9 @@ def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boa
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     knight          = start_square.piece
-    return not eating_own_piece(knight, end_square.piece)
+
+    print("Knight move rules are not implemented!")
+    return True
 
 def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
@@ -77,7 +79,6 @@ def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boa
     # Bishop should move diagonally
     if abs(x_from-x_to) != abs(y_from-y_to):
         return False
-
     return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
 def legal_rook_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
