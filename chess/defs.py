@@ -30,6 +30,7 @@ class Player:
     color: str
     name: str
     rating: int
+    can_castle: bool = True
 
 @dataclass
 class Piece:
