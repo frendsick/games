@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from typing import List
-from defs   import Board, Move
+from defs   import Board, Move, Player
 from logic  import is_game_over
 from move   import ask_move, make_move
 from utils  import print_board
@@ -9,11 +9,12 @@ def new_game():
     game_over: bool     = False
     whites_turn: bool   = True
 
+    players: List[Player] = [Player("White", "Teemu", 1337), Player("Black", "Random n00b", 420)]
     board = Board() # Initializes the board to the starting position
     moves: List[Move] = []
     # Game loop
     while not game_over:
-        print_board(board)
+        print_board(board, players)
         board = make_move(board, moves, whites_turn)
         game_over = is_game_over(board)
 

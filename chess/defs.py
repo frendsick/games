@@ -26,6 +26,12 @@ PIECE_ICON_MAP = {
 }
 
 @dataclass
+class Player:
+    color: str
+    name: str
+    rating: int
+
+@dataclass
 class Piece:
     id:    int
     color: str
