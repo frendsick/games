@@ -13,7 +13,7 @@ from defs import Board
 
 def print_board(board: Board) -> None:
     for y in range(9, 1, -1):
-        print(f'\n{y}  ', end='')
+        print(f'\n{y-1}  ', end='')
         for x in range(1,9):
             piece   = board.squares[x][y].piece
             icon    = '-' if piece is None else piece.icon
