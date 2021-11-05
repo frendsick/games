@@ -38,7 +38,7 @@ class Piece:
     icon:  str # Unicode representation of a piece
     type:  str
     value: int
-    can_castle: bool = False # Variable for King and Rook objects
+    can_castle: bool # Variable for King and Rook objects
 
 @dataclass
 class Square:
@@ -93,9 +93,10 @@ class Board:
         id      = y+(x*8)
         color   = 'WHITE' if x < 6 else 'BLACK'
         value   = abs(self.STARTING_POSITION[x][y])
-        name    = PIECE_VALUE_MAP[value]
-        icon    = PIECE_ICON_MAP[f'{color} {name}']
-        piece   = Piece(id, color, icon, name, value)
+        type    = PIECE_VALUE_MAP[value]
+        icon    = PIECE_ICON_MAP[f'{color} {type}']
+        can_castle = type in ['KING', 'ROOK']
+        piece   = Piece(id, color, icon, type, value, can_castle)
         return Square( loc=(y, x), piece=piece, oob=False )
 
     def __init__(self) -> None:
