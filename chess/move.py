@@ -88,8 +88,26 @@ def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boar
         return False
     return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
+# Move the rook two squares. King move will be done afterwards.
+def castle(board: Board, y: int, castle_right: bool) -> Board:
+    print("JEEEE")
+    if castle_right:
+        board.squares[6][y].piece == board.squares[8][y].piece
+        board.squares[8][y].piece == None
+    else:
+        board.squares[3][y].piece == board.squares[1][y].piece
+        board.squares[1][y].piece == None
+    return Board
+
 # TODO: Castling
 def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    king    = board.squares[x_from][y_from].piece
+    # Check castling
+    if (king.can_castle and abs(x_from - x_to) == 2 and y_from == y_to
+        and not move_through_other_piece(x_from, y_from, x_to, y_to, board)):
+        return bool((x_from - x_to < 0 and board.squares[1][y_from].piece.can_castle
+        or x_from - x_to > 0 and board.squares[8][y_from].piece.can_castle))
+
     # King can move to any direction but only one step
     if abs(x_from - x_to) > 1 or abs(y_from - y_to) > 1:
         return False
@@ -131,6 +149,15 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
     from_square     = Square( (x_from, y_from), moved_piece )
     to_square       = Square( (x_to, y_to), target_piece )
 
+    # If castling, move the corresponding rook over the king
+    if moved_piece.type == 'KING' and abs(x_from - x_to) == 2:
+        if x_from < x_to:
+            board.squares[6][y_from].piece = board.squares[8][y_from].piece
+            board.squares[8][y_from].piece = None
+        else:
+            board.squares[4][y_from].piece = board.squares[1][y_from].piece
+            board.squares[1][y_from].piece = None
+
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
@@ -149,6 +176,11 @@ def make_move(board: Board, moves: List[Move], players: List[Player], turn: int)
         x_from, y_from  = move_from
         x_to,   y_to    = move_to
         legal_move = check_move(x_from, y_from, x_to, y_to, board, player)
+
+    # Revocate castling rights when moving king or rook
+    piece = board.squares[x_from][y_from].piece
+    if piece.type in ['KING', 'ROOK']:
+        piece.can_castle = False
     return move_piece(x_from, y_from, x_to, y_to, board, moves)
 
 def is_game_over():
