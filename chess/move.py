@@ -55,7 +55,7 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     right_direction = (y_from < y_to and pawn.color == 'WHITE') or (y_from > y_to and pawn.color == 'BLACK')
 
     # If the pawn walks forward check if there is any other pieces in the way
-    if x_from == x_to and abs(y_from - y_to) <= allowed_steps and right_direction:
+    if x_from == x_to and abs(y_from - y_to) <= allowed_steps and end_square.piece is None and right_direction:
         return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
     if abs(x_from - x_to) == 1 and abs(y_from - y_to) == 1 and right_direction:
         # Cannot eat own piece
