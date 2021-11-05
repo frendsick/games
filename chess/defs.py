@@ -30,7 +30,6 @@ class Player:
     color: str
     name: str
     rating: int
-    can_castle: bool = True
 
 @dataclass
 class Piece:
@@ -39,6 +38,7 @@ class Piece:
     icon:  str # Unicode representation of a piece
     type:  str
     value: int
+    can_castle: bool = False # Variable for King and Rook objects
 
 @dataclass
 class Square:
