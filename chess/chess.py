@@ -17,6 +17,7 @@ def new_game():
         print_board(board, players)
         board = make_move(board, moves, players, whites_turn)
         game_over = is_game_over(board)
+        whites_turn = not whites_turn
 
 def ask_play_again():
     while(True):
