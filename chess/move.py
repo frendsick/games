@@ -88,9 +88,13 @@ def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boar
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     queen           = start_square.piece
-
-    print("Queen move rules are not implemented!")
-    return True
+    # Queen can move to any direction
+    if (
+        x_from != x_to and y_from != y_to
+        and abs(x_from - x_to) != abs(y_from - y_to)
+    ):
+        return False
+    return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
 def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
