@@ -105,8 +105,8 @@ def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     # Check castling
     if (king.can_castle and abs(x_from - x_to) == 2 and y_from == y_to
         and not move_through_other_piece(x_from, y_from, x_to, y_to, board)):
-        return bool((x_from - x_to < 0 and board.squares[1][y_from].piece.can_castle
-        or x_from - x_to > 0 and board.squares[8][y_from].piece.can_castle))
+        return bool((x_from > x_to and board.squares[1][y_from].piece.can_castle)
+        or (x_from < x_to and board.squares[8][y_from].piece.can_castle))
 
     # King can move to any direction but only one step
     if abs(x_from - x_to) > 1 or abs(y_from - y_to) > 1:
