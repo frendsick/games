@@ -68,9 +68,6 @@ def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boa
     return True
 
 def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
-    start_square    = board.squares[x_from][y_from]
-    end_square      = board.squares[x_to][y_to]
-    bishop          = start_square.piece
     # Bishop should move diagonally
     if abs(x_from-x_to) != abs(y_from-y_to):
         return False
