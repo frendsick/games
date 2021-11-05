@@ -43,6 +43,9 @@ def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, boa
             return True
     return False
 
+def eating_own_piece(moving_piece: Piece, target_square_piece: Piece) -> bool:
+    return target_square_piece != None and target_square_piece.color == moving_piece.color
+
 def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
@@ -55,21 +58,25 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     if x_from == x_to and abs(y_from - y_to) <= allowed_steps and right_direction:
         return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
     if abs(x_from - x_to) == 1 and abs(y_from - y_to) == 1 and right_direction:
-        return end_square.piece != None and end_square.piece.color != pawn.color
+        # Cannot eat own piece
+        return eating_own_piece(end_square.piece, pawn)
     return False
 
 def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     knight          = start_square.piece
-    print("Knight move rules are not implemented!")
-    return True
+    return eating_own_piece(end_square.piece, knight)
 
 def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     bishop          = start_square.piece
-    if end_square.piece != None and end_square.piece.color == bishop.color:
+    # Bishop should move diagonally
+    if abs(x_from-x_to) != abs(y_from-y_to):
+        return False
+    # Cannot eat own piece
+    if eating_own_piece(end_square.piece, bishop):
         return False
     return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
@@ -77,6 +84,9 @@ def legal_rook_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     rook            = start_square.piece
+    # Cannot eat own piece
+    if eating_own_piece(end_square.piece, rook):
+        return False
     print("Rook move rules are not implemented!")
     return True
 
@@ -84,6 +94,9 @@ def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boar
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     queen           = start_square.piece
+    # Cannot eat own piece
+    if eating_own_piece(end_square.piece, queen):
+        return False
     print("Queen move rules are not implemented!")
     return True
 
@@ -91,6 +104,9 @@ def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     king            = start_square.piece
+    # Cannot eat own piece
+    if eating_own_piece(end_square.piece, king):
+        return False
     print("King move rules are not implemented!")
     return True
 
