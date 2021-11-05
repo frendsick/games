@@ -2,7 +2,7 @@
 from typing import List
 from defs   import Board, Move, Player
 from logic  import is_game_over
-from move   import ask_move, make_move
+from move   import make_move
 from utils  import print_board
 
 def new_game():

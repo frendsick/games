@@ -1,7 +1,7 @@
 import re
-from typing import List, TextIO, Tuple
+from typing import List, Tuple
 
-from defs import Board, Move, Player, Square, Piece
+from defs import Board, Move, Player, Square
 from utils import print_board
 
 def invalid_move_error(move: str, error_message: str = None) -> None:
