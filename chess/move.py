@@ -1,7 +1,7 @@
 import re
 from typing import List, TextIO, Tuple
 
-from defs import Board, Move, Square, Piece
+from defs import Board, Move, Player, Square, Piece
 from utils import print_board
 
 def invalid_move_error(move: str, error_message: str = None) -> None:
@@ -10,10 +10,10 @@ def invalid_move_error(move: str, error_message: str = None) -> None:
         print(error_message)
 
 # Returns given move in two tuples of coordinates for the move
-def ask_move(color: str) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+def ask_move(player: Player) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     # move_regex  = r'[BRQNK][a-h][1-8]|[BRQNK][a-h]x[a-h][1-8]|[BRQNK][a-h][1-8]x[a-h][1-8]|[BRQNK][a-h][1-8][a-h][1-8]|[BRQNK][a-h][a-h][1-8]|[BRQNK]x[a-h][1-8]|[a-h]x[a-h][1-8]=(B+R+Q+N)|[a-h]x[a-h][1-8]|[a-h][1-8]x[a-h][1-8]=(B+R+Q+N)|[a-h][1-8]x[a-h][1-8]|[a-h][1-8][a-h][1-8]=(B+R+Q+N)|[a-h][1-8][a-h][1-8]|[a-h][1-8]=(B+R+Q+N)|[a-h][1-8]|[BRQNK][1-8]x[a-h][1-8]|[BRQNK][1-8][a-h][1-8]|O-O|O-O-O'
     move_regex = r'(?i)[a-h][1-8][a-h][1-8]' # Example: e2g4
-    print(f"{color}'s turn!")
+    print(f"{player.name}'s turn!")
     while(True):
         print("Give move: ", end='')
         move = input().upper()
@@ -136,19 +136,19 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
     board.squares[x_from][y_from].piece = None
     return board
 
-def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, color: int) -> bool:
-    if not is_own_piece(x_from, y_from, board, color):
+def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
+    if not is_own_piece(x_from, y_from, board, player.color):
         return False
-    return is_legal_move(x_from, y_from, x_to, y_to, board, color)
+    return is_legal_move(x_from, y_from, x_to, y_to, board, player.color)
 
-def make_move(board: Board, moves: List[Move], turn: int) -> Board:
-    color: str = 'White' if turn % 2 == 1 else 'Black'
+def make_move(board: Board, moves: List[Move], players: List[Player], turn: int) -> Board:
+    player: Player = players[0] if turn % 2 == 1 else players[1] # players[0] => White
     legal_move = False
     while not legal_move:
-        move_from, move_to = ask_move(color)
+        move_from, move_to = ask_move(player)
         x_from, y_from  = move_from
         x_to,   y_to    = move_to
-        legal_move = check_move(x_from, y_from, x_to, y_to, board, color)
+        legal_move = check_move(x_from, y_from, x_to, y_to, board, player)
     return move_piece(x_from, y_from, x_to, y_to, board, moves)
 
 def is_game_over():
