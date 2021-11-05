@@ -92,7 +92,6 @@ def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boar
 
 # Move the rook two squares. King move will be done afterwards.
 def castle(board: Board, y: int, castle_right: bool) -> Board:
-    print("JEEEE")
     if castle_right:
         board.squares[6][y].piece == board.squares[8][y].piece
         board.squares[8][y].piece == None
