@@ -43,11 +43,6 @@ def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, boa
             return True
     return False
 
-def eating_own_piece(moving_piece: Piece, target_square_piece: Piece) -> bool:
-    if target_square_piece != None:
-        return target_square_piece.color == moving_piece.color
-    return False
-
 def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
