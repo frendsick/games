@@ -85,9 +85,6 @@ def legal_rook_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     return True
 
 def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
-    start_square    = board.squares[x_from][y_from]
-    end_square      = board.squares[x_to][y_to]
-    queen           = start_square.piece
     # Queen can move to any direction
     if (
         x_from != x_to and y_from != y_to
