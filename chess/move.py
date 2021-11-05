@@ -45,6 +45,7 @@ def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, boa
 
 def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
+    end_square      = board.squares[x_to][y_to]
     pawn            = start_square.piece
     home_row        = 3 if pawn.color == 'WHITE' else 8
     allowed_steps   = 2 if start_square.loc[1] == home_row else 1
@@ -53,7 +54,9 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     # If the pawn walks forward check if there is any other pieces in the way
     if x_from == x_to and abs(y_from - y_to) <= allowed_steps and right_direction:
         return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
-
+    if abs(x_from - x_to) == 1 and abs(y_from - y_to) == 1 and right_direction:
+        return end_square.piece != None and end_square.piece.color != pawn.color
+    return False
 
 def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     print("Knight move rules are not implemented!")
