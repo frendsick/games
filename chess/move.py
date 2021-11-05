@@ -105,7 +105,7 @@ def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, 
     target_piece    = board.squares[x_to][y_to].piece
 
     # Cannot capture own piece
-    if target_piece is not None and target_piece.color == color:
+    if target_piece is not None and target_piece.color == color.upper():
         return False
 
     # Check is the move legal for the type of the piece
