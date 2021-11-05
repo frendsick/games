@@ -69,8 +69,9 @@ def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boa
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     bishop          = start_square.piece
-    print("Bishop move rules are not implemented!")
-    return True
+    if end_square.piece != None and end_square.piece.color == bishop.color:
+        return False
+    return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
 def legal_rook_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     start_square    = board.squares[x_from][y_from]
