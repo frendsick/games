@@ -25,7 +25,9 @@ def ask_move(player: Player) -> Tuple[Tuple[int, int], Tuple[int, int]]:
 
 def is_own_piece(x: int, y: int, board: Board, color: str) -> bool:
     piece = board.squares[x][y].piece
-    return piece is not None or piece.color != color.upper()
+    if piece is not None:
+        return piece.color == color.upper()
+    return False
 
 def in_check(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
     raise NotImplementedError
