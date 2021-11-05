@@ -34,7 +34,7 @@ def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, boa
     x_curr = x_from
     y_curr = y_from
 
-    while (abs(x_to-x_curr) > 0 or abs(y_to-y_curr) > 0):
+    while (abs(x_to-x_curr) > 1 or abs(y_to-y_curr) > 1):
         if x_from != x_to:
             x_curr = x_curr+1 if x_to > x_from else x_curr-1
         if y_from != y_to:
