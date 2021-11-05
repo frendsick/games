@@ -59,22 +59,37 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     return False
 
 def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    start_square    = board.squares[x_from][y_from]
+    end_square      = board.squares[x_to][y_to]
+    knight          = start_square.piece
     print("Knight move rules are not implemented!")
     return True
 
 def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    start_square    = board.squares[x_from][y_from]
+    end_square      = board.squares[x_to][y_to]
+    bishop          = start_square.piece
     print("Bishop move rules are not implemented!")
     return True
 
 def legal_rook_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    start_square    = board.squares[x_from][y_from]
+    end_square      = board.squares[x_to][y_to]
+    rook            = start_square.piece
     print("Rook move rules are not implemented!")
     return True
 
 def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    start_square    = board.squares[x_from][y_from]
+    end_square      = board.squares[x_to][y_to]
+    queen           = start_square.piece
     print("Queen move rules are not implemented!")
     return True
 
 def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+    start_square    = board.squares[x_from][y_from]
+    end_square      = board.squares[x_to][y_to]
+    king            = start_square.piece
     print("King move rules are not implemented!")
     return True
 
