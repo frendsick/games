@@ -33,7 +33,8 @@ def in_check(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -
 def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     x_curr = x_from
     y_curr = y_from
-    while (x_to != x_curr or y_to != y_curr):
+
+    while (abs(x_to-x_curr) > 0 or abs(y_to-y_curr) > 0):
         if x_from != x_to:
             x_curr = x_curr+1 if x_to > x_from else x_curr-1
         if y_from != y_to:
