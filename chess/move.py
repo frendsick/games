@@ -91,6 +91,7 @@ def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boar
         return False
     return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
 
+# TODO: Castling
 def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     # King can move to any direction but only one step
     if abs(x_from - x_to) > 1 or abs(y_from - y_to) > 1:
