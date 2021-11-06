@@ -5,10 +5,11 @@ def is_checkmate(board: Board, white_player: Player, black_player: Player):
     # Position cannot be checkmate if none of the players are in check
     if not white_player.in_check and not black_player.in_check:
         return False
+
     print("Checking for checkmate is not implemented")
     return False
 
-def is_stalemate(board: Board, players: List[Player]):
+def is_stalemate(board: Board, white_player: Player, black_player: Player):
     print("Checking for stalemate is not implemented")
     return False
 
