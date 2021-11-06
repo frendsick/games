@@ -58,14 +58,16 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
         return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
     # Capturing is only allowed diagonally
     if abs(x_from - x_to) == 1 and abs(y_from - y_to) == 1 and right_direction:
+        # Diagonal movement is only allowed when capturing
+        if end_square.piece is not None and pawn.color != end_square.piece:
+            return True
+
         # Check en passant
         if x_from - x_to < 0: # If en passanting to the right
             if board.squares[x_from+1][y_from].piece.en_passant is True:
                 return True
-            elif board.squares[x_from-1][y_from].piece.en_passant is True:
-                return True
-        # Diagonal movement is only allowed when capturing
-        return end_square.piece is not None and pawn.color != end_square.piece
+        elif board.squares[x_from-1][y_from].piece.en_passant is True:
+            return True
     return False
 
 def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
@@ -165,9 +167,18 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
     if moved_piece.type == 'PAWN' and abs(y_from - y_to) == 2:
         moved_piece.en_passant = True
 
+    # If en passanting the target pawn is right next to the from_square
+    if (
+        moved_piece.type == 'PAWN'
+        and abs(x_from - x_to) == 1
+        and target_piece is None
+    ):
+        board.squares[x_from-(x_from-x_to)][y_from].piece = None
+
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
+
     return board
 
 def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
@@ -184,6 +195,14 @@ def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, pla
         return False
     return is_legal_move(x_from, y_from, x_to, y_to, board, player.color)
 
+def clear_en_passant(board: Board, moves: List[Move]) -> Board:
+    if len(moves) > 1:
+        x_prev, y_prev = moves[-2].to_square.loc
+        print(x_prev, y_prev)
+        print(board.squares[4][6].piece)
+        board.squares[x_prev][y_prev].piece.en_passant = False
+    return board
+
 def make_move(board: Board, moves: List[Move], players: List[Player], turn: int) -> Board:
     player: Player = players[0] if turn % 2 == 1 else players[1] # players[0] => White
     legal_move = False
@@ -197,6 +216,10 @@ def make_move(board: Board, moves: List[Move], players: List[Player], turn: int)
     piece = board.squares[x_from][y_from].piece
     if piece.type in ['KING', 'ROOK']:
         piece.can_castle = False
+
+    # Clear en passant for the previous move
+    board = clear_en_passant(board, moves)
+    
     return move_piece(x_from, y_from, x_to, y_to, board, moves)
 
 def is_game_over():
