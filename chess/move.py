@@ -71,12 +71,9 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     return False
 
 def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
-    start_square    = board.squares[x_from][y_from]
-    end_square      = board.squares[x_to][y_to]
-    knight          = start_square.piece
-
-    print("Knight move rules are not implemented!")
-    return True
+    x_diff = abs(x_from - x_to)
+    y_diff = abs(y_from - y_to)
+    return (x_diff == 2 and y_diff == 1) or (x_diff == 1 and y_diff == 2)
 
 def legal_bishop_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     # Bishop should move diagonally
