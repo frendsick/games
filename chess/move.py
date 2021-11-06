@@ -237,8 +237,8 @@ def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     return board
 
 # Makes move and returns the 50 move rule counter
-def make_move(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], turn: int) -> int:
-    player: Player = players[0] if turn % 2 == 1 else players[1] # players[0] => White
+def make_move(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], whites_turn: bool, debug=False, debug_game=None) -> int:
+    player: Player = players[0] if whites_turn else players[1] # players[0] => White
     legal_move = False
     while not legal_move:
         move_from, move_to = ask_move(player)
