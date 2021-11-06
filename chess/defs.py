@@ -25,11 +25,14 @@ PIECE_ICON_MAP = {
     'WHITE PAWN'    : '\u265F',
 }
 
+Location = Tuple[int, int]
+
 @dataclass
 class Piece:
     id:         int
     color:      str
     icon:       str # Unicode representation of a piece
+    location:   Location
     type:       str
     value:      int
     can_castle: bool # Variable for King and Rook objects
@@ -42,8 +45,6 @@ class Player:
     rating:             int
     checking_pieces:    List[Piece] = None
     in_check:           bool        = False
-
-Location = Tuple[int, int]
 
 @dataclass
 class Square:
@@ -94,7 +95,7 @@ class Board:
         type        = PIECE_VALUE_MAP[value]
         icon        = PIECE_ICON_MAP[f'{color} {type}']
         can_castle  = type in ['KING', 'ROOK']
-        piece       = Piece(id, color, icon, type, value, can_castle)
+        piece       = Piece(id, color, icon, (y, x), type, value, can_castle)
         return Square( location=(y, x), piece=piece)
 
     def __init__(self) -> None:

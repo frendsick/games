@@ -196,6 +196,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
 
 def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves: List[Move], moved_piece: Piece, captured_piece: Piece, from_square: Square, to_square: Square) -> List[Move]:
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
+    moved_piece.location = (y_to, x_to)
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
     return moves
