@@ -27,7 +27,7 @@ def is_own_piece(x: int, y: int, board: Board, color: str) -> bool:
         return piece.color == color.upper()
     return False
 
-def in_check(loc_from: Tuple[int, int], loc_to: Tuple[int, int], board: Board) -> bool:
+def in_check(board: Board) -> bool:
     raise NotImplementedError
 
 def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
@@ -190,7 +190,7 @@ def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
 def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
     if not is_own_piece(x_from, y_from, board, player.color):
         return False
-    return is_legal_move(x_from, y_from, x_to, y_to, board, player.color)
+    return not in_check(board) and is_legal_move(x_from, y_from, x_to, y_to, board, player.color)
 
 def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     if len(moves) > 1:
