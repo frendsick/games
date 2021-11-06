@@ -156,35 +156,31 @@ def in_check(board: Board, player: Player) -> bool:
                 return True
     return False
 
-def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, players: List[Player], board: Board, moves: List[Move]) -> Board:
-    # TODO: Move rules for different pieces
+def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter: int, players: List[Player], board: Board, moves: List[Move]) -> int:
     moved_piece     = board.squares[x_from][y_from].piece
     target_piece    = board.squares[x_to][y_to].piece
     captured_piece  = target_piece if target_piece != None else None
     from_square     = Square( (x_from, y_from), moved_piece )
     to_square       = Square( (x_to, y_to), target_piece )
+    move_rule_counter += 1
 
     # If castling, move the corresponding rook over the king
     if moved_piece.type == 'KING':
-        board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
-        if abs(x_from - x_to) == 2:
-            board = move_rook_when_castling(x_from, y_from, x_to, board)
+        board = check_for_castling(x_from, y_from, x_to, players, board, moves, to_square)
+    # Moving pawn resets the 50 move rule counter
+    if moved_piece.type == 'PAWN':
+        move_rule_counter = 0
+        # If moving pawn two squares forwards change en_passant boolean to true for the next turn
+        if abs(y_from - y_to) == 2:
+            moved_piece.en_passant = True
+        # If en passanting the target pawn is right next to the from_square
+        if abs(x_from - x_to) == 1 and target_piece is None:
+            board.squares[x_from-(x_from-x_to)][y_from].piece = None
+    # Capturing a piece resets the 50 move rule counter
+    if captured_piece:
+        move_rule_counter = 0
 
-    # If moving pawn two squares forwards change en_passant boolean to true for the next turn
-    if moved_piece.type == 'PAWN' and abs(y_from - y_to) == 2:
-        moved_piece.en_passant = True
-
-    # If en passanting the target pawn is right next to the from_square
-    if (
-        moved_piece.type == 'PAWN'
-        and abs(x_from - x_to) == 1
-        and target_piece is None
-    ):
-        board.squares[x_from-(x_from-x_to)][y_from].piece = None
-
-    moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
-    board.squares[x_to][y_to].piece = moved_piece
-    board.squares[x_from][y_from].piece = None
+    moves = do_move(x_from, y_from, x_to, y_to, board, moves, moved_piece, captured_piece, from_square, to_square)
 
     # Update are players in check
     player      = players[ (len(moves)+1)%2 ]
@@ -193,6 +189,18 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, players: List[Pla
         opponent.in_check = True
     player.in_check = False
 
+    return move_rule_counter
+
+def do_move(x_from, y_from, x_to, y_to, board, moves, moved_piece, captured_piece, from_square, to_square) -> List[Move]:
+    moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
+    board.squares[x_to][y_to].piece = moved_piece
+    board.squares[x_from][y_from].piece = None
+    return moves
+
+def check_for_castling(x_from, y_from, x_to, players, board, moves, to_square):
+    board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
+    if abs(x_from - x_to) == 2:
+        board = move_rook_when_castling(x_from, y_from, x_to, board)
     return board
 
 def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
@@ -224,7 +232,8 @@ def clear_en_passant(board: Board, moves: List[Move]) -> Board:
         board.squares[x_prev][y_prev].piece.en_passant = False
     return board
 
-def make_move(board: Board, moves: List[Move], players: List[Player], turn: int) -> Board:
+# Makes move and returns the 50 move rule counter
+def make_move(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], turn: int) -> int:
     player: Player = players[0] if turn % 2 == 1 else players[1] # players[0] => White
     legal_move = False
     while not legal_move:
@@ -241,7 +250,7 @@ def make_move(board: Board, moves: List[Move], players: List[Player], turn: int)
     # Clear en passant for the previous move
     board = clear_en_passant(board, moves)
     
-    return move_piece(x_from, y_from, x_to, y_to, players, board, moves)
+    return move_piece(x_from, y_from, x_to, y_to, move_rule_counter, players, board, moves)
 
 def is_game_over():
     raise NotImplementedError
