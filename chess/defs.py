@@ -45,8 +45,8 @@ Location = Tuple[int, int]
 
 @dataclass
 class Square:
-    loc:    Location # 1, 5 --> B6
-    piece:  Piece = None
+    location:   Location # 1, 5 --> B6
+    piece:      Piece = None
 
 @dataclass
 class Move:
@@ -84,7 +84,7 @@ class Board:
 
     def init_square(self, x, y) -> Square:
         if 1 < x < 6: # Empty square
-            return Square( loc=(y, x), piece=None)
+            return Square( location=(y, x), piece=None)
 
         id          = y+(x*8)
         color       = 'WHITE' if x < 5 else 'BLACK'
@@ -93,7 +93,7 @@ class Board:
         icon        = PIECE_ICON_MAP[f'{color} {type}']
         can_castle  = type in ['KING', 'ROOK']
         piece       = Piece(id, color, icon, type, value, can_castle)
-        return Square( loc=(y, x), piece=piece)
+        return Square( location=(y, x), piece=piece)
 
     def __init__(self) -> None:
         self.captured_pieces    = []

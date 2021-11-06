@@ -48,7 +48,7 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     end_square      = board.squares[x_to][y_to]
     pawn            = start_square.piece
     home_row        = 1 if pawn.color == 'WHITE' else 6
-    allowed_steps   = 2 if start_square.loc[1] == home_row else 1
+    allowed_steps   = 2 if start_square.location[1] == home_row else 1
     right_direction = (y_from < y_to and pawn.color == 'WHITE') or (y_from > y_to and pawn.color == 'BLACK')
 
     # If the pawn walks forward check if there is any other pieces in the way
@@ -156,7 +156,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
 
     # If castling, move the corresponding rook over the king
     if moved_piece.type == 'KING':
-        board.king_locations[len(moves)%2] = to_square.loc
+        board.king_locations[len(moves)%2] = to_square.location
         if abs(x_from - x_to) == 2:
             board = move_rook_when_castling(x_from, y_from, x_to, board)
 
@@ -194,7 +194,7 @@ def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, pla
 
 def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     if len(moves) > 1:
-        x_prev, y_prev = moves[-2].to_square.loc
+        x_prev, y_prev = moves[-2].to_square.location
         board.squares[x_prev][y_prev].piece.en_passant = False
     return board
 
