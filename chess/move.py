@@ -102,10 +102,10 @@ def castle(board: Board, y: int, castle_right: bool) -> Board:
         board.squares[0][y].piece == None
     return board
 
-# TODO: Castling
 def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     king    = board.squares[x_from][y_from].piece
     # Check castling
+    # TODO: Prevent castling through check
     if (king.can_castle and abs(x_from - x_to) == 2 and y_from == y_to
         and not move_through_other_piece(x_from, y_from, x_to, y_to, board)):
         return bool((x_from > x_to and board.squares[0][y_from].piece.can_castle)
