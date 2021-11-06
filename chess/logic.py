@@ -11,6 +11,7 @@ def is_stalemate():
 
 def is_game_over(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player]) -> bool:
     if move_rule_counter >= 50:
+        print("Game over - 50 move rule")
         return True
     if is_checkmate():
         return True
