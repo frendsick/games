@@ -1,4 +1,5 @@
 from defs import Board, Location, Move, Piece, Player, Square
+from move import is_legal_move
 from typing import List
 
 def get_squares_between_pieces(board: Board, checking_piece: Piece, target_location: Location) -> List[Square]:
@@ -34,11 +35,23 @@ def is_checkmate(board: Board, player: Player):
     for y in range(8):
         for x in range(8):
             piece = board.squares[x][y].piece
-            if piece.color != player.color.upper():
+            if piece is None or piece.color != player.color.upper():
                 continue
-
-    print("Checking for checkmate is not implemented")
-    return False
+            # King can escape check by moving to a square that is not attacked
+            if piece.type == 'KING':
+                pass
+            else:
+                # Double check can not be blocked by a piece
+                if len(squares_between_king_and_checkers) > 1:
+                    continue
+                # Check if the piece can occupy a square between the checker and the king
+                for square in squares_between_king_and_checkers[0]:
+                    x_from, y_from  = piece.location
+                    x_to, y_to      = square.location
+                    if is_legal_move(x_from, y_from, x_to, y_to, board, piece.color.upper()):
+                        return False
+    print("CHECKMATE")
+    return True
 
 def is_stalemate(board: Board, player: Player):
     print("Checking for stalemate is not implemented")
