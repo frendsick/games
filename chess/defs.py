@@ -57,7 +57,7 @@ class Move:
 
 class Board:
     captured_pieces:    List[List[Piece]]
-    king_locations:     Tuple[Location, Location]
+    king_locations:     List[Location]
     moves:              List[Move]
     squares:            List[List[Square]]
 
