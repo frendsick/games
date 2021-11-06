@@ -2,7 +2,6 @@ import re
 from typing import List, Tuple
 
 from defs import Board, Move, Player, Square
-from utils import print_board
 
 def invalid_move_error(move: str, error_message: str = None) -> None:
     print(f"'{move}' is not a valid move!")
@@ -70,7 +69,7 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
             return True
     return False
 
-def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+def legal_knight_move(x_from: int, y_from: int, x_to: int, y_to: int) -> bool:
     x_diff = abs(x_from - x_to)
     y_diff = abs(y_from - y_to)
     return (x_diff == 2 and y_diff == 1) or (x_diff == 1 and y_diff == 2)
@@ -137,7 +136,7 @@ def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, 
     if moved_piece.type == "PAWN":
         return legal_pawn_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "KNIGHT":
-        return legal_knight_move(x_from, y_from, x_to, y_to, board)
+        return legal_knight_move(x_from, y_from, x_to, y_to)
     if moved_piece.type == "BISHOP":
         return legal_bishop_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "ROOK":
