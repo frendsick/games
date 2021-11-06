@@ -45,9 +45,9 @@ def is_checkmate(board: Board, player: Player):
                 possible_directions = [(1,1),(1,0),(1,-1),(0,-1),(-1,-1),(-1,0),(-1,1),(0,1)]
 
                 # Try moving to every square until a safe square is found
-                for i in range(len(possible_directions)):
-                    x_to = piece.location[0] + possible_directions[i][0]
-                    y_to = piece.location[1] + possible_directions[i][1]
+                for direction in possible_directions:
+                    x_to = piece.location[0] + direction[0]
+                    y_to = piece.location[1] + direction[1]
                     try:
                         if check_move(x_from, y_from, x_to, y_to, board, player):
                             return False
