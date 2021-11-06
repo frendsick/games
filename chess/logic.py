@@ -1,5 +1,5 @@
 from defs import Board, Location, Move, Piece, Player, Square
-from move import is_legal_move
+from move import check_move
 from typing import List
 
 def get_squares_between_pieces(board: Board, checking_piece: Piece, target_location: Location) -> List[Square]:
@@ -37,18 +37,33 @@ def is_checkmate(board: Board, player: Player):
             piece = board.squares[x][y].piece
             if piece is None or piece.color != player.color.upper():
                 continue
+
+            x_from, y_from = piece.location
             # King can escape check by moving to a square that is not attacked
             if piece.type == 'KING':
-                pass
+                # All possible directions starting from up and going clockwise
+                possible_directions = [(1,1),(1,0),(1,-1),(0,-1),(-1,-1),(-1,0),(-1,1),(0,1)]
+
+                # Try moving to every square until a safe square is found
+                for i in range(len(possible_directions)):
+                    x_to = piece.location[0] + possible_directions[i][0]
+                    y_to = piece.location[1] + possible_directions[i][1]
+                    try:
+                        if check_move(x_from, y_from, x_to, y_to, board, player):
+                            return False
+                    # IndexError happens if the king is at the edge of the board
+                    except IndexError:
+                        continue
+
+            # All pieces except King
             else:
                 # Double check can not be blocked by a piece
                 if len(squares_between_king_and_checkers) > 1:
                     continue
                 # Check if the piece can occupy a square between the checker and the king
                 for square in squares_between_king_and_checkers[0]:
-                    x_from, y_from  = piece.location
-                    x_to, y_to      = square.location
-                    if is_legal_move(x_from, y_from, x_to, y_to, board, piece.color.upper()):
+                    y_to, x_to = square.location
+                    if check_move(x_from, y_from, x_to, y_to, board, player):
                         return False
     print("CHECKMATE")
     return True
