@@ -97,6 +97,6 @@ class Board:
 
     def __init__(self) -> None:
         self.captured_pieces    = []
-        self.king_locations     = ( (4,0), (4,7) )
+        self.king_locations     = [ (4,0), (4,7) ]
         self.moves              = []
         self.squares            = self.init_board()
