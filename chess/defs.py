@@ -41,9 +41,11 @@ class Piece:
     can_castle: bool # Variable for King and Rook objects
     en_passant: bool = None # If the pawn can be captured en passant this turn
 
+Location = Tuple[int, int]
+
 @dataclass
 class Square:
-    loc:    Tuple[int, int] # 1, 5 --> B6
+    loc:    Location # 1, 5 --> B6
     piece:  Piece = None
     oob:    bool  = False # Out of bounds square
 
@@ -56,6 +58,7 @@ class Move:
 
 class Board:
     captured_pieces:    List[List[Piece]]
+    king_locations:     Tuple[Location, Location]
     moves:              List[Move]
     squares:            List[List[Square]]
 
@@ -102,5 +105,6 @@ class Board:
 
     def __init__(self) -> None:
         self.captured_pieces    = []
+        self.king_locations     = ( (5,2), (5,9) )
         self.moves              = []
         self.squares            = self.init_board()

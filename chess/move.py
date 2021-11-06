@@ -1,6 +1,5 @@
 import re
 from typing import List, Tuple
-
 from defs import Board, Move, Player, Square
 
 def invalid_move_error(move: str, error_message: str = None) -> None:
