@@ -1,3 +1,4 @@
+from copy import deepcopy
 import re
 from typing import List, Tuple
 from defs import Board, Move, Player, Square
@@ -26,9 +27,6 @@ def is_own_piece(x: int, y: int, board: Board, color: str) -> bool:
     if piece is not None:
         return piece.color == color.upper()
     return False
-
-def in_check(board: Board) -> bool:
-    raise NotImplementedError
 
 def move_through_other_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
     x_curr = x_from
@@ -126,7 +124,6 @@ def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
 def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, color: str) -> bool:
     moved_piece     = board.squares[x_from][y_from].piece
     target_piece    = board.squares[x_to][y_to].piece
-
     # Cannot capture own piece
     if target_piece is not None and target_piece.color == color.upper():
         return False
@@ -146,7 +143,20 @@ def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, 
         return legal_king_move(x_from, y_from, x_to, y_to, board)
     raise RuntimeError("This should not be accessible")
 
-def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves: List[Move]) -> Board:
+def in_check(board: Board, player: Player) -> bool:
+    for y in range(8):
+        for x in range(8):
+            piece = board.squares[x][y].piece
+            # Player's pieces cannot check own king
+            if piece is None or piece.color == player.color.upper():
+                continue
+            # Check if the current piece can get to the opponent's king
+            target_king_x, target_king_y = board.king_locations[player.color.upper()]
+            if is_legal_move(x, y, target_king_x, target_king_y, board, piece.color):
+                return True
+    return False
+
+def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, players: List[Player], board: Board, moves: List[Move]) -> Board:
     # TODO: Move rules for different pieces
     moved_piece     = board.squares[x_from][y_from].piece
     target_piece    = board.squares[x_to][y_to].piece
@@ -156,7 +166,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
 
     # If castling, move the corresponding rook over the king
     if moved_piece.type == 'KING':
-        board.king_locations[len(moves)%2] = to_square.location
+        board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
         if abs(x_from - x_to) == 2:
             board = move_rook_when_castling(x_from, y_from, x_to, board)
 
@@ -176,6 +186,13 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
 
+    # Update are players in check
+    player      = players[ (len(moves)+1)%2 ]
+    opponent    = players[ len(moves)%2 ]
+    if in_check(board, opponent):
+        opponent.in_check = True
+    player.in_check = False
+
     return board
 
 def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
@@ -190,7 +207,16 @@ def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
 def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
     if not is_own_piece(x_from, y_from, board, player.color):
         return False
-    return not in_check(board) and is_legal_move(x_from, y_from, x_to, y_to, board, player.color)
+    legal_move: bool = is_legal_move(x_from, y_from, x_to, y_to, board, player.color)
+    if player.in_check:
+        # Check if the player would still be in check after the proposed move
+        board_copy = deepcopy(board)
+        board_copy.squares[x_to][y_to].piece = board.squares[x_from][y_from].piece
+        board_copy.squares[x_from][y_from].piece = None
+        if board_copy.squares[x_to][y_to].piece.type == 'KING':
+            board_copy.king_locations[player.color.upper()] = (x_to, y_to)
+        return legal_move and not in_check(board_copy, player)
+    return legal_move
 
 def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     if len(moves) > 1:
@@ -215,7 +241,7 @@ def make_move(board: Board, moves: List[Move], players: List[Player], turn: int)
     # Clear en passant for the previous move
     board = clear_en_passant(board, moves)
     
-    return move_piece(x_from, y_from, x_to, y_to, board, moves)
+    return move_piece(x_from, y_from, x_to, y_to, players, board, moves)
 
 def is_game_over():
     raise NotImplementedError

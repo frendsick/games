@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 PIECE_VALUE_MAP = {
     10:     'PAWN',
@@ -58,7 +58,7 @@ class Move:
 
 class Board:
     captured_pieces:    List[List[Piece]]
-    king_locations:     List[Location]
+    king_locations:     Dict[str, Location]
     moves:              List[Move]
     squares:            List[List[Square]]
 
@@ -98,6 +98,6 @@ class Board:
 
     def __init__(self) -> None:
         self.captured_pieces    = []
-        self.king_locations     = [ (4,0), (4,7) ]
+        self.king_locations     = { 'WHITE': (4,0), 'BLACK': (4,7) }
         self.moves              = []
         self.squares            = self.init_board()
