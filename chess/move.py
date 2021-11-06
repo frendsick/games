@@ -143,7 +143,8 @@ def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, 
         return legal_king_move(x_from, y_from, x_to, y_to, board)
     raise RuntimeError("This should not be accessible")
 
-def in_check(board: Board, player: Player) -> bool:
+def get_checking_pieces(board: Board, player: Player) -> List[Piece]:
+    checking_pieces: List[Piece] = []
     for y in range(8):
         for x in range(8):
             piece = board.squares[x][y].piece
@@ -153,8 +154,8 @@ def in_check(board: Board, player: Player) -> bool:
             # Check if the current piece can get to the opponent's king
             target_king_x, target_king_y = board.king_locations[player.color.upper()]
             if is_legal_move(x, y, target_king_x, target_king_y, board, piece.color):
-                return True
-    return False
+                checking_pieces.append(board.squares[x][y].piece)
+    return checking_pieces
 
 def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter: int, players: List[Player], board: Board, moves: List[Move]) -> int:
     moved_piece     = board.squares[x_from][y_from].piece
@@ -185,7 +186,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
     # Update are players in check
     player      = players[ (len(moves)+1)%2 ]
     opponent    = players[ len(moves)%2 ]
-    if in_check(board, opponent):
+    if get_checking_pieces(board, opponent) != []:
         opponent.in_check = True
     player.in_check = False
 
@@ -223,7 +224,7 @@ def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, pla
         board_copy.squares[x_from][y_from].piece = None
         if board_copy.squares[x_to][y_to].piece.type == 'KING':
             board_copy.king_locations[player.color.upper()] = (x_to, y_to)
-        return legal_move and not in_check(board_copy, player)
+        return legal_move and get_checking_pieces(board_copy, player) == []
     return legal_move
 
 def clear_en_passant(board: Board, moves: List[Move]) -> Board:
