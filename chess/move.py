@@ -155,8 +155,10 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
     to_square       = Square( (x_to, y_to), target_piece )
 
     # If castling, move the corresponding rook over the king
-    if moved_piece.type == 'KING' and abs(x_from - x_to) == 2:
-        board = move_rook_when_castling(x_from, y_from, x_to, board)
+    if moved_piece.type == 'KING':
+        board.king_locations[len(moves)%2] = to_square.loc
+        if abs(x_from - x_to) == 2:
+            board = move_rook_when_castling(x_from, y_from, x_to, board)
 
     # If moving pawn two squares forwards change en_passant boolean to true for the next turn
     if moved_piece.type == 'PAWN' and abs(y_from - y_to) == 2:
