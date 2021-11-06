@@ -39,6 +39,7 @@ class Piece:
     type:  str
     value: int
     can_castle: bool # Variable for King and Rook objects
+    en_passant: bool = None # If the pawn can be captured en passant this turn
 
 @dataclass
 class Square:
