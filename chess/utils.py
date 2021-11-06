@@ -13,7 +13,7 @@ from typing import List
 #     <Player1>
 #     A B C D E F G H
 
-def print_board(board: Board, players: List[Player]) -> None:
+def print_board(board: Board, players: List[Player], game_over) -> None:
     print(f'\n    {players[1].name}', end='')
     for y in range(7, -1, -1):
         print(f'\n{y+1}  ', end='')
@@ -23,5 +23,7 @@ def print_board(board: Board, players: List[Player]) -> None:
             print(f' {icon}', end='')
     print(f'\n    {players[0].name}')
     print('    A B C D E F G H\n')
-    if players[0].in_check or players[1].in_check:
+    if game_over:
+        print("CHECKMATE!")
+    elif players[0].in_check or players[1].in_check:
         print("CHECK!")

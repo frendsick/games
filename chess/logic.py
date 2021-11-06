@@ -65,7 +65,6 @@ def is_checkmate(board: Board, player: Player):
                     y_to, x_to = square.location
                     if check_move(x_from, y_from, x_to, y_to, board, player):
                         return False
-    print("CHECKMATE")
     return True
 
 def is_stalemate(board: Board, player: Player):

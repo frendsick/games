@@ -15,10 +15,11 @@ def new_game():
     moves: List[Move] = []
     # Game loop
     while not game_over:
-        print_board(board, players)
+        print_board(board, players, game_over)
         move_rule_counter = make_move(move_rule_counter, board, moves, players, whites_turn)
         game_over = is_game_over(move_rule_counter, board, moves, players)
         whites_turn = not whites_turn
+    print_board(board, players, game_over)
 
 def ask_play_again():
     while(True):
