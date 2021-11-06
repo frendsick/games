@@ -25,12 +25,10 @@ def is_checkmate(board: Board, player: Player):
         return False
 
     # Map the squares between king and the checking pieces
-    squares_between_king_and_checkers: List[List[Square]] = [[]] # Inner lists represent the different checking pieces
-    checking_piece_index = 0
+    squares_between_king_and_checkers: List[List[Square]] = [] # Inner lists represent the different checking pieces
     for checking_piece in player.checking_pieces:
         target_location = board.king_locations[player.color.upper()]
-        squares_between_king_and_checkers[checking_piece_index].append(get_squares_between_pieces(board, checking_piece, target_location))
-        checking_piece_index += 1
+        squares_between_king_and_checkers.append(get_squares_between_pieces(board, checking_piece, target_location))
 
     # Check if there is a move that escapes from the different checks
     for y in range(8):
