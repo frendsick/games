@@ -152,16 +152,20 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
 
     # If castling, move the corresponding rook over the king
     if moved_piece.type == 'KING' and abs(x_from - x_to) == 2:
-        if x_from < x_to:
-            board.squares[6][y_from].piece = board.squares[8][y_from].piece
-            board.squares[8][y_from].piece = None
-        else:
-            board.squares[4][y_from].piece = board.squares[1][y_from].piece
-            board.squares[1][y_from].piece = None
+        board = move_rook_when_castling(x_from, y_from, x_to, board)
 
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
+    return board
+
+def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
+    if x_from < x_to:
+        board.squares[6][y_from].piece = board.squares[8][y_from].piece
+        board.squares[8][y_from].piece = None
+    else:
+        board.squares[4][y_from].piece = board.squares[1][y_from].piece
+        board.squares[1][y_from].piece = None
     return board
 
 def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
