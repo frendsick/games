@@ -23,3 +23,5 @@ def print_board(board: Board, players: List[Player]) -> None:
             print(f' {icon}', end='')
     print(f'\n    {players[0].name}')
     print('    A B C D E F G H\n')
+    if players[0].in_check or players[1].in_check:
+        print("CHECK!")
