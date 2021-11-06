@@ -1,7 +1,7 @@
 from copy import deepcopy
 import re
 from typing import List, Tuple
-from defs import Board, Move, Player, Square
+from defs import Board, Move, Piece, Player, Square
 
 def invalid_move_error(move: str, error_message: str = None) -> None:
     print(f"'{move}' is not a valid move!")
@@ -191,7 +191,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
 
     return move_rule_counter
 
-def do_move(x_from, y_from, x_to, y_to, board, moves, moved_piece, captured_piece, from_square, to_square) -> List[Move]:
+def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves: List[Move], moved_piece: Piece, captured_piece: Piece, from_square: Square, to_square: Square) -> List[Move]:
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
