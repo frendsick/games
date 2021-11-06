@@ -26,13 +26,6 @@ PIECE_ICON_MAP = {
 }
 
 @dataclass
-class Player:
-    color:      str
-    name:       str
-    rating:     int
-    in_check:   bool = False
-
-@dataclass
 class Piece:
     id:         int
     color:      str
@@ -41,6 +34,14 @@ class Piece:
     value:      int
     can_castle: bool # Variable for King and Rook objects
     en_passant: bool = None # If the pawn can be captured en passant this turn
+
+@dataclass
+class Player:
+    color:              str
+    name:               str
+    rating:             int
+    checking_pieces:    List[Piece] = None
+    in_check:           bool        = False
 
 Location = Tuple[int, int]
 
