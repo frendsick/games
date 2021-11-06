@@ -58,6 +58,13 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
         return not move_through_other_piece(x_from, y_from, x_to, y_to, board)
     # Capturing is only allowed diagonally
     if abs(x_from - x_to) == 1 and abs(y_from - y_to) == 1 and right_direction:
+        # Check en passant
+        if x_from - x_to < 0: # If en passanting to the right
+            if board.squares[x_from+1][y_from].piece.en_passant is True:
+                return True
+            elif board.squares[x_from-1][y_from].piece.en_passant is True:
+                return True
+        # Diagonal movement is only allowed when capturing
         return end_square.piece is not None and pawn.color != end_square.piece
     return False
 
@@ -153,6 +160,10 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
     # If castling, move the corresponding rook over the king
     if moved_piece.type == 'KING' and abs(x_from - x_to) == 2:
         board = move_rook_when_castling(x_from, y_from, x_to, board)
+
+    # If moving pawn two squares forwards change en_passant boolean to true for the next turn
+    if moved_piece.type == 'PAWN' and abs(y_from - y_to) == 2:
+        moved_piece.en_passant = True
 
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
     board.squares[x_to][y_to].piece = moved_piece
