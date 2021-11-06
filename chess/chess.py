@@ -6,8 +6,9 @@ from move   import make_move
 from utils  import print_board
 
 def new_game():
-    game_over: bool     = False
-    whites_turn: bool   = True
+    game_over: bool         = False
+    whites_turn: bool       = True
+    move_rule_counter: int  = 0 # 50 move rule
 
     players: List[Player] = [Player("White", "Teemu", 1337), Player("Black", "Random n00b", 420)]
     board = Board() # Initializes the board to the starting position
