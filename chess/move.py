@@ -97,12 +97,12 @@ def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boar
 # Move the rook two squares. King move will be done afterwards.
 def castle(board: Board, y: int, castle_right: bool) -> Board:
     if castle_right:
-        board.squares[6][y].piece == board.squares[8][y].piece
-        board.squares[8][y].piece == None
+        board.squares[5][y].piece == board.squares[7][y].piece
+        board.squares[7][y].piece == None
     else:
-        board.squares[3][y].piece == board.squares[1][y].piece
-        board.squares[1][y].piece == None
-    return Board
+        board.squares[2][y].piece == board.squares[0][y].piece
+        board.squares[0][y].piece == None
+    return board
 
 # TODO: Castling
 def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
@@ -110,8 +110,8 @@ def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     # Check castling
     if (king.can_castle and abs(x_from - x_to) == 2 and y_from == y_to
         and not move_through_other_piece(x_from, y_from, x_to, y_to, board)):
-        return bool((x_from > x_to and board.squares[1][y_from].piece.can_castle)
-        or (x_from < x_to and board.squares[8][y_from].piece.can_castle))
+        return bool((x_from > x_to and board.squares[0][y_from].piece.can_castle)
+        or (x_from < x_to and board.squares[7][y_from].piece.can_castle))
 
     # King can move to any direction but only one step
     if abs(x_from - x_to) > 1 or abs(y_from - y_to) > 1:
@@ -178,11 +178,11 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, mov
 
 def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
     if x_from < x_to:
-        board.squares[6][y_from].piece = board.squares[8][y_from].piece
-        board.squares[8][y_from].piece = None
+        board.squares[5][y_from].piece = board.squares[7][y_from].piece
+        board.squares[7][y_from].piece = None
     else:
-        board.squares[4][y_from].piece = board.squares[1][y_from].piece
-        board.squares[1][y_from].piece = None
+        board.squares[3][y_from].piece = board.squares[0][y_from].piece
+        board.squares[0][y_from].piece = None
     return board
 
 def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
@@ -193,8 +193,6 @@ def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, pla
 def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     if len(moves) > 1:
         x_prev, y_prev = moves[-2].to_square.loc
-        print(x_prev, y_prev)
-        print(board.squares[4][6].piece)
         board.squares[x_prev][y_prev].piece.en_passant = False
     return board
 
