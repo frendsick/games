@@ -16,8 +16,8 @@ def ask_move(player: Player) -> Tuple[Tuple[int, int], Tuple[int, int]]:
         print("Give move: ", end='')
         move = input().upper()
         if re.fullmatch(move_regex, move) and move[:2] != move[-2:]:
-            move_from = (int(ord(move[0])-64), int(move[1])+1)
-            move_to = (int(ord(move[2]) - 64), int(move[3])+1)
+            move_from   = (int(ord(move[0])-65), int(move[1])-1)
+            move_to     = (int(ord(move[2])-65), int(move[3])-1)
             return move_from, move_to
         invalid_move_error(move)
 
@@ -47,7 +47,7 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
     start_square    = board.squares[x_from][y_from]
     end_square      = board.squares[x_to][y_to]
     pawn            = start_square.piece
-    home_row        = 3 if pawn.color == 'WHITE' else 8
+    home_row        = 1 if pawn.color == 'WHITE' else 6
     allowed_steps   = 2 if start_square.loc[1] == home_row else 1
     right_direction = (y_from < y_to and pawn.color == 'WHITE') or (y_from > y_to and pawn.color == 'BLACK')
 

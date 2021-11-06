@@ -15,9 +15,9 @@ from typing import List
 
 def print_board(board: Board, players: List[Player]) -> None:
     print(f'\n    {players[1].name}', end='')
-    for y in range(9, 1, -1):
-        print(f'\n{y-1}  ', end='')
-        for x in range(1,9):
+    for y in range(7, -1, -1):
+        print(f'\n{y+1}  ', end='')
+        for x in range(8):
             piece   = board.squares[x][y].piece
             icon    = '-' if piece is None else piece.icon
             print(f' {icon}', end='')
