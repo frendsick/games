@@ -16,8 +16,8 @@ def get_squares_between_pieces(board: Board, checking_piece: Piece, target_locat
             curr_x = curr_x+1 if from_x < to_x else curr_x-1
         if from_y != to_y:
             curr_y = curr_y+1 if from_y < to_y else curr_y-1
-        curr_piece = board.squares[curr_x][curr_y].piece
-        squares.append(Square(location=(curr_y, curr_x), piece=curr_piece))
+        curr_piece = board.squares[curr_y][curr_x].piece
+        squares.append(Square(location=(curr_x, curr_y), piece=curr_piece))
     return squares
 
 def is_checkmate(board: Board, player: Player):
