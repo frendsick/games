@@ -60,9 +60,9 @@ def legal_pawn_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
 
         # Check en passant
         if x_from - x_to < 0: # If en passanting to the right
-            if board.squares[x_from+1][y_from].piece.en_passant is True:
+            if board.squares[x_from+1][y_from].piece is not None and board.squares[x_from+1][y_from].piece.en_passant is True:
                 return True
-        elif board.squares[x_from-1][y_from].piece.en_passant is True:
+        elif board.squares[x_from-1][y_from].piece is not None and board.squares[x_from-1][y_from].piece.en_passant is True:
             return True
     return False
 
