@@ -1,5 +1,5 @@
 import pygame
-from defs import Board, Player, SCREEN_HEIGHT, SCREEN_WIDTH
+from defs import Board, Player, PINK, SCREEN_HEIGHT, SCREEN_WIDTH
 from typing import List
 
 #     <Player2>
@@ -39,8 +39,18 @@ def print_board_background(background, colors, tile_height, tile_width):
 def print_board_state(board: Board, players: List[Player], game_over: bool, display: pygame.Surface, tile_height: int, tile_width: int) -> None:
     for x in range(8):
         for y in range(8):
-            piece   = board.squares[x][7-y].piece
+            square  = board.squares[x][7-y]
+            piece   = square.piece
             if piece is None:
                 continue
-            piece_icon = pygame.image.load(piece.icon)
-            display.blit(piece_icon, (x*tile_width, y*tile_height))
+            if square.highlighted:
+                highlight_piece(display, tile_height, tile_width, x, y)
+            display_piece(display, tile_height, tile_width, x, y, piece)
+
+def display_piece(display, tile_height, tile_width, x, y, piece):
+    piece_icon = pygame.image.load(piece.icon)
+    display.blit(piece_icon, (x*tile_width, y*tile_height))
+
+def highlight_piece(display, tile_height, tile_width, x, y):
+    rect = (x*tile_width, y*tile_height, tile_width, tile_height)
+    pygame.draw.rect(display, PINK, rect)
