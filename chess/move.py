@@ -233,7 +233,8 @@ def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, pla
 def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     if len(moves) > 1:
         x_prev, y_prev = moves[-2].to_square.location
-        board.squares[x_prev][y_prev].piece.en_passant = False
+        if board.squares[x_prev][y_prev].piece != None:
+            board.squares[x_prev][y_prev].piece.en_passant = False
     return board
 
 # Makes move and returns the 50 move rule counter
