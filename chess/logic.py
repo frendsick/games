@@ -64,11 +64,20 @@ def is_checkmate(board: Board, player: Player):
                 # Double check can not be blocked by a piece
                 if len(squares_between_king_and_checkers) > 1:
                     continue
-                # Check if the piece can occupy a square between the checker and the king
-                for square in squares_between_king_and_checkers[0]:
-                    y_to, x_to = square.location
-                    if check_move(x_from, y_from, x_to, y_to, board, player):
-                        return False
+
+                # Check if the checking piece can be captured
+                checking_piece = player.checking_pieces[0]
+                y_to, x_to = checking_piece.location
+                if check_move(x_from, y_from, x_to, y_to, board, player):
+                    return False
+
+                # Knight check can only be denied by capturing it
+                if checking_piece.type != 'KNIGHT':
+                    # Check if the piece can occupy a square between the checker and the king
+                    for square in squares_between_king_and_checkers[0]:
+                        y_to, x_to = square.location
+                        if check_move(x_from, y_from, x_to, y_to, board, player):
+                            return False
     return True
 
 def is_stalemate(board: Board, player: Player):
