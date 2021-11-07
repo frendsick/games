@@ -30,10 +30,7 @@ def is_checkmate(board: Board, player: Player):
         return False
 
     # Map the squares between king and the checking pieces
-    squares_between_king_and_checkers: List[List[Square]] = [] # Inner lists represent the different checking pieces
-    for checking_piece in player.checking_pieces:
-        target_location = board.king_locations[player.color.upper()]
-        squares_between_king_and_checkers.append(get_squares_between_pieces(board, checking_piece, target_location))
+    squares_between_king_and_checkers: List[List[Square]] = get_squares_between_king_and_checkers(board, player)
 
     # Check if there is a move that escapes from the different checks
     for y in range(8):
@@ -79,6 +76,13 @@ def is_checkmate(board: Board, player: Player):
                         if check_move(x_from, y_from, x_to, y_to, board, player):
                             return False
     return True
+
+def get_squares_between_king_and_checkers(board, player):
+    squares_between_king_and_checkers: List[List[Square]] = []
+    for checking_piece in player.checking_pieces:
+        target_location = board.king_locations[player.color.upper()]
+        squares_between_king_and_checkers.append(get_squares_between_pieces(board, checking_piece, target_location))
+    return squares_between_king_and_checkers
 
 def is_stalemate(board: Board, player: Player):
     #print("Checking for stalemate is not implemented")
