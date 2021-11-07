@@ -225,7 +225,7 @@ def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, pla
         board_copy = deepcopy(board)
         board_copy.squares[x_to][y_to].piece = board.squares[x_from][y_from].piece
         board_copy.squares[x_from][y_from].piece = None
-        if board_copy.squares[x_to][y_to].piece.type == 'KING':
+        if board_copy.squares[x_to][y_to].piece is not None and board_copy.squares[x_to][y_to].piece.type == 'KING':
             board_copy.king_locations[player.color.upper()] = (x_to, y_to)
         return legal_move and get_checking_pieces(board_copy, player) == []
     return legal_move
