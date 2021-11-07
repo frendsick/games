@@ -1,5 +1,11 @@
+import pygame
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
+
+BLACK = pygame.Color('darkslategrey')
+WHITE = pygame.Color('antiquewhite')
+SCREEN_WIDTH    = 600
+SCREEN_HEIGHT   = 800
 
 PIECE_VALUE_MAP = {
     10:     'PAWN',
