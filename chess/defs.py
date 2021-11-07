@@ -3,9 +3,18 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 BLACK = pygame.Color('darkslategrey')
+PINK  = pygame.Color('pink')
 WHITE = pygame.Color('antiquewhite')
+
+TICKRATE        = 120
 SCREEN_HEIGHT   = 800
 SCREEN_WIDTH    = 800
+
+MOUSE_BUTTONS = {
+    'LEFT':     1,
+    'MIDDLE':   2,
+    'RIGHT':    3
+}
 
 PIECE_VALUE_MAP = {
     10:     'PAWN',
