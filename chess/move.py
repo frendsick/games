@@ -213,13 +213,19 @@ def check_for_castling(x_from, y_from, x_to, players, board, moves, to_square):
         board = move_rook_when_castling(x_from, y_from, x_to, board)
     return board
 
-def move_rook_when_castling(x_from, y_from, x_to, board) -> Board:
+def move_rook_when_castling(x_from: int, y_from: int, x_to: int, board: Board) -> Board:
     if x_from < x_to:
-        board.squares[5][y_from].piece = board.squares[7][y_from].piece
-        board.squares[7][y_from].piece = None
+        return do_rook_move_when_castling(7, y_from, 5, board)
     else:
-        board.squares[3][y_from].piece = board.squares[0][y_from].piece
-        board.squares[0][y_from].piece = None
+        return do_rook_move_when_castling(0, y_from, 3, board)
+
+def do_rook_move_when_castling(x_from: int, y_from: int, x_to: int, board: Board) -> Board:
+    source_square = board.squares[x_from][y_from]
+    target_square = board.squares[x_to][y_from]
+    target_square.piece = source_square.piece
+    target_square.piece.location = (x_to, y_from)
+    target_square.highlighted = False
+    source_square.piece = None
     return board
 
 def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
