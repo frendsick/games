@@ -254,7 +254,7 @@ def make_move(move_rule_counter: int, board: Board, moves: List[Move], players: 
     # Clear en passant for the previous move
     board = clear_en_passant(board, moves)
     
-    return move_piece(x_from, y_from, x_to, y_to, move_rule_counter, players, board, moves)
+    return True, move_piece(x_from, y_from, x_to, y_to, move_rule_counter, players, board, moves)
 
 def is_game_over():
     raise NotImplementedError

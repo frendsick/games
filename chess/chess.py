@@ -31,17 +31,46 @@ def new_game():
 
     # Game loop
     while not game_over:
-        clock.tick(2)
-        screen.fill([60, 70, 90])
-        screen.blit(background, (0, 0))
+        move_done = False
+        clock.tick(TICKRATE)
+        fill_screen(clock, background, screen)
+        events: List[pygame.event.Event] = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                exit(0)
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == MOUSE_BUTTONS['LEFT']:
+                    mouse_pos           = pygame.mouse.get_pos()
+                    x_to, y_to          = mouse_pos[0] // tile_width , 7 - (mouse_pos[1] // tile_height)
+                    if highlighted_piece is not None:
+                        x_from, y_from  = highlighted_piece.location
+                        move_done, move_rule_counter = make_move(x_from, y_from, x_to, y_to, move_rule_counter, board, moves, players, whites_turn)
+                    highlighted_piece   = change_highlighted_piece(x_to, y_to, highlighted_piece, board)
+                elif event.button == MOUSE_BUTTONS['RIGHT']:
+                    print("Right click")
 
-        move_rule_counter = make_move(move_rule_counter, board, moves, players, whites_turn)
+        #move_rule_counter = make_move(move_rule_counter, board, moves, players, whites_turn)
         game_over = is_game_over(move_rule_counter, board, moves, players)
         if move_done:
             whites_turn = not whites_turn
         print_board_state(board, players, game_over, screen, tile_height, tile_width)
         pygame.display.update()
-    print_board(board, players, game_over)
+    print("Game over")
+
+def change_highlighted_piece(x: int, y: int, highlighted_piece: Piece, board: Board) -> Piece:
+    if highlighted_piece is not None:
+        # Clear old highlight
+        old_x, old_y = highlighted_piece.location
+        board.squares[old_x][old_y].highlighted = False
+        return None
+    else:
+        # Highlight clicked piece
+        board.squares[x][y].highlighted = True
+    return board.squares[x][y].piece
+
+def fill_screen(clock: pygame.time.Clock, background: pygame.Surface, screen: pygame.Surface) -> None:
+    screen.fill([60, 70, 90])
+    screen.blit(background, (0, 0))
 
 def ask_play_again():
     while(True):

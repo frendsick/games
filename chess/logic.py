@@ -81,7 +81,7 @@ def is_checkmate(board: Board, player: Player):
     return True
 
 def is_stalemate(board: Board, player: Player):
-    print("Checking for stalemate is not implemented")
+    #print("Checking for stalemate is not implemented")
     return False
 
 def is_game_over(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player]) -> bool:
