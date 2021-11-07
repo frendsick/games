@@ -1,6 +1,6 @@
 from defs import Board, Location, Move, Piece, Player, Square
 from move import check_move
-from typing import List
+from typing import List, Tuple
 
 def get_squares_between_pieces(board: Board, checking_piece: Piece, target_location: Location) -> List[Square]:
     if checking_piece.type == 'KNIGHT':
@@ -12,13 +12,17 @@ def get_squares_between_pieces(board: Board, checking_piece: Piece, target_locat
     squares: List[Square]   = []
 
     for _ in range(max( abs(from_x - to_x)-1, abs(from_y - to_y)-1 )):
-        if from_x != to_x:
-            curr_x = curr_x+1 if from_x < to_x else curr_x-1
-        if from_y != to_y:
-            curr_y = curr_y+1 if from_y < to_y else curr_y-1
-        curr_piece = board.squares[curr_y][curr_x].piece
+        curr_piece, curr_x, curr_y = get_square_between(from_y, from_x, to_y, to_x, curr_x, curr_y, board)
         squares.append(Square(location=(curr_x, curr_y), piece=curr_piece))
     return squares
+
+def get_square_between(from_y: int, from_x: int, to_y: int, to_x: int, curr_x: int, curr_y: int, board: Board) -> Tuple[Piece, int, int]:
+    if from_x != to_x:
+        curr_x = curr_x+1 if from_x < to_x else curr_x-1
+    if from_y != to_y:
+        curr_y = curr_y+1 if from_y < to_y else curr_y-1
+    curr_piece = board.squares[curr_y][curr_x].piece
+    return curr_piece, curr_x, curr_y
 
 def is_checkmate(board: Board, player: Player):
     # Position cannot be checkmate if none of the players are in check
