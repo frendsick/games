@@ -100,7 +100,7 @@ class Board:
         value       = abs(self.STARTING_POSITION[x][y])
         type        = PIECE_VALUE_MAP[value]
         #icon        = PIECE_ICON_MAP[f'{color} {type}']
-        icon        = f'pics/{color}_{type}.png'
+        icon        = f'icons/{color}_{type}.png'
         can_castle  = type in ['KING', 'ROOK']
         piece       = Piece(id, color, icon, (y, x), type, value, can_castle)
         return Square( location=(y, x), piece=piece)
