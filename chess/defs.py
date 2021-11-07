@@ -54,8 +54,9 @@ class Player:
 
 @dataclass
 class Square:
-    location:   Location # 1, 5 --> B6
-    piece:      Piece = None
+    location:       Location # 1, 5 --> B6
+    highlighted:    bool    = None
+    piece:          Piece   = None
 
 @dataclass
 class Move:
@@ -103,7 +104,7 @@ class Board:
         icon        = f'icons/{color}_{type}.png'
         can_castle  = type in ['KING', 'ROOK']
         piece       = Piece(id, color, icon, (y, x), type, value, can_castle)
-        return Square( location=(y, x), piece=piece)
+        return Square( location=(y, x), highlighted=False, piece=piece)
 
     def __init__(self) -> None:
         self.captured_pieces    = []
