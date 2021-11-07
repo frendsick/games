@@ -237,14 +237,12 @@ def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     return board
 
 # Makes move and returns the 50 move rule counter
-def make_move(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], whites_turn: bool, debug=False, debug_game=None) -> int:
+def make_move(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], whites_turn: bool, debug=False, debug_game=None) -> Tuple[bool, int]:
     player: Player = players[0] if whites_turn else players[1] # players[0] => White
-    legal_move = False
-    while not legal_move:
-        move_from, move_to = ask_move(player)
-        x_from, y_from  = move_from
-        x_to,   y_to    = move_to
-        legal_move = check_move(x_from, y_from, x_to, y_to, board, player)
+
+    if not check_move(x_from, y_from, x_to, y_to, board, player):
+        print("Illegal move:", (x_from, y_from), "=>", (x_to, y_to))
+        return False, move_rule_counter
 
     # Revocate castling rights when moving king or rook
     piece = board.squares[x_from][y_from].piece
