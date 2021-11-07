@@ -62,10 +62,15 @@ def change_highlighted_piece(x: int, y: int, highlighted_piece: Piece, board: Bo
         # Clear old highlight
         old_x, old_y = highlighted_piece.location
         board.squares[old_x][old_y].highlighted = False
-        return None
-    else:
-        # Highlight clicked piece
-        board.squares[x][y].highlighted = True
+        if board.squares[x][y].piece is not None and (
+            (
+                board.squares[x][y].piece.color != highlighted_piece.color
+                or board.squares[x][y].piece == highlighted_piece
+            )
+        ):
+            return None
+
+    board.squares[x][y].highlighted = True
     return board.squares[x][y].piece
 
 def fill_screen(clock: pygame.time.Clock, background: pygame.Surface, screen: pygame.Surface) -> None:
