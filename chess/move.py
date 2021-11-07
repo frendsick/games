@@ -170,7 +170,12 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
         board = check_for_castling(x_from, y_from, x_to, players, board, moves, to_square)
     # Moving pawn resets the 50 move rule counter
     if moved_piece.type == 'PAWN':
-        move_rule_counter = 0
+        move_rule_counter   = 0
+        queening_row        = 7 if moved_piece.color == 'WHITE' else 0
+        # Pawn becomes a queen if it gets to the other end of the board
+        if y_to == queening_row:
+            moved_piece.type = 'QUEEN'
+            moved_piece.icon = f'icons/{moved_piece.color}_QUEEN.png'
         # If moving pawn two squares forwards change en_passant boolean to true for the next turn
         if abs(y_from - y_to) == 2:
             moved_piece.en_passant = True
