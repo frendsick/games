@@ -24,7 +24,10 @@ def new_game():
     height, width   = 8*tile_height, 8*tile_width
     background      = pygame.Surface((width, height))
     screen          = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+
+    # Print the board
     print_board_background(background, colors, tile_height, tile_width)
+    print_board_state(board, players, game_over, screen, tile_height, tile_width)
 
     # Game loop
     while not game_over:
@@ -34,8 +37,8 @@ def new_game():
 
         move_rule_counter = make_move(move_rule_counter, board, moves, players, whites_turn)
         game_over = is_game_over(move_rule_counter, board, moves, players)
-        whites_turn = not whites_turn
-
+        if move_done:
+            whites_turn = not whites_turn
         print_board_state(board, players, game_over, screen, tile_height, tile_width)
         pygame.display.update()
     print_board(board, players, game_over)
