@@ -77,7 +77,7 @@ def is_checkmate(board: Board, player: Player):
                             return False
     return True
 
-def get_squares_between_king_and_checkers(board, player):
+def get_squares_between_king_and_checkers(board: Board, player: Player) -> List[List[Square]]:
     squares_between_king_and_checkers: List[List[Square]] = []
     for checking_piece in player.checking_pieces:
         target_location = board.king_locations[player.color.upper()]

@@ -207,7 +207,7 @@ def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves:
     board.squares[x_from][y_from].piece = None
     return moves
 
-def check_for_castling(x_from, y_from, x_to, players, board, moves, to_square):
+def check_for_castling(x_from: int, y_from: int, x_to: int, players: List[Player], board: Board, moves: List[Move], to_square: Square):
     board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
     if abs(x_from - x_to) == 2:
         board = move_rook_when_castling(x_from, y_from, x_to, board)
