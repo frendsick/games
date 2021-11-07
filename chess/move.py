@@ -173,6 +173,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
         move_rule_counter   = 0
         queening_row        = 7 if moved_piece.color == 'WHITE' else 0
         # Pawn becomes a queen if it gets to the other end of the board
+        # TODO: Underpromotion
         if y_to == queening_row:
             moved_piece.type = 'QUEEN'
             moved_piece.icon = f'icons/{moved_piece.color}_QUEEN.png'
