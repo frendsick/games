@@ -1,13 +1,11 @@
 #!/usr/bin/python3
+import itertools
 import pygame
 from typing import List
-
-from pygame import color
-from defs   import Background, Board, Move, Player, BLACK, WHITE, SCREEN_HEIGHT, SCREEN_WIDTH
+from defs   import Board, Move, Player, BLACK, WHITE, SCREEN_HEIGHT, SCREEN_WIDTH
 from logic  import is_game_over
 from move   import make_move
-from utils  import print_board, pygame_print_board
-import itertools
+from utils  import print_board, print_board_background, print_board_state
 
 def new_game():
     game_over: bool         = False
@@ -17,25 +15,27 @@ def new_game():
     board = Board() # Initializes the board to the starting position
     moves: List[Move] = []
 
-    colors = itertools.cycle((BLACK, WHITE))
-    tile_size = SCREEN_WIDTH // 8
-    width, height = 8*tile_size, 8*tile_size
-    background = pygame.Surface((width, height))
+    # Pygame variables
+    clock           = pygame.time.Clock()
+    colors          = itertools.cycle((WHITE, BLACK))
+    tile_height     = SCREEN_HEIGHT // 8
+    tile_width      = SCREEN_WIDTH // 8
+    height, width   = 8*tile_height, 8*tile_width
+    background      = pygame.Surface((width, height))
+    screen          = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+    print_board_background(background, colors, tile_height, tile_width)
 
-    clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((600,600))
-
-    pygame_print_board(board, players, background, colors, tile_size)
     # Game loop
     while not game_over:
-        clock.tick(30)
+        clock.tick(2)
         screen.fill([60, 70, 90])
         screen.blit(background, (0, 0))
 
-        print_board(board, players, game_over)
         move_rule_counter = make_move(move_rule_counter, board, moves, players, whites_turn)
         game_over = is_game_over(move_rule_counter, board, moves, players)
         whites_turn = not whites_turn
+
+        print_board_state(board, players, game_over, screen, tile_height, tile_width)
         pygame.display.update()
     print_board(board, players, game_over)
 

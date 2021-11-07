@@ -4,8 +4,8 @@ from typing import Dict, List, Tuple
 
 BLACK = pygame.Color('darkslategrey')
 WHITE = pygame.Color('antiquewhite')
-SCREEN_WIDTH    = 600
 SCREEN_HEIGHT   = 800
+SCREEN_WIDTH    = 800
 
 PIECE_VALUE_MAP = {
     10:     'PAWN',
@@ -73,14 +73,14 @@ class Board:
     # Positive are white pieces, negative are black pieces
     # Zero's are empty, None's are out-of-bounds
     STARTING_POSITION = [
-        [ 50, 30, 31, 90, 9001, 31, 30, 50 ],
-        [ 10, 10, 10, 10, 10, 10, 10, 10 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
+        [ -50, -30, -31, -90, -9001, -31, -30, -50 ],
         [ -10, -10, -10, -10, -10, -10, -10, -10 ],
-        [ -50, -30, -31, -90, -9001, -31, -30, -50 ]
+        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
+        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
+        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
+        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
+        [ 10, 10, 10, 10, 10, 10, 10, 10 ],
+        [ 50, 30, 31, 90, 9001, 31, 30, 50 ]
     ]
 
     def init_board(self) -> List[List[Square]]:
@@ -99,7 +99,8 @@ class Board:
         color       = 'WHITE' if x < 5 else 'BLACK'
         value       = abs(self.STARTING_POSITION[x][y])
         type        = PIECE_VALUE_MAP[value]
-        icon        = PIECE_ICON_MAP[f'{color} {type}']
+        #icon        = PIECE_ICON_MAP[f'{color} {type}']
+        icon        = f'pics/{color}_{type}.png'
         can_castle  = type in ['KING', 'ROOK']
         piece       = Piece(id, color, icon, (y, x), type, value, can_castle)
         return Square( location=(y, x), piece=piece)
