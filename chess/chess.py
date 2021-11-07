@@ -5,7 +5,7 @@ from typing import List
 from defs   import Board, Move, Piece, Player, BLACK, WHITE, MOUSE_BUTTONS, TICKRATE, SCREEN_HEIGHT, SCREEN_WIDTH, Square
 from logic  import is_game_over
 from move   import make_move
-from utils  import highlight_piece, print_board, print_board_background, print_board_state
+from utils  import change_highlighted_piece, print_board_background, print_board_state
 
 def new_game():
     game_over: bool             = False
@@ -56,22 +56,6 @@ def new_game():
         print_board_state(board, players, game_over, screen, tile_height, tile_width)
         pygame.display.update()
     print("Game over")
-
-def change_highlighted_piece(x: int, y: int, highlighted_piece: Piece, board: Board) -> Piece:
-    if highlighted_piece is not None:
-        # Clear old highlight
-        old_x, old_y = highlighted_piece.location
-        board.squares[old_x][old_y].highlighted = False
-        if board.squares[x][y].piece is not None and (
-            (
-                board.squares[x][y].piece.color != highlighted_piece.color
-                or board.squares[x][y].piece == highlighted_piece
-            )
-        ):
-            return None
-
-    board.squares[x][y].highlighted = True
-    return board.squares[x][y].piece
 
 def fill_screen(clock: pygame.time.Clock, background: pygame.Surface, screen: pygame.Surface) -> None:
     screen.fill([60, 70, 90])

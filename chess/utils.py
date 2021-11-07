@@ -1,5 +1,5 @@
 import pygame
-from defs import Board, Player, PINK, SCREEN_HEIGHT, SCREEN_WIDTH
+from defs import Board, Player, Piece, PINK, SCREEN_HEIGHT, SCREEN_WIDTH
 from typing import List
 
 #     <Player2>
@@ -54,3 +54,19 @@ def display_piece(display, tile_height, tile_width, x, y, piece):
 def highlight_piece(display, tile_height, tile_width, x, y):
     rect = (x*tile_width, y*tile_height, tile_width, tile_height)
     pygame.draw.rect(display, PINK, rect)
+
+def change_highlighted_piece(x: int, y: int, highlighted_piece: Piece, board: Board) -> Piece:
+    if highlighted_piece is not None:
+        # Clear old highlight
+        old_x, old_y = highlighted_piece.location
+        board.squares[old_x][old_y].highlighted = False
+        if board.squares[x][y].piece is not None and (
+            (
+                board.squares[x][y].piece.color != highlighted_piece.color
+                or board.squares[x][y].piece == highlighted_piece
+            )
+        ):
+            return None
+
+    board.squares[x][y].highlighted = True
+    return board.squares[x][y].piece
