@@ -1,4 +1,5 @@
-from defs import Board, Player
+import pygame
+from defs import Board, Player, SCREEN_HEIGHT, SCREEN_WIDTH
 from typing import List
 
 #     <Player2>
@@ -27,3 +28,10 @@ def print_board(board: Board, players: List[Player], game_over) -> None:
         print("Game Over")
     elif players[0].in_check or players[1].in_check:
         print("CHECK!")
+
+def pygame_print_board(board: Board, players: List[Player], background, colors, tile_size):
+    for y in range(0, SCREEN_HEIGHT, tile_size):
+        for x in range(0, SCREEN_WIDTH, tile_size):
+            rect = (x, y, tile_size, tile_size)
+            pygame.draw.rect(background, next(colors), rect)
+        next(colors)
