@@ -49,6 +49,7 @@ def print_board_state(board: Board, players: List[Player], game_over: bool, disp
 
 def display_piece(display, tile_height, tile_width, x, y, piece):
     piece_icon = pygame.image.load(piece.icon)
+    piece_icon = pygame.transform.scale(piece_icon, (tile_width, tile_height))
     display.blit(piece_icon, (x*tile_width, y*tile_height))
 
 def highlight_piece(display, tile_height, tile_width, x, y):
