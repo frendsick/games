@@ -228,19 +228,20 @@ def do_rook_move_when_castling(x_from: int, y_from: int, x_to: int, board: Board
     source_square.piece = None
     return board
 
+def moving_results_in_check(x_from, y_from, x_to, y_to, board, player):
+    board_copy = deepcopy(board)
+    board_copy.squares[x_to][y_to].piece = board_copy.squares[x_from][y_from].piece
+    board_copy.squares[x_from][y_from].piece = None
+    if board_copy.squares[x_to][y_to].piece.type == 'KING':
+        board_copy.king_locations[player.color.upper()] = (x_to, y_to)
+    return get_checking_pieces(board_copy, player) != []
+
 def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
     if not is_own_piece(x_from, y_from, board, player.color):
         return False
-    legal_move: bool = is_legal_move(x_from, y_from, x_to, y_to, board, player.color)
-    if player.in_check:
-        # Check if the player would still be in check after the proposed move
-        board_copy = deepcopy(board)
-        board_copy.squares[x_to][y_to].piece = board.squares[x_from][y_from].piece
-        board_copy.squares[x_from][y_from].piece = None
-        if board_copy.squares[x_to][y_to].piece is not None and board_copy.squares[x_to][y_to].piece.type == 'KING':
-            board_copy.king_locations[player.color.upper()] = (x_to, y_to)
-        return legal_move and get_checking_pieces(board_copy, player) == []
-    return legal_move
+    if not is_legal_move(x_from, y_from, x_to, y_to, board, player.color):
+        return False
+    return not moving_results_in_check(x_from, y_from, x_to, y_to, board, player)
 
 def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     if len(moves) > 1:
