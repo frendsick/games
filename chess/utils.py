@@ -31,14 +31,14 @@ def print_board(board: Board, players: List[Player], game_over: bool) -> None:
     elif players[0].in_check or players[1].in_check:
         print("CHECK!")
 
-def print_board_background(background, colors, tile_height, tile_width):
+def print_board_background(background: pygame.Surface, colors: itertools.cycle, tile_height: int, tile_width: int) -> None:
     for y in range(0, SCREEN_HEIGHT, tile_height):
         for x in range(0, SCREEN_WIDTH, tile_width):
             rect = (x, y, tile_width, tile_height)
             pygame.draw.rect(background, next(colors), rect)
         next(colors)
 
-def print_board_state(board: Board, players: List[Player], game_over: bool, display: pygame.Surface, tile_height: int, tile_width: int) -> None:
+def print_board_state(board: Board, players: List[Player], game_over: bool, display: pygame.Surface, tile_height: int, tile_width: int, whites_turn: bool) -> None:
     for x in range(8):
         for y in range(8):
             square  = board.squares[x][7-y]
@@ -46,7 +46,8 @@ def print_board_state(board: Board, players: List[Player], game_over: bool, disp
             if piece is None:
                 continue
             if square.highlighted:
-                highlight_piece(board, piece, display, tile_height, tile_width, x, y)
+                player = players[0] if whites_turn else players[1]
+                highlight_piece(x, y, board, piece, player, display, tile_height, tile_width)
             display_piece(display, tile_height, tile_width, x, y, piece)
 
 def highlight_square(x: int, y: int, board: Board, display: pygame.Surface, tile_height: int, tile_width: int) -> None:
@@ -58,11 +59,11 @@ def highlight_square(x: int, y: int, board: Board, display: pygame.Surface, tile
     if board.squares[x][y].piece is not None:
         display_piece(display, tile_height, tile_width, x, 7-y, board.squares[x][y].piece)
 
-def highlight_possible_moves(board: Board, piece: Piece, display: pygame.Surface, tile_height: int, tile_width: int) -> None:
+def highlight_possible_moves(board: Board, piece: Piece, player: Player, display: pygame.Surface, tile_height: int, tile_width: int) -> None:
     x_from, y_from = piece.location
     for y_to in range(8):
         for x_to in range(8):
-            if is_legal_move(x_from, y_from, x_to, y_to, board, piece.color):
+            if check_move(x_from, y_from, x_to, y_to, board, player):
                 highlight_square(x_to, y_to, board, display, tile_height, tile_width)
 
 def display_piece(display, tile_height, tile_width, x, y, piece):
@@ -70,10 +71,10 @@ def display_piece(display, tile_height, tile_width, x, y, piece):
     piece_icon = pygame.transform.scale(piece_icon, (tile_width, tile_height))
     display.blit(piece_icon, (x*tile_width, y*tile_height))
 
-def highlight_piece(board: Board, piece: Piece, display: pygame.Surface, tile_height: int, tile_width: int, x: int, y: int) -> None:
+def highlight_piece(x: int, y: int, board: Board, piece: Piece, player: Player, display: pygame.Surface, tile_height: int, tile_width: int) -> None:
     rect = (x*tile_width, y*tile_height, tile_width, tile_height)
     pygame.draw.rect(display, PINK, rect)
-    highlight_possible_moves(board, piece, display, tile_height, tile_width)
+    highlight_possible_moves(board, piece, player, display, tile_height, tile_width)
 
 def change_highlighted_piece(x: int, y: int, highlighted_piece: Piece, board: Board) -> Optional[Piece]:
     if highlighted_piece is not None:
