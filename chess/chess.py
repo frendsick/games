@@ -21,8 +21,7 @@ def new_game():
     colors          = itertools.cycle((WHITE, BLACK))
     tile_height     = SCREEN_HEIGHT // 8
     tile_width      = SCREEN_WIDTH // 8
-    height, width   = 8*tile_height, 8*tile_width
-    background      = pygame.Surface((width, height))
+    background      = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
     screen          = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
     # Print the board
