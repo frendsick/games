@@ -266,6 +266,3 @@ def make_move(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter:
     board = clear_en_passant(board, moves)
     
     return True, move_piece(x_from, y_from, x_to, y_to, move_rule_counter, players, board, moves)
-
-def is_game_over():
-    raise NotImplementedError
