@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 BLACK = pygame.Color('darkslategrey')
+GRAY  = pygame.Color('darkgray')
 PINK  = pygame.Color('pink')
 WHITE = pygame.Color('antiquewhite')
 
