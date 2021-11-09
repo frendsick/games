@@ -1,7 +1,8 @@
+import itertools
 import pygame
 from defs import Board, Player, Piece, GRAY, PINK, SCREEN_HEIGHT, SCREEN_WIDTH
-from move import is_legal_move
-from typing import List
+from move import check_move
+from typing import List, Optional
 
 #     <Player2>
 # 8   ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖
@@ -15,7 +16,7 @@ from typing import List
 #     <Player1>
 #     A B C D E F G H
 
-def print_board(board: Board, players: List[Player], game_over) -> None:
+def print_board(board: Board, players: List[Player], game_over: bool) -> None:
     print(f'\n    {players[1].name}', end='')
     for y in range(7, -1, -1):
         print(f'\n{y+1}  ', end='')
@@ -74,7 +75,7 @@ def highlight_piece(board: Board, piece: Piece, display: pygame.Surface, tile_he
     pygame.draw.rect(display, PINK, rect)
     highlight_possible_moves(board, piece, display, tile_height, tile_width)
 
-def change_highlighted_piece(x: int, y: int, highlighted_piece: Piece, board: Board) -> Piece:
+def change_highlighted_piece(x: int, y: int, highlighted_piece: Piece, board: Board) -> Optional[Piece]:
     if highlighted_piece is not None:
         # Clear old highlight
         old_x, old_y = highlighted_piece.location
