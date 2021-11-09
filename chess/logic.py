@@ -84,6 +84,7 @@ def get_squares_between_king_and_checkers(board: Board, player: Player) -> List[
         squares_between_king_and_checkers.append(get_squares_between_pieces(board, checking_piece, target_location))
     return squares_between_king_and_checkers
 
+# TODO: Implement stalemate
 def is_stalemate(board: Board, player: Player):
     #print("Checking for stalemate is not implemented")
     return False
