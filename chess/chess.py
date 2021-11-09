@@ -48,7 +48,6 @@ def new_game():
                 elif event.button == MOUSE_BUTTONS['RIGHT']:
                     print("Right click")
 
-        #move_rule_counter = make_move(move_rule_counter, board, moves, players, whites_turn)
         game_over = is_game_over(move_rule_counter, board, moves, players)
         if move_done:
             whites_turn = not whites_turn
