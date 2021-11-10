@@ -75,6 +75,7 @@ def is_checkmate(board: Board, player: Player):
                         y_to, x_to = square.location
                         if check_move(x_from, y_from, x_to, y_to, board, player):
                             return False
+    print("Checkmate!")
     return True
 
 def get_squares_between_king_and_checkers(board: Board, player: Player) -> List[List[Square]]:
@@ -84,10 +85,22 @@ def get_squares_between_king_and_checkers(board: Board, player: Player) -> List[
         squares_between_king_and_checkers.append(get_squares_between_pieces(board, checking_piece, target_location))
     return squares_between_king_and_checkers
 
-# TODO: Implement stalemate
+# Stalemate is when a player is not in check but there is no legal moves
 def is_stalemate(board: Board, player: Player):
-    #print("Checking for stalemate is not implemented")
-    return False
+    for y in range(8):
+        for x in range(8):
+            piece = board.squares[x][y].piece
+            if piece is None or piece.color != player.color.upper():
+                continue
+
+            x_from, y_from = piece.location
+            # Check if piece can move to any square
+            for x_to in range(8):
+                for y_to in range(8):
+                    if check_move(x_from, y_from, x_to, y_to, board, player):
+                        return False
+    print("Stalemate!")
+    return True
 
 def is_game_over(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player]) -> bool:
     if move_rule_counter >= 50:
