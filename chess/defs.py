@@ -103,7 +103,7 @@ class Board:
         return squares
 
     def init_square(self, x, y) -> Square:
-        if 1 < x < 6: # Empty square
+        if self.STARTING_POSITION[x][y] == 0: # Empty square
             return Square( location=(y, x), piece=None)
 
         id          = y+(x*8)
