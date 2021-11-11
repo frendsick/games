@@ -199,8 +199,11 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
         move_rule_counter = 0
 
     moves = do_move(x_from, y_from, x_to, y_to, board, moves, moved_piece, captured_piece, from_square, to_square)
+    update_players_in_check(board, moves, players)
 
-    # Update are players in check
+    return move_rule_counter
+
+def update_players_in_check(board: Board, moves: List[Move], players: List[Player]) -> None:
     player          = players[ (len(moves)+1)%2 ]
     opponent        = players[ len(moves)%2 ]
     checking_pieces = get_checking_pieces(board, opponent)
@@ -208,8 +211,6 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
         opponent.checking_pieces = checking_pieces
         opponent.in_check = True
     player.in_check = False
-
-    return move_rule_counter
 
 def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves: List[Move], moved_piece: Piece, captured_piece: Piece, from_square: Square, to_square: Square) -> List[Move]:
     moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
