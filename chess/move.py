@@ -175,6 +175,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
             moved_piece.en_passant = True
         # If en passanting the target pawn is right next to the from_square
         if abs(x_from - x_to) == 1 and target_piece is None:
+            captured_piece  = board.squares[x_from-(x_from-x_to)][y_from].piece
             board.squares[x_from-(x_from-x_to)][y_from].piece = None
     # Capturing a piece resets the 50 move rule counter
     if captured_piece:
@@ -214,9 +215,13 @@ def undo_move(board: Board, moves: List[Move]) -> Board:
     target_square   = board.squares[x_to][y_to]
 
     target_square.piece                 = moved_piece
+    target_square.piece.en_passant      = False
     target_square.piece.location        = (x_to, y_to)
     target_square.highlighted           = False
-    board.squares[x_from][y_from].piece = captured_piece or None
+    board.squares[x_from][y_from].piece = None
+    if captured_piece:
+        x_captured, y_captured                      = captured_piece.location
+        board.squares[x_captured][y_captured].piece = captured_piece
 
 def check_for_castling(x_from: int, y_from: int, x_to: int, players: List[Player], board: Board, moves: List[Move], to_square: Square):
     board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
