@@ -4,6 +4,13 @@ from defs import Board, Player, Piece, GRAY, PINK, SCREEN_HEIGHT, SCREEN_WIDTH
 from move import check_move
 from typing import List, Optional
 
+def display_text(text: str, font_size: int, display: pygame.Surface, x: int, y: int) -> None:
+    font = pygame.font.Font('freesansbold.ttf', font_size)
+    text_surface = font.render(text, True, GRAY)
+    text_rect = text_surface.get_rect()
+    text_rect.center = (x, y)
+    display.blit(text_surface, text_rect)
+
 def print_board_background(background: pygame.Surface, colors: itertools.cycle, tile_height: int, tile_width: int) -> None:
     for y in range(0, SCREEN_HEIGHT, tile_height):
         for x in range(0, SCREEN_WIDTH, tile_width):
