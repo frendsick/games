@@ -59,7 +59,6 @@ def new_game():
                 undo_move(board, moves)
                 if move_rule_counter > 0:
                     move_rule_counter -= 1
-                    print(move_rule_counter)
                 move_done = True
 
         game_over = is_game_over(move_rule_counter, board, moves, players)
