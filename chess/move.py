@@ -199,6 +199,19 @@ def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves:
     board.squares[x_from][y_from].piece = None
     return moves
 
+def undo_move(board: Board, moves: List[Move]) -> Board:
+    last_move       = moves.pop()
+    x_from, y_from  = last_move.to_square.location
+    x_to, y_to      = last_move.from_square.location
+    moved_piece     = last_move.moved_piece
+    captured_piece  = last_move.captured_piece
+    target_square   = board.squares[x_to][y_to]
+
+    target_square.piece                 = moved_piece
+    target_square.piece.location        = (x_to, y_to)
+    target_square.highlighted           = False
+    board.squares[x_from][y_from].piece = captured_piece or None
+
 def check_for_castling(x_from: int, y_from: int, x_to: int, players: List[Player], board: Board, moves: List[Move], to_square: Square):
     board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
     if abs(x_from - x_to) == 2:

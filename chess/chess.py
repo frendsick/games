@@ -4,7 +4,7 @@ import pygame
 from typing import List
 from defs   import Board, Move, Piece, Player, BLACK, WHITE, MOUSE_BUTTONS, TICKRATE, SCREEN_HEIGHT, SCREEN_WIDTH, Square
 from logic  import is_game_over
-from move   import make_move
+from move   import make_move, undo_move
 from utils  import change_highlighted_piece, print_board_background, print_board_state
 
 def new_game():
@@ -47,6 +47,20 @@ def new_game():
                     highlighted_piece   = change_highlighted_piece(x_to, y_to, highlighted_piece, board)
                 elif event.button == MOUSE_BUTTONS['RIGHT']:
                     print("Right click")
+            # Undo the last move with CTRZ-Z or U
+            if (
+                event.type == pygame.KEYDOWN and
+                moves                       and
+                (event.key == pygame.K_u    or
+                (event.key == pygame.K_z    and
+                pygame.key.get_mods()       and
+                pygame.KMOD_CTRL))
+            ):
+                undo_move(board, moves)
+                if move_rule_counter > 0:
+                    move_rule_counter -= 1
+                    print(move_rule_counter)
+                move_done = True
 
         game_over = is_game_over(move_rule_counter, board, moves, players)
         if move_done:
