@@ -2,12 +2,12 @@
 import itertools
 import pygame
 from typing import List
-from defs   import Board, Move, Piece, Player, BLACK, WHITE, MOUSE_BUTTONS, TICKRATE, SCREEN_HEIGHT, SCREEN_WIDTH
+from defs   import Board, Move, Piece, Player, BLACK, GRAY, WHITE, MOUSE_BUTTONS, TICKRATE, SCREEN_HEIGHT, SCREEN_WIDTH
 from logic  import is_game_over
 from move   import make_move, undo_move
 from utils  import change_highlighted_piece, display_text, print_board_background, print_board_state
 
-def new_game():
+def new_game(background: pygame.Surface, screen: pygame.Surface) -> None:
     game_over: bool             = False
     highlighted_piece: Piece    = None
     whites_turn: bool           = True
@@ -21,8 +21,6 @@ def new_game():
     colors          = itertools.cycle((WHITE, BLACK))
     tile_height     = SCREEN_HEIGHT // 8
     tile_width      = SCREEN_WIDTH // 8
-    background      = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-    screen          = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
     # Print the board
     print_board_background(background, colors, tile_height, tile_width)
@@ -66,27 +64,35 @@ def new_game():
             whites_turn = not whites_turn
         print_board_state(board, players, game_over, screen, tile_height, tile_width, whites_turn)
         pygame.display.update()
-    print("Game over")
 
 def fill_screen(background: pygame.Surface, screen: pygame.Surface) -> None:
     screen.fill([60, 70, 90])
     screen.blit(background, (0, 0))
 
-def ask_play_again():
+def play_again(screen: pygame.Surface) -> None:
+    font_size = SCREEN_WIDTH // 18
+    text_x    = SCREEN_WIDTH // 2
+    text_y    = int(SCREEN_HEIGHT // 8 * 5.5)
+    display_text("Play again? (Y/N)", font_size, GRAY, screen, text_x, text_y)
+    pygame.display.update()
+
+    # Wait for Y or N press from the user
     while(True):
-        print("Would you like to play again? (Y/n):")
-        answer = input().upper()
-        if answer == 'N':
-            exit(0)
-        elif answer == 'Y' or len(answer) == 0:
-            main()
-        else:
-            print(f"Option '{answer}' is not recognized")
+        events: List[pygame.event.Event] = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_n):
+                exit(0)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_y:
+                return True
 
 def main():
     pygame.init()
-    new_game()
-    ask_play_again()
+    background  = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen      = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+    playing     = True
+    while playing:
+        new_game(background, screen)
+        playing = play_again(screen)
 
 if __name__ == '__main__':
     main()
