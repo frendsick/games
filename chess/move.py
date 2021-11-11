@@ -91,15 +91,25 @@ def castle(board: Board, y: int, castle_right: bool) -> Board:
         board.squares[0][y].piece == None
     return board
 
-def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board) -> bool:
+def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player = None) -> bool:
     king    = board.squares[x_from][y_from].piece
+
     # Check castling
-    # TODO: Prevent castling through check
     if (king.can_castle and abs(x_from - x_to) == 2 and y_from == y_to
         and not move_through_other_piece(x_from, y_from, x_to, y_to, board)):
-        if x_from > x_to and board.squares[0][y_from].piece is not None:
+        # Checked player cannot castle
+        if player is not None and player.in_check:
+            return False
+        # Cannot castle through check
+        if (x_from > x_to
+        and board.squares[0][y_from].piece is not None
+        and not moving_results_in_check(x_from, y_from, x_from-1, y_from, board, player)
+        ):
             return board.squares[0][y_from].piece.can_castle
-        elif x_from < x_to and board.squares[7][y_from].piece is not None:
+        elif (x_from < x_to
+        and board.squares[7][y_from].piece is not None
+        and not moving_results_in_check(x_from, y_from, x_from+1, y_from, board, player)
+        ):
             return board.squares[7][y_from].piece.can_castle
 
     # King can move to any direction but only one step
@@ -112,7 +122,7 @@ def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
         return False
     return True
 
-def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, color: str) -> bool:
+def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, color: str, player: Player = None) -> bool:
     moved_piece     = board.squares[x_from][y_from].piece
     target_piece    = board.squares[x_to][y_to].piece
     # Cannot capture own piece
@@ -131,7 +141,7 @@ def is_legal_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, 
     if moved_piece.type == "QUEEN":
         return legal_queen_move(x_from, y_from, x_to, y_to, board)
     if moved_piece.type == "KING":
-        return legal_king_move(x_from, y_from, x_to, y_to, board)
+        return legal_king_move(x_from, y_from, x_to, y_to, board, player)
     raise RuntimeError("This should not be accessible")
 
 def get_checking_pieces(board: Board, player: Player) -> List[Piece]:
@@ -271,7 +281,7 @@ def moving_results_in_check(x_from, y_from, x_to, y_to, board, player):
 def check_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
     if not is_own_piece(x_from, y_from, board, player.color):
         return False
-    if not is_legal_move(x_from, y_from, x_to, y_to, board, player.color):
+    if not is_legal_move(x_from, y_from, x_to, y_to, board, player.color, player):
         return False
     return not moving_results_in_check(x_from, y_from, x_to, y_to, board, player)
 
