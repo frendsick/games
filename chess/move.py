@@ -2,11 +2,6 @@ from copy import deepcopy
 from typing import List, Tuple
 from defs import Board, Move, Piece, Player, Square
 
-def invalid_move_error(move: str, error_message: str = None) -> None:
-    print(f"'{move}' is not a valid move!")
-    if error_message:
-        print(error_message)
-
 # Checks if there is any legal moves available for the piece
 def can_piece_move(board: Board, piece: Piece, player: Player) -> bool:
     x_from, y_from = piece.location
