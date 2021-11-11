@@ -154,6 +154,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
     captured_piece  = target_piece if target_piece != None else None
     from_square     = Square( (x_from, y_from), moved_piece )
     to_square       = Square( (x_to, y_to), target_piece )
+    promoted: bool  = False
     move_rule_counter += 1
 
     # If castling, move the corresponding rook over the king
@@ -168,6 +169,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
         if y_to == queening_row:
             moved_piece.type = 'QUEEN'
             moved_piece.icon = f'icons/{moved_piece.color}_QUEEN.png'
+            promoted = True
         # If moving pawn two squares forwards change en_passant boolean to true for the next turn
         if abs(y_from - y_to) == 2:
             moved_piece.en_passant = True
@@ -178,7 +180,7 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
     if captured_piece:
         move_rule_counter = 0
 
-    moves = do_move(x_from, y_from, x_to, y_to, board, moves, moved_piece, captured_piece, from_square, to_square)
+    moves = do_move(x_from, y_from, x_to, y_to, board, moves, moved_piece, captured_piece, from_square, to_square, promoted)
     update_players_in_check(board, moves, players)
 
     return move_rule_counter
@@ -192,11 +194,15 @@ def update_players_in_check(board: Board, moves: List[Move], players: List[Playe
         opponent.in_check = True
     player.in_check = False
 
-def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves: List[Move], moved_piece: Piece, captured_piece: Piece, from_square: Square, to_square: Square) -> List[Move]:
-    moves.append( Move(from_square, to_square, moved_piece, captured_piece) )
+def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves: List[Move], moved_piece: Piece, captured_piece: Piece, from_square: Square, to_square: Square, promoted_pawn: bool) -> List[Move]:
     moved_piece.location = (x_to, y_to)
     board.squares[x_to][y_to].piece = moved_piece
     board.squares[x_from][y_from].piece = None
+    moved_piece_copy = deepcopy(moved_piece)
+    if promoted_pawn:
+        moved_piece_copy.type = 'PAWN'
+        moved_piece_copy.icon = f'icons/{moved_piece.color}_PAWN.png'
+    moves.append( Move(from_square, to_square, moved_piece_copy, captured_piece) )
     return moves
 
 def undo_move(board: Board, moves: List[Move]) -> Board:
