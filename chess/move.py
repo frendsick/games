@@ -1,5 +1,4 @@
 from copy import deepcopy
-import re
 from typing import List, Tuple
 from defs import Board, Move, Piece, Player, Square
 
@@ -7,20 +6,6 @@ def invalid_move_error(move: str, error_message: str = None) -> None:
     print(f"'{move}' is not a valid move!")
     if error_message:
         print(error_message)
-
-# Returns given move in two tuples of coordinates for the move
-def ask_move(player: Player) -> Tuple[Tuple[int, int], Tuple[int, int]]:
-    # move_regex  = r'[BRQNK][a-h][1-8]|[BRQNK][a-h]x[a-h][1-8]|[BRQNK][a-h][1-8]x[a-h][1-8]|[BRQNK][a-h][1-8][a-h][1-8]|[BRQNK][a-h][a-h][1-8]|[BRQNK]x[a-h][1-8]|[a-h]x[a-h][1-8]=(B+R+Q+N)|[a-h]x[a-h][1-8]|[a-h][1-8]x[a-h][1-8]=(B+R+Q+N)|[a-h][1-8]x[a-h][1-8]|[a-h][1-8][a-h][1-8]=(B+R+Q+N)|[a-h][1-8][a-h][1-8]|[a-h][1-8]=(B+R+Q+N)|[a-h][1-8]|[BRQNK][1-8]x[a-h][1-8]|[BRQNK][1-8][a-h][1-8]|O-O|O-O-O'
-    move_regex = r'(?i)[a-h][1-8][a-h][1-8]' # Example: e2g4
-    print(f"{player.name}'s turn!")
-    while(True):
-        print("Give move: ", end='')
-        move = input().upper()
-        if re.fullmatch(move_regex, move) and move[:2] != move[-2:]:
-            move_from   = (int(ord(move[0])-65), int(move[1])-1)
-            move_to     = (int(ord(move[2])-65), int(move[3])-1)
-            return move_from, move_to
-        invalid_move_error(move)
 
 # Checks if there is any legal moves available for the piece
 def can_piece_move(board: Board, piece: Piece, player: Player) -> bool:
