@@ -22,6 +22,15 @@ def ask_move(player: Player) -> Tuple[Tuple[int, int], Tuple[int, int]]:
             return move_from, move_to
         invalid_move_error(move)
 
+# Checks if there is any legal moves available for the piece
+def can_piece_move(board: Board, piece: Piece, player: Player) -> bool:
+    x_from, y_from = piece.location
+    for x_to in range(8):
+        for y_to in range(8):
+            if check_move(x_from, y_from, x_to, y_to, board, player):
+                return True
+    return False
+
 def is_own_piece(x: int, y: int, board: Board, color: str) -> bool:
     piece = board.squares[x][y].piece
     if piece is not None:

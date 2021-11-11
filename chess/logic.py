@@ -1,5 +1,5 @@
 from defs import Board, Location, Move, Piece, Player, Square
-from move import check_move
+from move import can_piece_move
 from typing import List, Tuple
 
 def legal_move_found(board: Board, player: Player) -> bool:
@@ -10,11 +10,8 @@ def legal_move_found(board: Board, player: Player) -> bool:
                 continue
 
             # Check if piece can move to any square
-            x_from, y_from = piece.location
-            for x_to in range(8):
-                for y_to in range(8):
-                    if check_move(x_from, y_from, x_to, y_to, board, player):
-                        return True
+            if can_piece_move(board, piece, player):
+                return True
     return False
 
 def is_checkmate(board: Board, player: Player) -> bool:
