@@ -5,7 +5,7 @@ from typing import List
 from defs   import Board, Move, Piece, Player, BLACK, WHITE, MOUSE_BUTTONS, TICKRATE, SCREEN_HEIGHT, SCREEN_WIDTH
 from logic  import is_game_over
 from move   import make_move, undo_move
-from utils  import change_highlighted_piece, print_board_background, print_board_state
+from utils  import change_highlighted_piece, display_text, print_board_background, print_board_state
 
 def new_game():
     game_over: bool             = False
@@ -61,7 +61,7 @@ def new_game():
                     move_rule_counter -= 1
                 move_done = True
 
-        game_over = is_game_over(move_rule_counter, board, moves, players)
+        game_over = is_game_over(move_rule_counter, board, moves, players, screen)
         if move_done:
             whites_turn = not whites_turn
         print_board_state(board, players, game_over, screen, tile_height, tile_width, whites_turn)

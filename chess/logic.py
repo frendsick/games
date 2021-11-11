@@ -1,6 +1,8 @@
-from defs import Board, Move, Player
+import pygame
+from defs import Board, Move, Player, GRAY, RED, SCREEN_HEIGHT, SCREEN_WIDTH
 from move import can_piece_move
-from typing import List, Tuple
+from typing import List
+from utils import display_text
 
 def legal_move_found(board: Board, player: Player) -> bool:
     for y in range(8):
@@ -22,13 +24,22 @@ def is_checkmate(board: Board, player: Player) -> bool:
 def is_stalemate(board: Board, player: Player) -> bool:
     return not legal_move_found(board, player)
 
-def is_game_over(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player]) -> bool:
+def is_game_over(move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], screen: pygame.Surface) -> bool:
+    font_size = SCREEN_HEIGHT // 8
+    message_x = SCREEN_WIDTH // 2
+    message_y = int(SCREEN_HEIGHT/8*3.5)
+
+    # Check for 50 move rule
     if move_rule_counter >= 50:
+        display_text("Draw", font_size, GRAY, screen, message_x, message_y)
         print("Game over - 50 move rule")
         return True
 
     # Only the player whose turn is next can be in checkmate or stalemate
     player = players[0] if len(moves)%2 == 0 else players[1]
     if is_checkmate(board, player):
+        display_text("Checkmate", font_size, RED, screen, message_x, message_y)
         return True
-    return is_stalemate(board, player)
+    if is_stalemate(board, player):
+        display_text("Stalemate", font_size, GRAY, screen, message_x, message_y)
+        return True
