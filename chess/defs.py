@@ -4,8 +4,8 @@ from typing import Dict, List, Tuple
 
 BLACK   = pygame.Color('darkslategrey')
 GRAY    = pygame.Color('darkgray')
-HOTPINK = pygame.Color('hotpink')
 PINK    = pygame.Color('pink')
+RED     = pygame.Color('red')
 WHITE   = pygame.Color('antiquewhite')
 
 TICKRATE        = 120
