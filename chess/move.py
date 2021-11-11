@@ -216,7 +216,7 @@ def do_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, moves:
     moves.append( Move(from_square, to_square, moved_piece_copy, captured_piece) )
     return moves
 
-def undo_move(board: Board, moves: List[Move]) -> Board:
+def undo_move(board: Board, moves: List[Move]) -> None:
     last_move       = moves.pop()
     x_from, y_from  = last_move.to_square.location
     x_to, y_to      = last_move.from_square.location
@@ -235,7 +235,7 @@ def undo_move(board: Board, moves: List[Move]) -> Board:
     if moved_piece.type == 'KING' and abs(x_from - x_to) == 2:
         undo_castling(board, moved_piece, x_from)
 
-def undo_castling(board: Board, moved_piece: Piece, x_from: int) -> Board:
+def undo_castling(board: Board, moved_piece: Piece, x_from: int) -> None:
     x_home = x_from+1 if x_from > 4 else x_from-2 # The rook's home square
     x_rook = x_from-1 if x_from > 4 else x_from+1 # The rook's current x-coordinate
     y_rook = moved_piece.location[1]
@@ -249,7 +249,7 @@ def undo_castling(board: Board, moved_piece: Piece, x_from: int) -> Board:
     x_king, y_king = moved_piece.location
     board.squares[x_king][y_king].piece.can_castle = True
 
-def check_for_castling(x_from: int, y_from: int, x_to: int, players: List[Player], board: Board, moves: List[Move], to_square: Square):
+def check_for_castling(x_from: int, y_from: int, x_to: int, players: List[Player], board: Board, moves: List[Move], to_square: Square) -> Board:
     board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
     if abs(x_from - x_to) == 2:
         board = move_rook_when_castling(x_from, y_from, x_to, board)
@@ -270,7 +270,7 @@ def do_rook_move_when_castling(x_from: int, y_from: int, x_to: int, board: Board
     source_square.piece = None
     return board
 
-def moving_results_in_check(x_from, y_from, x_to, y_to, board, player):
+def moving_results_in_check(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
     board_copy = deepcopy(board)
     board_copy.squares[x_to][y_to].piece = board_copy.squares[x_from][y_from].piece
     board_copy.squares[x_from][y_from].piece = None

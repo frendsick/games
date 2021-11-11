@@ -1,4 +1,4 @@
-from defs import Board, Location, Move, Piece, Player, Square
+from defs import Board, Move, Player
 from move import can_piece_move
 from typing import List, Tuple
 

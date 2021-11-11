@@ -2,7 +2,7 @@
 import itertools
 import pygame
 from typing import List
-from defs   import Board, Move, Piece, Player, BLACK, WHITE, MOUSE_BUTTONS, TICKRATE, SCREEN_HEIGHT, SCREEN_WIDTH, Square
+from defs   import Board, Move, Piece, Player, BLACK, WHITE, MOUSE_BUTTONS, TICKRATE, SCREEN_HEIGHT, SCREEN_WIDTH
 from logic  import is_game_over
 from move   import make_move, undo_move
 from utils  import change_highlighted_piece, print_board_background, print_board_state
@@ -32,7 +32,7 @@ def new_game():
     while not game_over:
         move_done = False
         clock.tick(TICKRATE)
-        fill_screen(clock, background, screen)
+        fill_screen(background, screen)
         events: List[pygame.event.Event] = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
@@ -68,7 +68,7 @@ def new_game():
         pygame.display.update()
     print("Game over")
 
-def fill_screen(clock: pygame.time.Clock, background: pygame.Surface, screen: pygame.Surface) -> None:
+def fill_screen(background: pygame.Surface, screen: pygame.Surface) -> None:
     screen.fill([60, 70, 90])
     screen.blit(background, (0, 0))
 

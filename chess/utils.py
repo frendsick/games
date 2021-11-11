@@ -39,7 +39,7 @@ def highlight_possible_moves(board: Board, piece: Piece, player: Player, display
             if check_move(x_from, y_from, x_to, y_to, board, player):
                 highlight_square(x_to, y_to, board, display, tile_height, tile_width)
 
-def display_piece(display, tile_height, tile_width, x, y, piece):
+def display_piece(display: pygame.Surface, tile_height: int, tile_width: int, x: int, y: int, piece: Piece) -> None:
     piece_icon = pygame.image.load(piece.icon)
     piece_icon = pygame.transform.scale(piece_icon, (tile_width, tile_height))
     display.blit(piece_icon, (x*tile_width, y*tile_height))
