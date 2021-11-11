@@ -2,10 +2,11 @@ import pygame
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
-BLACK = pygame.Color('darkslategrey')
-GRAY  = pygame.Color('darkgray')
-PINK  = pygame.Color('pink')
-WHITE = pygame.Color('antiquewhite')
+BLACK   = pygame.Color('darkslategrey')
+GRAY    = pygame.Color('darkgray')
+HOTPINK = pygame.Color('hotpink')
+PINK    = pygame.Color('pink')
+WHITE   = pygame.Color('antiquewhite')
 
 TICKRATE        = 120
 SCREEN_HEIGHT   = 800
