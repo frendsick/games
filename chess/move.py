@@ -234,7 +234,7 @@ def undo_castling(board: Board, moved_piece: Piece, x_from: int) -> Board:
     board.squares[x_home][y_rook].piece = rook
     rook.location = (x_home, y_rook)
 
-    # The king and the rook can castle later
+    # The king and the rook can castle again
     rook.can_castle = True
     x_king, y_king = moved_piece.location
     board.squares[x_king][y_king].piece.can_castle = True
