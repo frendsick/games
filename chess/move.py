@@ -222,6 +222,22 @@ def undo_move(board: Board, moves: List[Move]) -> Board:
     if captured_piece:
         x_captured, y_captured                      = captured_piece.location
         board.squares[x_captured][y_captured].piece = captured_piece
+    if moved_piece.type == 'KING' and abs(x_from - x_to) == 2:
+        undo_castling(board, moved_piece, x_from)
+
+def undo_castling(board: Board, moved_piece: Piece, x_from: int) -> Board:
+    x_home = x_from+1 if x_from > 4 else x_from-2 # The rook's home square
+    x_rook = x_from-1 if x_from > 4 else x_from+1 # The rook's current x-coordinate
+    y_rook = moved_piece.location[1]
+    rook   = board.squares[x_rook][y_rook].piece
+    board.squares[x_rook][y_rook].piece = None
+    board.squares[x_home][y_rook].piece = rook
+    rook.location = (x_home, y_rook)
+
+    # The king and the rook can castle later
+    rook.can_castle = True
+    x_king, y_king = moved_piece.location
+    board.squares[x_king][y_king].piece.can_castle = True
 
 def check_for_castling(x_from: int, y_from: int, x_to: int, players: List[Player], board: Board, moves: List[Move], to_square: Square):
     board.king_locations[players[len(moves)%2].color.upper()] = to_square.location
