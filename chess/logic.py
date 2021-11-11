@@ -9,8 +9,8 @@ def legal_move_found(board: Board, player: Player) -> bool:
             if piece is None or piece.color != player.color.upper():
                 continue
 
-            x_from, y_from = piece.location
             # Check if piece can move to any square
+            x_from, y_from = piece.location
             for x_to in range(8):
                 for y_to in range(8):
                     if check_move(x_from, y_from, x_to, y_to, board, player):
