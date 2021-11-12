@@ -272,18 +272,20 @@ def move_rook_when_castling(x_from: int, y_from: int, x_to: int, board: Board) -
         return do_rook_move_when_castling(0, y_from, 3, board)
 
 def do_rook_move_when_castling(x_from: int, y_from: int, x_to: int, board: Board) -> Board:
-    source_square = board.squares[x_from][y_from]
-    target_square = board.squares[x_to][y_from]
-    target_square.piece = source_square.piece
-    target_square.piece.location = (x_to, y_from)
-    target_square.highlighted = False
-    source_square.piece = None
+    source_square                   = board.squares[x_from][y_from]
+    target_square                   = board.squares[x_to][y_from]
+    target_square.piece             = source_square.piece
+    target_square.piece.location    = (x_to, y_from)
+    target_square.highlighted       = False
+    source_square.piece             = None
     return board
 
 def moving_results_in_check(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player) -> bool:
     board_copy = deepcopy(board)
     board_copy.squares[x_to][y_to].piece = board_copy.squares[x_from][y_from].piece
     board_copy.squares[x_from][y_from].piece = None
+
+    # Check if the player is in check after the move
     if board_copy.squares[x_to][y_to].piece.type == 'KING':
         board_copy.king_locations[player.color.upper()] = (x_to, y_to)
     return get_checking_pieces(board_copy, player) != []
@@ -303,7 +305,7 @@ def clear_en_passant(board: Board, moves: List[Move]) -> Board:
     return board
 
 # Makes move and returns the 50 move rule counter
-def make_move(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], whites_turn: bool, debug=False, debug_game=None) -> Tuple[bool, int]:
+def make_move(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter: int, board: Board, moves: List[Move], players: List[Player], whites_turn: bool) -> Tuple[bool, int]:
     player: Player = players[0] if whites_turn else players[1] # players[0] => White
 
     if not check_move(x_from, y_from, x_to, y_to, board, player):

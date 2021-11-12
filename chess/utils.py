@@ -5,10 +5,10 @@ from move import check_move
 from typing import List, Optional
 
 def display_text(text: str, font_size: int, font_color: pygame.Color, display: pygame.Surface, x: int, y: int) -> None:
-    font = pygame.font.Font('freesansbold.ttf', font_size)
-    text_surface = font.render(text, True, font_color)
-    text_rect = text_surface.get_rect()
-    text_rect.center = (x, y)
+    font                = pygame.font.Font('freesansbold.ttf', font_size)
+    text_surface        = font.render(text, True, font_color)
+    text_rect           = text_surface.get_rect()
+    text_rect.center    = (x, y)
     display.blit(text_surface, text_rect)
 
 def print_board_background(background: pygame.Surface, colors: itertools.cycle, tile_height: int, tile_width: int) -> None:

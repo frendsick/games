@@ -12,7 +12,7 @@ def new_game(background: pygame.Surface, screen: pygame.Surface) -> None:
     highlighted_piece: Piece    = None
     whites_turn: bool           = True
     move_rule_counter: int      = 0 # 50 move rule
-    players: List[Player]       = [Player("White", "Teemu", 1337), Player("Black", "Random n00b", 420)]
+    players: List[Player]       = [Player("White", "CyberPaddy", 1337), Player("Black", "Random n00b", 420)]
     board                       = Board() # Initializes the board to the starting position
     moves: List[Move]           = []
 
@@ -20,7 +20,7 @@ def new_game(background: pygame.Surface, screen: pygame.Surface) -> None:
     clock           = pygame.time.Clock()
     colors          = itertools.cycle((WHITE, BLACK))
     tile_height     = SCREEN_HEIGHT // 8
-    tile_width      = SCREEN_WIDTH // 8
+    tile_width      = SCREEN_WIDTH  // 8
 
     # Print the board
     print_board_background(background, colors, tile_height, tile_width)
