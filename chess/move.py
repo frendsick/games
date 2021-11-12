@@ -307,7 +307,6 @@ def make_move(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter:
     player: Player = players[0] if whites_turn else players[1] # players[0] => White
 
     if not check_move(x_from, y_from, x_to, y_to, board, player):
-        print("Illegal move:", (x_from, y_from), "=>", (x_to, y_to))
         return False, move_rule_counter
 
     # Revocate castling rights when moving king or rook

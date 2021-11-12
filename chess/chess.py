@@ -35,16 +35,17 @@ def new_game(background: pygame.Surface, screen: pygame.Surface) -> None:
         for event in events:
             if event.type == pygame.QUIT:
                 exit(0)
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == MOUSE_BUTTONS['LEFT']:
-                    mouse_pos           = pygame.mouse.get_pos()
-                    x_to, y_to          = mouse_pos[0] // tile_width , 7 - (mouse_pos[1] // tile_height)
-                    if highlighted_piece is not None:
-                        x_from, y_from  = highlighted_piece.location
-                        move_done, move_rule_counter = make_move(x_from, y_from, x_to, y_to, move_rule_counter, board, moves, players, whites_turn)
-                    highlighted_piece   = change_highlighted_piece(x_to, y_to, highlighted_piece, board)
-                elif event.button == MOUSE_BUTTONS['RIGHT']:
-                    print("Right click")
+            if (
+                event.type == pygame.MOUSEBUTTONDOWN
+                and event.button == MOUSE_BUTTONS['LEFT']
+            ):
+                mouse_pos           = pygame.mouse.get_pos()
+                x_to, y_to          = mouse_pos[0] // tile_width , 7 - (mouse_pos[1] // tile_height)
+                if highlighted_piece is not None:
+                    x_from, y_from  = highlighted_piece.location
+                    move_done, move_rule_counter = make_move(x_from, y_from, x_to, y_to, move_rule_counter, board, moves, players, whites_turn)
+                highlighted_piece   = change_highlighted_piece(x_to, y_to, highlighted_piece, board)
+
             # Undo the last move with CTRZ-Z or U
             if (
                 event.type == pygame.KEYDOWN and
