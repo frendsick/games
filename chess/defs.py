@@ -70,14 +70,14 @@ class Board:
     # Positive are white pieces, negative are black pieces
     # Zero's are empty, None's are out-of-bounds
     STARTING_POSITION = [
-        [ -50, -30, -31, -90, -9001, -31, -30, -50 ],
-        [ -10, -10, -10, -10, -10, -10, -10, -10 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
-        [ 0, 0, 0, 0, 0, 0,  0, 0 ],
+        [ 50, 30, 31, 90, 9001, 31, 30, 50 ],
         [ 10, 10, 10, 10, 10, 10, 10, 10 ],
-        [ 50, 30, 31, 90, 9001, 31, 30, 50 ]
+        [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+        [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+        [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+        [ 0, 0, 0, 0, 0, 0, 0, 0 ],
+        [ -10, -10, -10, -10, -10, -10, -10, -10 ],
+        [ -50, -30, -31, -90, -9001, -31, -30, -50 ]
     ]
 
     def init_board(self) -> List[List[Square]]:
@@ -89,12 +89,13 @@ class Board:
         return squares
 
     def init_square(self, x, y) -> Square:
-        if self.STARTING_POSITION[x][y] == 0: # Empty square
+        piece_value = self.STARTING_POSITION[x][y]
+        if piece_value == 0: # Empty square
             return Square( location=(y, x), piece=None)
 
         id          = y+(x*8)
-        color       = 'WHITE' if x < 5 else 'BLACK'
-        value       = abs(self.STARTING_POSITION[x][y])
+        color       = 'WHITE' if piece_value > 0 else 'BLACK'
+        value       = abs(piece_value)
         type        = PIECE_VALUE_MAP[value]
         icon        = f'icons/{color}_{type}.png'
         can_castle  = type in ['KING', 'ROOK']
