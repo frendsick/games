@@ -31,7 +31,8 @@ def new_game(background: pygame.Surface, screen: pygame.Surface) -> None:
         game_over, background, screen, highlighted_piece, whites_turn, move_rule_counter, players, moves = \
             game_loop(background, screen, highlighted_piece, whites_turn, move_rule_counter, players, board, moves, tile_height, tile_width)
 
-def game_loop(background: pygame.Surface, screen: pygame.Surface, highlighted_piece: Piece, whites_turn: bool, move_rule_counter: int, players: List[Player], board: Board, moves: List[Move], tile_height: int, tile_width: int) -> Tuple[bool, bool]:
+def game_loop(background: pygame.Surface, screen: pygame.Surface, highlighted_piece: Piece, whites_turn: bool, move_rule_counter: int, players: List[Player], board: Board, moves: List[Move], tile_height: int, tile_width: int) \
+    -> Tuple[bool, pygame.Surface, pygame.Surface, Piece, bool, int, List[Player], List[Move]]:
     # Draw the background
     fill_screen(background, screen)
 
