@@ -100,15 +100,16 @@ def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board
         # Checked player cannot castle
         if player is not None and player.in_check:
             return False
+
         # Cannot castle through check
         if (x_from > x_to
-        and board.squares[0][y_from].piece is not None
-        and not moving_results_in_check(x_from, y_from, x_from-1, y_from, board, player)
+            and board.squares[0][y_from].piece is not None
+            and not moving_results_in_check(x_from, y_from, x_from-1, y_from, board, player)
         ):
             return board.squares[0][y_from].piece.can_castle
         elif (x_from < x_to
-        and board.squares[7][y_from].piece is not None
-        and not moving_results_in_check(x_from, y_from, x_from+1, y_from, board, player)
+            and board.squares[7][y_from].piece is not None
+            and not moving_results_in_check(x_from, y_from, x_from+1, y_from, board, player)
         ):
             return board.squares[7][y_from].piece.can_castle
 
