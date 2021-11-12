@@ -175,26 +175,30 @@ def move_piece(x_from: int, y_from: int, x_to: int, y_to: int, move_rule_counter
     if moved_piece.type == 'PAWN':
         move_rule_counter   = 0
         queening_row        = 7 if moved_piece.color == 'WHITE' else 0
+
         # Pawn becomes a queen if it gets to the other end of the board
         # TODO: Underpromotion
         if y_to == queening_row:
             moved_piece.type = 'QUEEN'
             moved_piece.icon = f'icons/{moved_piece.color}_QUEEN.png'
             promoted = True
+
         # If moving pawn two squares forwards change en_passant boolean to true for the next turn
         if abs(y_from - y_to) == 2:
             moved_piece.en_passant = True
+
         # If en passanting the target pawn is right next to the from_square
         if abs(x_from - x_to) == 1 and target_piece is None:
             captured_piece  = board.squares[x_from-(x_from-x_to)][y_from].piece
             board.squares[x_from-(x_from-x_to)][y_from].piece = None
+
     # Capturing a piece resets the 50 move rule counter
     if captured_piece:
         move_rule_counter = 0
 
+    # Do the move and update Player object's in_check variable
     moves = do_move(x_from, y_from, x_to, y_to, board, moves, moved_piece, captured_piece, from_square, to_square, promoted)
     update_players_in_check(board, moves, players)
-
     return move_rule_counter
 
 def update_players_in_check(board: Board, moves: List[Move], players: List[Player]) -> None:
@@ -225,14 +229,19 @@ def undo_move(board: Board, moves: List[Move]) -> None:
     captured_piece  = last_move.captured_piece
     target_square   = board.squares[x_to][y_to]
 
+    # Move the piece back to its previous location
     target_square.piece                 = moved_piece
     target_square.piece.en_passant      = False
     target_square.piece.location        = (x_to, y_to)
     target_square.highlighted           = False
     board.squares[x_from][y_from].piece = None
+
+    # Add the captured piece back to the board
     if captured_piece:
         x_captured, y_captured                      = captured_piece.location
         board.squares[x_captured][y_captured].piece = captured_piece
+
+    # If the previous move was a castle, undo the castling and restore castling rights
     if moved_piece.type == 'KING' and abs(x_from - x_to) == 2:
         undo_castling(board, moved_piece, x_from)
 
