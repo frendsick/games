@@ -85,10 +85,10 @@ def legal_queen_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Boar
 def castle(board: Board, y: int, castle_right: bool) -> Board:
     if castle_right:
         board.squares[5][y].piece == board.squares[7][y].piece
-        board.squares[7][y].piece == None
+        board.squares[7][y].piece is None
     else:
         board.squares[2][y].piece == board.squares[0][y].piece
-        board.squares[0][y].piece == None
+        board.squares[0][y].piece is None
     return board
 
 def legal_king_move(x_from: int, y_from: int, x_to: int, y_to: int, board: Board, player: Player = None) -> bool:
