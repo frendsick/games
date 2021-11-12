@@ -18,7 +18,7 @@ def print_board_background(background: pygame.Surface, colors: itertools.cycle, 
             pygame.draw.rect(background, next(colors), rect)
         next(colors)
 
-def print_board_state(board: Board, players: List[Player], game_over: bool, display: pygame.Surface, tile_height: int, tile_width: int, whites_turn: bool) -> None:
+def print_board_state(board: Board, players: List[Player], display: pygame.Surface, tile_height: int, tile_width: int, whites_turn: bool) -> None:
     for x in range(8):
         for y in range(8):
             square  = board.squares[x][7-y]
