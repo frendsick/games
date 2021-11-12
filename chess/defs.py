@@ -27,21 +27,6 @@ PIECE_VALUE_MAP = {
     9001:   'KING'
 }
 
-PIECE_ICON_MAP = {
-    'BLACK KING'    : '\u2654',
-    'BLACK QUEEN'   : '\u2655',
-    'BLACK ROOK'    : '\u2656',
-    'BLACK BISHOP'  : '\u2657',
-    'BLACK KNIGHT'  : '\u2658',
-    'BLACK PAWN'    : '\u2659',
-    'WHITE KING'    : '\u265A',
-    'WHITE QUEEN'   : '\u265B',
-    'WHITE ROOK'    : '\u265C',
-    'WHITE BISHOP'  : '\u265D',
-    'WHITE KNIGHT'  : '\u265E',
-    'WHITE PAWN'    : '\u265F',
-}
-
 Location = Tuple[int, int]
 
 @dataclass
