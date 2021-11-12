@@ -53,7 +53,7 @@ def game_loop(background: pygame.Surface, screen: pygame.Surface, highlighted_pi
     pygame.display.update()
     return game_over, background, screen, highlighted_piece, whites_turn, move_rule_counter, players, moves
 
-def handle_event(highlighted_piece: Piece, whites_turn: bool, move_done: bool, move_rule_counter: int, players: List[Player], board: Board, moves: List[Move], tile_height: int, tile_width: int, event: pygame.event.Event) -> Tuple[int, bool]:
+def handle_event(highlighted_piece: Piece, whites_turn: bool, move_done: bool, move_rule_counter: int, players: List[Player], board: Board, moves: List[Move], tile_height: int, tile_width: int, event: pygame.event.Event) -> Tuple[Piece, bool, bool, int, List[Player], List[Move]]:
     if event.type == pygame.QUIT:
         exit(0)
 
