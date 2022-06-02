@@ -14,8 +14,6 @@
 
 <p>The program tests all the possible neighbors for the single cards, then all the possible continuations to all of the possible pairs. Once a card is placed to the edge of the 3x3 grid, it places the next one below the first cards.</p>
 
-<p>In the best case scenario the program should only find one 3x3 configuration which is the correct one. However there is still some bug lying in the code which denies that wonder from me. In any case it is good enough that the correct 3x3 configuration is found in the found <i>possible</i> configurations.</p>
-
 <p>I guess this program <i>should</i> work with another nine card puzzle as well but I have not tested it. Just change the <b><i>all_card_sides</i></b> constant values in <i>ninecards.cpp</i>. This code always uses the numbers (+-) 2, 3, 6 and 7 so just map those numbers to correspond to images in cards. The other half should be <b>+</b> and the other is <b>-</b>.</p>
 
 ![The program in action](solve.png)
